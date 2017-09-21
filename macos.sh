@@ -380,6 +380,12 @@ defaults write com.google.Chrome PMPrintingExpandedStateForPrint2 -bool true
 defaults write com.google.Chrome.canary PMPrintingExpandedStateForPrint2 -bool true
 
 ###############################################################################
+# Sublime                                                                     #
+###############################################################################
+
+ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" /usr/local/bin/subl
+
+###############################################################################
 # Kill affected applications                                                  #
 ###############################################################################
 
