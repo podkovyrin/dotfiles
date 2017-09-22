@@ -20,7 +20,7 @@ set esckeys
 set nostartofline
 
 " Display tabs and trailing spaces visually
-set list listchars=tab:\ \ ,trail:
+set list listchars=tab:\ \ ,trail:·
 
 " Show the filename in the window titlebar
 set title
