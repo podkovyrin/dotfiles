@@ -56,6 +56,7 @@ brew install pv
 brew install rename
 brew install ssh-copy-id
 brew install tree
+brew install tig
 
 # Install Node.js. Note: this installs `npm` too, using the recommended
 # installation method.
