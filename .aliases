@@ -82,8 +82,9 @@ alias hpr='hub pull-request -b master'
 alias showFiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
 alias hideFiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
 
-# Homebrew
+# Homebrew & gem
 alias brewu='brew update && brew upgrade && brew cleanup && brew prune && brew doctor'
+alias gemu='sudo gem update --system && sudo gem update && sudo gem cleanup'
 
 # Cocoapods
 alias piu="pod install --repo-update && osascript -e 'display notification \"Cocoapods installed and repo updated\" with title \"iTerm2\"'"
