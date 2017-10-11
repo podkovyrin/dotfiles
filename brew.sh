@@ -13,9 +13,6 @@ brew install bash-completion
 # Install GnuPG to enable PGP-signing commits.
 brew install gnupg
 
-# Install more recent versions of some macOS tools.
-brew install vim --with-override-system-vi
-
 brew install git
 brew install git-lfs
 brew install tig
