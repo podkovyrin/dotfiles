@@ -57,7 +57,7 @@
   pl = pull                         # pull
 
   # push
-  ps = push -u origin               # push
+  ps = push                         # push
 
   # rebase
   rc = rebase --continue            # continue rebase
