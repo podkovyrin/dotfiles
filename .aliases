@@ -94,5 +94,4 @@ alias pi="pod install && osascript -e 'display notification \"Cocoapods installe
 alias jsp='underscore print --color'
 alias xtrmntdd='rm -rf /Users/podkovyrin/Library/Developer/Xcode/DerivedData'
 alias t='tig --all'
-alias gbclean='git branch --merged | grep -v "\*" | grep -v master | grep -v scanmath | xargs -n 1 git branch -d'
 alias xcpluginfix='find ~/Library/Application\ Support/Developer/Shared/Xcode/Plug-ins -name Info.plist -maxdepth 3 | xargs -I{} defaults write {} DVTPlugInCompatibilityUUIDs -array-add `defaults read /Applications/Xcode.app/Contents/Info DVTPlugInCompatibilityUUID`'
