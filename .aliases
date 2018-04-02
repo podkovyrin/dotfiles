@@ -84,7 +84,7 @@ alias hideFiles="defaults write com.apple.finder AppleShowAllFiles -bool false &
 
 # Homebrew & gem
 alias brewu='brew update && brew upgrade && brew cleanup && brew prune && brew doctor'
-alias gemu='sudo gem update --system && sudo gem update && sudo gem cleanup'
+alias gemu='gem update && gem cleanup'
 
 # Cocoapods
 alias piu="pod install --repo-update && osascript -e 'display notification \"Cocoapods installed and repo updated\" with title \"iTerm2\"'"
