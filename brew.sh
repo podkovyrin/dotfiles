@@ -17,6 +17,7 @@ brew install git
 brew install git-lfs
 brew install tig
 brew install hub
+brew install wget
 
 brew install ruby
 brew install python3
