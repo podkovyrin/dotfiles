@@ -18,9 +18,12 @@ brew install git-lfs
 brew install tig
 brew install hub
 brew install wget
+brew install mercurial
 
 brew install ruby
 brew install python3
+
+brew install tldr
 
 # Install MacAppStore console
 brew install mas
