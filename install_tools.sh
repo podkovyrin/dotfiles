@@ -51,3 +51,7 @@ brew cask install skype
 
 # Remove outdated versions from the cellar.
 brew cleanup
+
+gem install cocoapods
+gem install fastlane
+

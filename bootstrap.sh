@@ -8,7 +8,7 @@ function doIt() {
 	rsync --exclude ".git/" \
 		--exclude ".DS_Store" \
 		--exclude "macos.sh" \
-		--exclude "brew.sh" \
+		--exclude "install_tools.sh" \
 		--exclude "bootstrap.sh" \
 		--exclude "README.md" \
 		--exclude "LICENSE.txt" \
