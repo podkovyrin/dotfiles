@@ -35,6 +35,7 @@ brew install mas
 brew cask install iterm2
 brew cask install google-chrome
 brew cask install sublime-text
+brew cask install sublime-merge
 brew cask install 1password
 brew cask install dropbox
 brew cask install slack
@@ -42,9 +43,10 @@ brew cask install sourcetree
 brew cask install spotify
 brew cask install the-unarchiver
 brew cask install vlc
+brew cask install highsierramediakeyenabler
+brew cask install skype
 
 # Don't forget to install manually:
-# HighSierraMediaKeyEnabler
 # Magnet (AppStore)
 
 # Remove outdated versions from the cellar.
