@@ -21,6 +21,7 @@ brew install tig
 brew install hub
 brew install wget
 brew install mercurial
+brew install cmake
 
 brew install ruby
 brew install python3
@@ -45,6 +46,7 @@ brew cask install the-unarchiver
 brew cask install vlc
 brew cask install highsierramediakeyenabler
 brew cask install skype
+brew cask install telegram
 
 # Don't forget to install manually:
 # Magnet (AppStore)
