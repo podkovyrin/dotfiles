@@ -28,6 +28,8 @@ brew install python3
 
 brew install tldr
 
+brew install bartycrouch
+
 # Install MacAppStore console
 brew install mas
 
