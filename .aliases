@@ -83,7 +83,7 @@ alias showFiles="defaults write com.apple.finder AppleShowAllFiles -bool true &&
 alias hideFiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
 
 # Homebrew & gem
-alias brewu='brew update && brew upgrade && brew cleanup && brew prune && brew doctor'
+alias brewu='brew update && brew upgrade && brew cleanup && brew doctor'
 alias gemu='gem update && gem cleanup'
 
 # Cocoapods
