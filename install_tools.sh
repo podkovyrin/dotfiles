@@ -46,7 +46,7 @@ brew cask install sourcetree
 brew cask install spotify
 brew cask install the-unarchiver
 brew cask install vlc
-brew cask install highsierramediakeyenabler
+brew cask install macmediakeyforwarder
 brew cask install skype
 brew cask install telegram
 
