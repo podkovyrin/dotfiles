@@ -22,6 +22,8 @@ brew install hub
 brew install wget
 brew install mercurial
 brew install cmake
+brew install colordiff
+brew install clang-format
 
 brew install ruby
 brew install python3
