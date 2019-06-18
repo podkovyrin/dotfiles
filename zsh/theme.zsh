@@ -1,1 +1,1 @@
-prompt spaceship
+prompt podkovyrin

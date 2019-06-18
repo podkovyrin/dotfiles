@@ -5,36 +5,28 @@
 #   Steve Losh <steve@stevelosh.com>
 #   Bart Trojanowski <bart@jukie.net>
 #   Brian Carper <brian@carper.ca>
-#   steeef_simplified <steeef_simplified@gmail.com>
+#   podkovyrin <podkovyrin@gmail.com>
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
+#   Andrew Podkovyrin <podkovyrin@gmail.com>
 #
 # Screenshots:
 #   http://i.imgur.com/HyRvv.png
 #
 
-function prompt_steeef_simplified_precmd {
+function prompt_podkovyrin_precmd {
   # Check for untracked files or updated submodules since vcs_info does not.
   if [[ -n $(git ls-files --other --exclude-standard 2> /dev/null) ]]; then
-    branch_format="(${_prompt_steeef_simplified_colors[1]}%b%f%u%c${_prompt_steeef_simplified_colors[4]}●%f)"
+    branch_format="(${_prompt_podkovyrin_colors[1]}%b%f%u%c${_prompt_podkovyrin_colors[4]}●%f) "
   else
-    branch_format="(${_prompt_steeef_simplified_colors[1]}%b%f%u%c)"
+    branch_format="(${_prompt_podkovyrin_colors[1]}%b%f%u%c) "
   fi
 
   zstyle ':vcs_info:*:prompt:*' formats "${branch_format}"
 
   vcs_info 'prompt'
-
-  if (( $+functions[python-info] )); then
-    python-info
-  fi
-
-  # Get ruby information
-  if (( $+functions[ruby-info] )); then
-    ruby-info
-  fi
 }
 
-function prompt_steeef_simplified_setup {
+function prompt_podkovyrin_setup {
   setopt LOCAL_OPTIONS
   unsetopt XTRACE KSH_ARRAYS
   prompt_opts=(cr percent subst)
@@ -44,26 +36,16 @@ function prompt_steeef_simplified_setup {
   autoload -Uz vcs_info
 
   # Add hook for calling vcs_info before each command.
-  add-zsh-hook precmd prompt_steeef_simplified_precmd
+  add-zsh-hook precmd prompt_podkovyrin_precmd
 
   # Use extended color pallete if available.
-  if [[ $TERM = *256color* || $TERM = *rxvt* ]]; then
-    _prompt_steeef_simplified_colors=(
-      "%F{81}"  # Turquoise
-      "%F{166}" # Orange
-      "%F{135}" # Purple
-      "%F{161}" # Hotpink
-      "%F{118}" # Limegreen
-    )
-  else
-    _prompt_steeef_simplified_colors=(
+  _prompt_podkovyrin_colors=(
       "%F{cyan}"
       "%F{yellow}"
       "%F{magenta}"
       "%F{red}"
       "%F{green}"
     )
-  fi
 
   # Formats:
   #   %b - branchname
@@ -72,10 +54,10 @@ function prompt_steeef_simplified_setup {
   #   %a - action (e.g. rebase-i)
   #   %R - repository path
   #   %S - path in the repository
-  local branch_format="(${_prompt_steeef_simplified_colors[1]}%b%f%u%c)"
-  local action_format="(${_prompt_steeef_simplified_colors[5]}%a%f)"
-  local unstaged_format="${_prompt_steeef_simplified_colors[2]}●%f"
-  local staged_format="${_prompt_steeef_simplified_colors[5]}●%f"
+  local branch_format="(${_prompt_podkovyrin_colors[1]}%b%f%u%c)"
+  local action_format="(${_prompt_podkovyrin_colors[5]}%a%f)"
+  local unstaged_format="${_prompt_podkovyrin_colors[2]}●%f"
+  local staged_format="${_prompt_podkovyrin_colors[5]}●%f"
 
   # Set vcs_info parameters.
   zstyle ':vcs_info:*' enable bzr git hg svn
@@ -86,13 +68,10 @@ function prompt_steeef_simplified_setup {
   zstyle ':vcs_info:*:prompt:*' formats "${branch_format}"
   zstyle ':vcs_info:*:prompt:*' nvcsformats   ""
 
-  # Set python-info parameters.
-  zstyle ':prezto:module:python:info:virtualenv' format '(%v)'
-
   # Define prompts.
-  PROMPT="${_prompt_steeef_simplified_colors[3]}%n%f@${_prompt_steeef_simplified_colors[2]}%m%f ${_prompt_steeef_simplified_colors[5]}%~%f "'${vcs_info_msg_0_}'"$ "
-  RPROMPT='%F{blue}${ruby_info[version]}'
+  PROMPT="${_prompt_podkovyrin_colors[5]}%~%f "'${vcs_info_msg_0_}'"$ "
+  RPROMPT=''
 }
 
-prompt_steeef_simplified_setup "$@"
+prompt_podkovyrin_setup "$@"
 

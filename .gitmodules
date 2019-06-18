@@ -2,7 +2,3 @@
 	path = zsh/prezto
 	url = https://github.com/sorin-ionescu/prezto.git
 	ignore = dirty
-[submodule "zsh/prezto-themes/spaceship"]
-	path = zsh/prezto-themes/spaceship
-	url = git@github.com:denysdovhan/spaceship-prompt.git
-	ignore = dirty
