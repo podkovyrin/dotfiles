@@ -10,7 +10,8 @@ brew update
 # Upgrade any already-installed formulae.
 brew upgrade
 
-brew install bash-completion
+# TODO: enable if macOS Catalina will be having outdated zsh
+# brew install zsh
 
 # Install GnuPG to enable PGP-signing commits.
 brew install gnupg
