@@ -3,6 +3,9 @@
 # Don't change. The following determines where YADR is installed.
 yadr=$HOME/.yadr
 
+# disable alias "o" defined in prezto to fix "o" function
+unalias -m "o"
+
 # Get operating system
 platform='unknown'
 unamestr=$(uname)
