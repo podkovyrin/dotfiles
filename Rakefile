@@ -18,6 +18,7 @@ task :install => [:submodule_init, :submodules] do
   install_files(Dir.glob('editorconfig'))
 
   install_prezto
+  install_spaceship
 
   success_msg("installed")
 end
@@ -103,6 +104,10 @@ def install_prezto
       run %{ chsh -s /bin/zsh }
     end
   end
+end
+
+def install_spaceship
+    run %{ ln -nfs $HOME/.yadr/zsh/prezto-themes/spaceship/spaceship.zsh $HOME/.yadr/zsh/prezto-themes/prompt_spaceship_setup }
 end
 
 def install_files(files, method = :symlink)
