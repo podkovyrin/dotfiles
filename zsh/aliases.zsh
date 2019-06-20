@@ -117,6 +117,7 @@ alias gemu='gem update && gem cleanup'
 # Cocoapods
 alias piu="pod install --repo-update && osascript -e 'display notification \"Cocoapods installed and repo updated\" with title \"iTerm2\"'"
 alias pi="pod install && osascript -e 'display notification \"Cocoapods installed\" with title \"iTerm2\"'"
+alias pipod="pushd Example && pi && popd && osascript -e 'display notification \"Cocoapods installed\" with title \"iTerm2\"'"
 
 # Misc
 alias jsp='underscore print --color'
