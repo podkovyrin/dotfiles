@@ -55,26 +55,12 @@ When setting up a new Mac, you may want to install some common [Homebrew](https:
 
 Some of the functionality of these dotfiles depends on formulae installed by `install_tools.sh`. If you don’t plan to run `install_tools.sh`, you should look carefully through the script and manually install any particularly important ones.
 
-### Upgrading
+### Updating
 
-Upgrading is easy.
-
-```bash
-cd ~/.yadr
-git pull --rebase
-rake update
-```
-
-Update all plugins to latest versions from github:
+Update everything to latest versions from github:
 
 ```bash
 yup
-```
-
-Initialize all submodules. Run this every time you pull a new yadr version:
-
-```bash
-yip
 ```
 
 ## What's included, and how to customize?

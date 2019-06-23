@@ -1,6 +1,6 @@
-# `st` with no arguments opens the current directory in Sublime Text, otherwise
+# `s` with no arguments opens the current directory in Sublime Text, otherwise
 # opens the given location
-function st() {
+function s() {
 	if [ $# -eq 0 ]; then
 		subl .;
 	else
