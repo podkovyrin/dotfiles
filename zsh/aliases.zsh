@@ -16,7 +16,7 @@ elif [[ $unamestr == 'Darwin' ]]; then
 fi
 
 # YADR support
-alias yup='pusdh $yadr && git pull --rebase && git submodule update --init && rake update && rake submodules && popd'
+alias yup='pushd $yadr && git pull --rebase && git submodule update --init && rake update && rake submodules && popd'
 
 # PS
 alias psa="ps aux"
