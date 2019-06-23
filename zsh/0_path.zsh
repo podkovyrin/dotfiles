@@ -10,9 +10,6 @@ pathInsert() {
 # Remove duplicate entries from PATH:
 PATH=$(echo "$PATH" | awk -v RS=':' -v ORS=":" '!a[$1]++{if (NR > 1) printf ORS; printf $a[$1]}')
 
-pathInsert "$HOME/.yadr/bin"
-pathInsert "$HOME/.yadr/bin/yadr"
-
 pathInsert "$HOME/.fastlane/bin"
 pathInsert "/usr/local/sbin"
 pathInsert "/usr/local/opt/ruby/bin"
