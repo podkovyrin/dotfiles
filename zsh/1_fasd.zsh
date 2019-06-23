@@ -7,6 +7,7 @@ fi
 source "$fasd_cache"
 unset fasd_cache
 
+unalias -m "s"
 
 # jump to recently used items
 alias a='fasd -a' # any
