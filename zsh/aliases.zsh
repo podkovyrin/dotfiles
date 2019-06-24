@@ -122,3 +122,5 @@ alias pipod="pushd Example && pi && popd && osascript -e 'display notification \
 alias jsp='underscore print --color'
 alias xtrmntdd='rm -rf /Users/podkovyrin/Library/Developer/Xcode/DerivedData'
 alias t='tig --all'
+
+alias clean_my_mac='$yadr/clean_my_mac/clean_my_mac.sh'

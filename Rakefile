@@ -16,6 +16,7 @@ task :install => [:submodule_init, :submodules] do
   install_files(Dir.glob('vimify/*'))
   install_files(Dir.glob('vimify/*'))
   install_files(Dir.glob('editorconfig'))
+  install_files(Dir.glob('clang-format/clang-format'))
 
   install_prezto
 
