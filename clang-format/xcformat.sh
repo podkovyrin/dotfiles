@@ -18,4 +18,4 @@ end tell ')
 LOGNAME=~/.lastclangformatlog.txt
 echo "Filepath: ${CURRENT_DOCUMENT_PATH}" > ${LOGNAME}
 
-~/.yadr/clang-format/clang-format-custom -i -style=file "${CURRENT_DOCUMENT_PATH}" >> ${LOGNAME} 2>&1
+/usr/local/bin/clang-format -i -style=file "${CURRENT_DOCUMENT_PATH}" >> ${LOGNAME} 2>&1
