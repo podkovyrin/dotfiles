@@ -52,6 +52,7 @@ brew cask install vlc
 brew cask install macmediakeyforwarder
 brew cask install skype
 brew cask install telegram
+brew cask install opensim
 
 # Don't forget to install manually:
 # Magnet (AppStore)
