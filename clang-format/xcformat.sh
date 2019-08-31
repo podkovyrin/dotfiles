@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 CURRENT_DOCUMENT_PATH=$(osascript -e '
 tell application "Xcode"
