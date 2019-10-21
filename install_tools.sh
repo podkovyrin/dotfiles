@@ -43,7 +43,6 @@ brew cask install google-chrome
 brew cask install sublime-text
 brew cask install sublime-merge
 brew cask install 1password
-brew cask install dropbox
 brew cask install slack
 brew cask install sourcetree
 brew cask install spotify
@@ -53,6 +52,14 @@ brew cask install macmediakeyforwarder
 brew cask install skype
 brew cask install telegram
 brew cask install opensim
+brew cask install transmission
+brew cask install wwdc
+brew cask install nrlquaker-winbox
+brew cask install reveal
+brew cask install google-backup-and-sync
+brew cask install charles
+brew cask install postman
+brew cask install sf-symbols
 
 # Don't forget to install manually:
 # Magnet (AppStore)
