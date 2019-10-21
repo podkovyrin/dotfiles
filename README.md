@@ -1,59 +1,41 @@
+     _     _           _
+    | |   | |         | |
+    | |___| |_____  __| | ____
+    |_____  (____ |/ _  |/ ___)
+     _____| / ___ ( (_| | |
+    (_______\_____|\____|_|
+
+    # Yet Another Dotfile Repo v1.1-podkovyrin
+    # Now with Prezto!
+
 # Podkovyrin’s dotfiles
 
-## Based on and thanks to
+## Based on
 
-* [https://github.com/mathiasbynens/dotfiles](https://github.com/mathiasbynens/dotfiles)
 * [https://github.com/skwp/dotfiles](https://github.com/skwp/dotfiles)
+* [https://github.com/mathiasbynens/dotfiles](https://github.com/mathiasbynens/dotfiles)
+
+**Always be sure to run `rake update` after pulling to ensure plugins are updated**
+
+## What is YADR?
+
+**YADR is an opinionated dotfile repo that will make your heart sing**
+
+  * The best bits of all the top dotfile repos, zsh plugins curated in one place, into a simple and cohesive way of working.
+  * Many zsh plugins, starting with the wonderful Prezto base, and adding a few niceties on top.
+  * All things are vimized: command line, etc.
+
+*Linux/Ubuntu is not supported! If it works, great. If it doesn't, please don't complain. You may need to install zsh if you don't already have it.*
 
 ## Installation
 
-**Warning:** If you want to give these dotfiles a try, you should first fork this repository, review the code, and remove things you don’t want or need. Don’t blindly use my settings unless you know what that entails. Use at your own risk!
-
-### Using Git and the bootstrap script
-
-You can clone the repository wherever you want. (I like to keep it in `~/Tools/dotfiles`, with `~/dotfiles` as a symlink.) The bootstrapper script will pull in the latest version and copy the files to your home folder.
+To get started please run:
 
 ```bash
-git clone https://github.com/podkovyrin/dotfiles.git && cd dotfiles && source bootstrap.sh
+sh -c "`curl -fsSL https://raw.githubusercontent.com/podkovyrin/dotfiles/zsh/install.sh`"
 ```
 
-To update, `cd` into your local `dotfiles` repository and then:
-
-```bash
-source bootstrap.sh
-```
-
-Alternatively, to update while avoiding the confirmation prompt:
-
-```bash
-set -- -f; source bootstrap.sh
-```
-
-### Git-free install
-
-To install these dotfiles without Git:
-
-```bash
-cd; curl -#L https://github.com/podkovyrin/dotfiles/tarball/master | tar -xzv --strip-components 1 --exclude={README.md,bootstrap.sh,macos.sh,LICENSE.txt}
-```
-
-To update later on, just run that command again.
-
-### Specify the `$PATH`
-
-If `~/.path` exists, it will be sourced along with the other files, before any feature testing (such as [detecting which version of `ls` is being used](https://github.com/podkovyrin/dotfiles/blob/master/.aliases#L14)) takes place.
-
-Here’s an example `~/.path` file that adds `/usr/local/bin` to the `$PATH`:
-
-```bash
-export PATH="/usr/local/bin:$PATH"
-```
-
-### Add custom commands without creating a new fork
-
-If `~/.extra` exists, it will be sourced along with the other files. You can use this to add a few custom commands without the need to fork this entire repository, or to add commands you don’t want to commit to a public repository.
-
-You could also use `~/.extra` to override settings, functions and aliases from my dotfiles repository. It’s probably better to [fork this repository](https://github.com/podkovyrin/dotfiles/fork) instead, though.
+**Note:** YADR will automatically install all of its subcomponents. If you want to customize anything - fork the repo
 
 ### Sensible macOS defaults
 
@@ -71,7 +53,81 @@ When setting up a new Mac, you may want to install some common [Homebrew](https:
 ./install_tools.sh
 ```
 
-Some of the functionality of these dotfiles depends on formulae installed by `install_tools.sh`. If you don’t plan to run `install_tools.sh`, you should look carefully through the script and manually install any particularly important ones. A good example is Bash/Git completion: the dotfiles use a special version from Homebrew.
+Some of the functionality of these dotfiles depends on formulae installed by `install_tools.sh`. If you don’t plan to run `install_tools.sh`, you should look carefully through the script and manually install any particularly important ones.
+
+### Updating
+
+Update everything to latest versions from github:
+
+```bash
+yup
+```
+
+## What's included, and how to customize?
+
+Read on to learn what YADR provides!
+
+### [Homebrew](https://brew.sh/)
+
+Homebrew is _the missing package manager for macOS_. Installed automatically.
+
+We automatically install a few useful packages including ctags, git, macvim, hub, and the silver searcher ('ag')
+Note that our autocomplete plugin requires a MacVim that supports Lua. The installer knows how to install it, but if you had one installed before, you may need to manually remove your old MacVim.
+
+### ZSH
+
+Think of Zsh as a more awesome bash without having to learn anything new.
+Automatic spell correction for your commands, syntax highlighting, and more.
+We've also provided lots of enhancements:
+
+* Vim mode and bash style `Ctrl-R` for reverse history finder
+* `Ctrl-x,Ctrl-l` to insert output of last command
+* Fuzzy matching - if you mistype a directory name, tab completion will fix it
+* [fasd](https://github.com/clvv/fasd) integration - hit `z` and partial match for recently used directory. Tab completion enabled.
+* [Prezto - the power behind YADR's zsh](https://github.com/sorin-ionescu/prezto)
+* [How to add your own ZSH theme](doc/zsh/themes.md)
+
+### Aliases
+
+Lots of things we do every day are done with two or three character
+mnemonic aliases. Please feel free to edit them:
+
+    ae # alias edit
+    ar # alias reload
+
+
+### Git Customizations:
+
+YADR will take over your `~/.gitconfig`, so if you want to store your usernames, please put them into `~/.gitconfig.user`
+
+It is recommended to use this file to set your user info. Alternately, you can set the appropriate environment variables in your `~/.secrets`.
+
+  * `git l`- a much more usable git log
+  * `git b`- a list of branches with summary of last commit
+  * `git r` - a list of remotes with info
+  * `git t`- a list of tags with info
+  * `git nb`- a (n)ew (b)ranch - like checkout -b
+  * `git cp`- cherry-pick -x (showing what was cherrypicked)
+  * `git simple` - a clean format for creating changelogs
+  * `git recent-branches` - if you forgot what you've been working on
+  * `git unstage` (remove from index) and `git uncommit` (revert to the time prior to the last commit - dangerous if already pushed) aliases
+  * Some sensible default configs, such as improving merge messages, push only pushes the current branch, removing status hints, and using mnemonic prefixes in diff: (i)ndex, (w)ork tree, (c)ommit and (o)bject
+  * Slightly improved colors for diff
+
+
+### RubyGems
+
+A .gemrc is included. Never again type `gem install whatever --no-ri --no-rdoc`. `--no-ri --no-rdoc` is done by default.
+
+### Vimization of everything
+
+The provided inputrc and editrc will turn your various command line tools like mysql and irb into vim prompts. There's
+also an included Ctrl-R reverse history search feature in editrc, very useful in irb, postgres command line, and etc.
+
+## Misc
+
+* [Credits & Thanks](doc/credits.md)
+* [Yan's Blog](https://yanpritzker.com)
 
 ## Feedback
 

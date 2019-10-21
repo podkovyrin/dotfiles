@@ -25,7 +25,7 @@
 # SOFTWARE.
 #
 
-source "targets.sh"
+source "$HOME/.yadr/clean_my_mac/targets.sh"
 
 
 clean_my_mac() {

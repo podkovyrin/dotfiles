@@ -94,7 +94,9 @@
   f = fetch
   fa = fetch --all
 
-  bclean = "!f() { git branch --merged ${1-master} | grep -v " ${1-master}$" | xargs -n 1 git branch -d; }; f"
+  rb = recent-branches
+
+  bclean = "!f() { git branch --merged | grep  -v '\\*\\|master\\|develop' | xargs -n 1 git branch -d; }; f"
   
 [format]
   pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset
