@@ -60,6 +60,7 @@ brew cask install google-backup-and-sync
 brew cask install charles
 brew cask install postman
 brew cask install sf-symbols
+brew cask install pock
 
 # Don't forget to install manually:
 # Magnet (AppStore)
