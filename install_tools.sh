@@ -10,8 +10,8 @@ brew update
 # Upgrade any already-installed formulae.
 brew upgrade
 
-# TODO: enable if macOS Catalina will be having outdated zsh
-# brew install zsh
+brew install ruby
+brew install python3
 
 # Install GnuPG to enable PGP-signing commits.
 brew install gnupg
@@ -20,18 +20,14 @@ brew install git
 brew install git-lfs
 brew install tig
 brew install hub
-brew install wget
 brew install mercurial
 brew install cmake
 brew install colordiff
 brew install clang-format
-
-brew install ruby
-brew install python3
-
-brew install tldr
-
+brew install swiftformat
+brew install swiftlint
 brew install bartycrouch
+brew install tldr
 
 # Install MacAppStore console
 brew install mas
