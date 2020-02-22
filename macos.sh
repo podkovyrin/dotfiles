@@ -360,6 +360,13 @@ defaults write com.google.Chrome.canary PMPrintingExpandedStateForPrint2 -bool t
 ln -s "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" /usr/local/bin/subl
 
 ###############################################################################
+# Additional Hacks                                                            #
+###############################################################################
+
+# Enable Mac's startup chime
+sudo nvram StartupMute=%00
+
+###############################################################################
 # Kill affected applications                                                  #
 ###############################################################################
 
