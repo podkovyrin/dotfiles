@@ -11,7 +11,6 @@ echo "🧹 gem"
 gem update && gem cleanup
 
 echo "🧹 cleanup"
-
-../clean_my_mac/clean_my_mac.sh
-
-sudo ../clean_my_mac/clean_my_mac.sh
+CMM=$HOME/.yadr/clean_my_mac/clean_my_mac.sh
+$CMM
+sudo $CMM
