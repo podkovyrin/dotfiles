@@ -55,6 +55,9 @@ sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo Hos
 # Restart automatically if the computer freezes
 sudo systemsetup -setrestartfreeze on
 
+# Show percentage
+defaults write com.apple.menuextra.battery -bool true
+
 # # Disable automatic capitalization as it’s annoying when typing code
 # defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
 
@@ -301,6 +304,34 @@ defaults write com.google.Chrome.canary DisablePrintPreview -bool true
 # Expand the print dialog by default
 defaults write com.google.Chrome PMPrintingExpandedStateForPrint2 -bool true
 defaults write com.google.Chrome.canary PMPrintingExpandedStateForPrint2 -bool true
+
+###############################################################################
+# Magnet                                                                      #
+###############################################################################
+
+# Disable ads
+defaults write com.crowdcafe.windowmagnet alreadyClickedDynamoItem -bool true
+defaults write com.crowdcafe.windowmagnet seenDynamo -bool true
+
+# Disable all shortcuts
+defaults write com.crowdcafe.windowmagnet centerWindowComboKey -dict
+defaults write com.crowdcafe.windowmagnet expandWindowCenterThirdComboKey -dict
+defaults write com.crowdcafe.windowmagnet expandWindowEastComboKey -dict
+defaults write com.crowdcafe.windowmagnet expandWindowLeftThirdComboKey -dict
+defaults write com.crowdcafe.windowmagnet expandWindowLeftTwoThirdsComboKey -dict
+defaults write com.crowdcafe.windowmagnet expandWindowNorthComboKey -dict
+defaults write com.crowdcafe.windowmagnet expandWindowNorthEastComboKey -dict
+defaults write com.crowdcafe.windowmagnet expandWindowNorthWestComboKey -dict
+defaults write com.crowdcafe.windowmagnet expandWindowRightThirdComboKey -dict
+defaults write com.crowdcafe.windowmagnet expandWindowRightTwoThirdsComboKey -dict
+defaults write com.crowdcafe.windowmagnet expandWindowSouthComboKey -dict
+defaults write com.crowdcafe.windowmagnet expandWindowSouthEastComboKey -dict
+defaults write com.crowdcafe.windowmagnet expandWindowSouthWestComboKey -dict
+defaults write com.crowdcafe.windowmagnet expandWindowWestComboKey -dict
+defaults write com.crowdcafe.windowmagnet maximizeWindowComboKey -dict
+defaults write com.crowdcafe.windowmagnet moveWindowToNextDisplay -dict
+defaults write com.crowdcafe.windowmagnet moveWindowToPreviousDisplay -dict
+defaults write com.crowdcafe.windowmagnet restoreWindowComboKey -dict
 
 ###############################################################################
 # Additional Hacks                                                            #
