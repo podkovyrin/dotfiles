@@ -12,6 +12,6 @@ gem update && gem cleanup
 
 echo "🧹 cleanup"
 
-$yadr/clean_my_mac/clean_my_mac.sh
+../clean_my_mac/clean_my_mac.sh
 
-sudo $yadr/clean_my_mac/clean_my_mac.sh
+sudo ../clean_my_mac/clean_my_mac.sh
