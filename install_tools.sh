@@ -2,7 +2,7 @@
 
 # Install command-line tools using Homebrew.
 
-brew || /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+brew || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 
 # Make sure we’re using the latest Homebrew.
 brew update
@@ -52,9 +52,7 @@ brew cask install transmission
 brew cask install wwdc
 brew cask install nrlquaker-winbox
 brew cask install reveal
-brew cask install google-backup-and-sync
 brew cask install charles
-brew cask install postman
 brew cask install sf-symbols
 brew cask install pock
 
@@ -64,6 +62,6 @@ brew cask install pock
 # Remove outdated versions from the cellar.
 brew cleanup
 
-gem install cocoapods
-gem install fastlane
+# gem install cocoapods
+# gem install fastlane
 
