@@ -124,3 +124,4 @@ alias xtrmntdd='rm -rf /Users/podkovyrin/Library/Developer/Xcode/DerivedData'
 alias t='tig --all'
 
 alias clean_my_mac='$yadr/clean_my_mac/clean_my_mac.sh'
+alias cmm='$yadr/clean_my_mac/clean_my_mac.sh && sudo $yadr/clean_my_mac/clean_my_mac.sh'
