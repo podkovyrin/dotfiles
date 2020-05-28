@@ -118,4 +118,4 @@ alias xtrmntdd='rm -rf ~/Library/Developer/Xcode/DerivedData'
 alias t='tig --all'
 
 alias clean_my_mac='$yadr/clean_my_mac/clean_my_mac.sh'
-alias chores='sudo -v && brewu && gemu && && clean_my_mac && sudo $yadr/clean_my_mac/clean_my_mac.sh'
+alias chores='sudo -v && brewu && gemu && clean_my_mac && sudo $yadr/clean_my_mac/clean_my_mac.sh'
