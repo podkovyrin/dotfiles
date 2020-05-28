@@ -103,10 +103,6 @@ alias k9='kill -9'
 alias showFiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
 alias hideFiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
 
-# Homebrew & gem
-alias brewu='brew update && brew upgrade && brew cleanup && brew doctor'
-alias gemu='gem update && gem cleanup'
-
 # Cocoapods
 alias piu="pod install --repo-update && osascript -e 'display notification \"Cocoapods installed and repo updated\" with title \"iTerm2\"'"
 alias pi="pod install && osascript -e 'display notification \"Cocoapods installed\" with title \"iTerm2\"'"
@@ -117,5 +113,8 @@ alias pipod="pod install --project-directory=Example && osascript -e 'display no
 alias xtrmntdd='rm -rf ~/Library/Developer/Xcode/DerivedData'
 alias t='tig --all'
 
+# Maintance
+alias brewu='brew update && brew upgrade && brew cleanup && brew doctor'
+alias gemu='gem update && gem cleanup'
 alias clean_my_mac='$yadr/clean_my_mac/clean_my_mac.sh'
-alias chores='sudo -v && brewu && gemu && clean_my_mac && sudo $yadr/clean_my_mac/clean_my_mac.sh'
+alias chores='$yadr/chores/chores.sh'
