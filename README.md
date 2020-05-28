@@ -38,6 +38,10 @@ yup
 
 ### Manual TODO
 
+Configure gem path:
+`echo 'pathInsert "/usr/local/lib/ruby/gems/2.7.0/bin"' > ~/.secrets`
+
+
 https://developer.apple.com/fonts/
 http://milgra.com/airpods-sound-quality-fixer.html
 
