@@ -20,6 +20,7 @@ brew install git
 brew install git-lfs
 brew install tig
 brew install hub
+brew install github/gh/gh
 brew install mercurial
 brew install cmake
 brew install colordiff
@@ -57,6 +58,7 @@ brew cask install sf-symbols
 brew cask install firefox
 brew cask install exodus
 brew cask install font-jetbrains-mono
+brew cask install istat-menus
 
 # Remove outdated versions from the cellar.
 brew cleanup

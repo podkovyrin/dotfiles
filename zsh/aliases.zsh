@@ -99,16 +99,9 @@ alias gz='tar -zcvf'
 alias ka9='killall -9'
 alias k9='kill -9'
 
-# Gem install
-alias sgi='sudo gem install --no-ri --no-rdoc'
-
-
-alias hpr='hub pull-request'
-
 # Show/hide hidden files in Finder
 alias showFiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
 alias hideFiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
-
 
 # Homebrew & gem
 alias brewu='brew update && brew upgrade && brew cleanup && brew doctor'
@@ -120,9 +113,9 @@ alias pi="pod install && osascript -e 'display notification \"Cocoapods installe
 alias pipod="pod install --project-directory=Example && osascript -e 'display notification \"Cocoapods installed\" with title \"iTerm2\"'"
 
 # Misc
-alias jsp='underscore print --color'
-alias xtrmntdd='rm -rf /Users/podkovyrin/Library/Developer/Xcode/DerivedData'
+# alias jsp='underscore print --color'
+alias xtrmntdd='rm -rf ~/Library/Developer/Xcode/DerivedData'
 alias t='tig --all'
 
 alias clean_my_mac='$yadr/clean_my_mac/clean_my_mac.sh'
-alias cmm='$yadr/clean_my_mac/clean_my_mac.sh && sudo $yadr/clean_my_mac/clean_my_mac.sh'
+alias chores='sudo -v && brewu && gemu && && clean_my_mac && sudo $yadr/clean_my_mac/clean_my_mac.sh'
