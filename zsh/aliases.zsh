@@ -26,6 +26,7 @@ alias psr='ps aux | grep ruby'
 # Moving around
 alias cdb='cd -'
 alias cls='clear;ls'
+alias icloud='cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/'
 
 # Show human friendly numbers and colors
 alias df='df -h'

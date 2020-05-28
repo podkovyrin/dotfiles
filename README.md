@@ -18,7 +18,14 @@ sh -c "`curl -fsSL https://raw.githubusercontent.com/podkovyrin/dotfiles/master/
 
 ```bash
 ./install_brew_tools.sh
+```
+
+```bash
 ./install_gem_tools.sh
+```
+
+```bash
+./install_appstore.sh
 ```
 
 ### Updating
@@ -28,6 +35,11 @@ Update everything to latest versions from github:
 ```bash
 yup
 ```
+
+### Manual TODO
+
+https://developer.apple.com/fonts/
+http://milgra.com/airpods-sound-quality-fixer.html
 
 ## What's included, and how to customize?
 
@@ -79,11 +91,8 @@ also an included Ctrl-R reverse history search feature in editrc, very useful in
 
 ## Misc
 
-Based on
-
 * [https://github.com/skwp/dotfiles](https://github.com/skwp/dotfiles)
 * [https://github.com/mathiasbynens/dotfiles](https://github.com/mathiasbynens/dotfiles)
-
 * [Credits & Thanks](doc/credits.md)
 * [Yan's Blog](https://yanpritzker.com)
 

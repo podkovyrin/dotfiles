@@ -54,10 +54,11 @@ brew cask install nrlquaker-winbox
 brew cask install reveal
 brew cask install charles
 brew cask install sf-symbols
-brew cask install pock
-
-# Don't forget to install manually:
-# Magnet (AppStore)
+brew cask install firefox
 
 # Remove outdated versions from the cellar.
 brew cleanup
+
+# Fix Catalina compatibility
+
+xattr -cr /Applications/MacMediaKeyForwarder.app
