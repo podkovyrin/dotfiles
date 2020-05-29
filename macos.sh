@@ -213,6 +213,9 @@ defaults write com.apple.Safari SendDoNotTrackHTTPHeader -bool true
 # Update extensions automatically
 defaults write com.apple.Safari InstallExtensionUpdatesAutomatically -bool true
 
+# Disable notification popups
+defaults write com.apple.Safari CanPromptForPushNotifications -bool false
+
 ###############################################################################
 # Mail                                                                        #
 ###############################################################################
