@@ -58,6 +58,12 @@ sudo systemsetup -setrestartfreeze on
 # Show percentage
 defaults write com.apple.menuextra.battery -bool true
 
+# Set language and text formats
+defaults write NSGlobalDomain AppleLanguages -array "en-RU" "ru-RU"
+defaults write NSGlobalDomain AppleLocale -string "en_RU"
+defaults write NSGlobalDomain AppleMeasurementUnits -string "Centimeters"
+defaults write NSGlobalDomain AppleMetricUnits -bool true
+
 # # Disable automatic capitalization as it’s annoying when typing code
 # defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
 
@@ -151,7 +157,7 @@ defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
 chflags nohidden ~/Library
 
 # Show the /Volumes folder
-sudo chflags nohidden /Volumes
+chflags nohidden ~/Library && xattr -d com.apple.FinderInfo ~/Library
 
 # Expand the following File Info panes:
 # “General”, “Open with”, and “Sharing & Permissions”
@@ -179,6 +185,9 @@ defaults write com.apple.dock autohide -bool true
 # Don’t show recent applications in Dock
 defaults write com.apple.dock show-recents -bool false
 
+# Set the icon size of Dock items to 44 pixels
+defaults write com.apple.dock tilesize -int 44
+
 # Add a spacer to the left side of the Dock (where the applications are)
 #defaults write com.apple.dock persistent-apps -array-add '{tile-data={}; tile-type="spacer-tile";}'
 # Add a spacer to the right side of the Dock (where the Trash is)
@@ -187,6 +196,9 @@ defaults write com.apple.dock show-recents -bool false
 ###############################################################################
 # Safari & WebKit                                                             #
 ###############################################################################
+
+# Set Safari’s home page to `about:blank` for faster loading
+defaults write com.apple.Safari HomePage -string "about:blank"
 
 # Show the full URL in the address bar (note: this still hides the scheme)
 defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
@@ -337,6 +349,22 @@ defaults write com.crowdcafe.windowmagnet moveWindowToPreviousDisplay -dict
 defaults write com.crowdcafe.windowmagnet restoreWindowComboKey -dict
 
 ###############################################################################
+# Transmission.app                                                            #
+###############################################################################
+
+# Use `~/Downloads` to store completed downloads
+defaults write org.m0k.transmission DownloadLocationConstant -bool true
+
+# Trash original torrent files
+defaults write org.m0k.transmission DeleteOriginalTorrent -bool true
+
+# Hide the donate message
+defaults write org.m0k.transmission WarningDonate -bool false
+
+# Hide the legal disclaimer
+defaults write org.m0k.transmission WarningLegal -bool false
+
+###############################################################################
 # Additional Hacks                                                            #
 ###############################################################################
 
@@ -360,6 +388,7 @@ for app in "Activity Monitor" \
 	"Photos" \
 	"Safari" \
 	"SystemUIServer" \
+	"Transmission" \
 	"iCal"; do
 	killall "${app}" &> /dev/null
 done
