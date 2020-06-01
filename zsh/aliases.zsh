@@ -25,7 +25,6 @@ alias psr='ps aux | grep ruby'
 
 # Moving around
 alias cdb='cd -'
-alias cls='clear;ls'
 alias icloud='cd ~/Library/Mobile\ Documents/com~apple~CloudDocs/'
 
 # Show human friendly numbers and colors
@@ -58,21 +57,8 @@ alias ae='vim $yadr/zsh/aliases.zsh' #alias edit
 alias ar='source $yadr/zsh/aliases.zsh'  #alias reload
 alias gar="killall -HUP -u \"$USER\" zsh"  #global alias reload
 
-# vim using
-mvim --version > /dev/null 2>&1
-MACVIM_INSTALLED=$?
-if [ $MACVIM_INSTALLED -eq 0 ]; then
-  alias vim="mvim -v"
-fi
-
 # mimic vim functions
 alias :q='exit'
-
-# vimrc editing
-alias ve='vim ~/.vimrc'
-
-# zsh profile editing
-alias ze='vim ~/.zshrc'
 
 # IP addresses
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
@@ -89,7 +75,6 @@ alias less='less -r'
 alias tf='tail -f'
 alias l='less'
 alias lh='ls -alt | head' # see the last modified files
-alias screen='TERM=screen screen'
 alias cl='clear'
 
 # Zippin
