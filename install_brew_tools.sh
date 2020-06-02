@@ -36,7 +36,6 @@ brew install mas
 # Install GUI Apps
 
 brew cask install iterm2
-brew cask install google-chrome
 brew cask install sublime-text
 brew cask install sublime-merge
 brew cask install 1password
