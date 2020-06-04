@@ -16,6 +16,10 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 # General UI/UX                                                               #
 ###############################################################################
 
+# Don't close windows when quitting an app (use System Restoration)
+# Useful for iTerm to restore previous opened tabs
+defaults write NSGlobalDomain NSQuitAlwaysKeepsWindows 1
+
 # Reduce transparency
 defaults write com.apple.universalaccess reduceTransparency -bool true
 
