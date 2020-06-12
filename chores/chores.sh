@@ -9,6 +9,9 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 echo "🧹 brew"
 brew update && brew upgrade && brew cleanup && brew doctor
 
+echo "🧹 cask"
+brew cask upgrade && brew cask doctor
+
 echo "🧹 gem"
 gem update && gem cleanup
 
