@@ -58,6 +58,7 @@ brew cask install firefox
 brew cask install exodus
 brew cask install font-jetbrains-mono
 brew cask install istat-menus
+brew cask install db-browser-for-sqlite
 
 # Remove outdated versions from the cellar.
 brew cleanup
