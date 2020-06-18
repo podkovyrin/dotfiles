@@ -56,8 +56,13 @@ brew cask install charles
 brew cask install sf-symbols
 brew cask install firefox
 brew cask install exodus
-brew cask install font-jetbrains-mono
 brew cask install db-browser-for-sqlite
+
+# Fonts
+
+brew tap homebrew/cask-fonts
+brew cask install font-montserrat
+brew cask install font-jetbrains-mono
 
 # Remove outdated versions from the cellar.
 brew cleanup
