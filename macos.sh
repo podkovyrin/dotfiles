@@ -178,7 +178,7 @@ defaults write com.apple.finder FXInfoPanesExpanded -dict \
 defaults write com.apple.dock expose-animation-duration -float 0.1
 
 # Group windows by application in Mission Control
-defaults write com.apple.dock expose-group-by-app -bool true
+defaults write com.apple.dock expose-group-apps -bool true
 
 # Don’t automatically rearrange Spaces based on most recent use
 defaults write com.apple.dock mru-spaces -bool false
