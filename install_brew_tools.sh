@@ -29,6 +29,7 @@ brew install swiftformat
 brew install swiftlint
 brew install bartycrouch
 brew install tldr
+brew install carthage
 
 # Install MacAppStore console
 brew install mas
