@@ -71,3 +71,4 @@ brew cleanup
 # Fix Catalina compatibility
 
 xattr -cr /Applications/MacMediaKeyForwarder.app
+xattr -cr /Applications/SourceTree.app
