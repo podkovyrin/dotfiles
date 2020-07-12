@@ -10,7 +10,7 @@ echo "🧹 brew"
 brew update && brew upgrade && brew cleanup && brew doctor
 
 echo "🧹 cask"
-brew cask upgrade && brew cask doctor
+brew cask upgrade --greedy && brew cask doctor
 
 echo "🧹 gem"
 gem update && gem cleanup
