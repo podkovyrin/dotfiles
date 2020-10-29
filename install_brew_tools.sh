@@ -56,7 +56,7 @@ brew cask install nrlquaker-winbox
 brew cask install reveal
 brew cask install charles
 brew cask install sf-symbols
-brew cask install firefox
+brew cask install chrome
 brew cask install exodus
 brew cask install db-browser-for-sqlite
 
