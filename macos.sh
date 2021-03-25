@@ -376,6 +376,18 @@ defaults write org.m0k.transmission WarningLegal -bool false
 sudo nvram StartupMute=%00
 
 ###############################################################################
+# Xcode                                                                       #
+###############################################################################
+
+# see https://xcode-tips.github.io
+
+# Faster Xcode Rename Refactoring
+defaults write com.apple.dt.Xcode CodeFoldingAnimationSpeed -int 0
+
+# Show project build times in the activity viewer
+defaults write com.apple.dt.Xcode ShowBuildOperationDuration -bool YES
+
+###############################################################################
 # Kill affected applications                                                  #
 ###############################################################################
 
