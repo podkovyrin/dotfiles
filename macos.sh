@@ -16,6 +16,11 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 # General UI/UX                                                               #
 ###############################################################################
 
+# Colored iMac Accent color
+# 3 - yellow, 4 - teal, ... 8
+defaults write -g NSColorSimulateHardwareAccent -bool YES
+defaults write -g NSColorSimulatedHardwareEnclosureNumber -int 4
+
 # Don't close windows when quitting an app (use System Restoration)
 # Useful for iTerm to restore previous opened tabs
 defaults write NSGlobalDomain NSQuitAlwaysKeepsWindows 1
