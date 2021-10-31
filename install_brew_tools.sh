@@ -2,7 +2,8 @@
 
 # Install command-line tools using Homebrew.
 
-brew || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+# brew needs to be installed manually from https://brew.sh
+# brew || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 # Make sure we’re using the latest Homebrew.
 brew update
@@ -19,8 +20,7 @@ brew install gnupg
 brew install git
 brew install git-lfs
 brew install tig
-brew install hub
-# brew install github/gh/gh
+brew install gh
 brew install mercurial
 brew install cmake
 brew install colordiff
@@ -30,10 +30,7 @@ brew install clang-format
 brew install bartycrouch
 brew install tldr
 brew install carthage
-# brew install svn
-
-# Install MacAppStore console
-brew install mas
+brew install svn
 
 # Install GUI Apps
 

@@ -13,3 +13,20 @@ PATH=$(echo "$PATH" | awk -v RS=':' -v ORS=":" '!a[$1]++{if (NR > 1) printf ORS;
 pathInsert "$HOME/.fastlane/bin"
 pathInsert "/usr/local/sbin"
 pathInsert "/usr/local/opt/ruby/bin"
+
+pathInsert "/Applications/Sublime Text.app/Contents/SharedSupport/bin"
+
+# Apple Silicon specific brew installation
+pathInsert "/opt/homebrew/bin"
+pathInsert "/opt/homebrew/sbin"
+
+# Ruby @ brew
+pathInsert "/opt/homebrew/opt/ruby/bin"
+pathInsert "/opt/homebrew/lib/ruby/gems/3.0.0/bin"
+
+export HOMEBREW_PREFIX="/opt/homebrew"
+export HOMEBREW_CELLAR="/opt/homebrew/Cellar"
+export HOMEBREW_REPOSITORY="/opt/homebrew"
+export HOMEBREW_SHELLENV_PREFIX="/opt/homebrew"
+export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:"
+export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}"
