@@ -84,10 +84,6 @@ alias gz='tar -zcvf'
 alias ka9='killall -9'
 alias k9='kill -9'
 
-# Show/hide hidden files in Finder
-alias showFiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
-alias hideFiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
-
 # Cocoapods
 alias piu="pod install --repo-update && osascript -e 'display notification \"Cocoapods installed and repo updated\" with title \"iTerm2\"'"
 alias pi="pod install && osascript -e 'display notification \"Cocoapods installed\" with title \"iTerm2\"'"
