@@ -24,10 +24,6 @@ brew install gh
 brew install mercurial
 brew install cmake
 brew install colordiff
-brew install clang-format
-# brew install swiftformat
-# brew install swiftlint
-brew install bartycrouch
 brew install tldr
 brew install carthage
 brew install svn
@@ -36,7 +32,6 @@ brew install svn
 
 brew install iterm2
 brew install sublime-text
-brew install slack
 brew install fork
 brew install spotify
 brew install the-unarchiver
@@ -45,14 +40,10 @@ brew install macmediakeyforwarder
 brew install skype
 brew install telegram
 brew install opensim
-# brew install transmission
 brew install wwdc
 brew install nrlquaker-winbox
-# brew install reveal
-# brew install charles
 brew install sf-symbols
 brew install chrome
-# brew install exodus
 brew install db-browser-for-sqlite
 
 # Fonts

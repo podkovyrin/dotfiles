@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo "🧹 Running chores (brew, gem and AppStore updates, cleanup)"
+echo "🧹 Running chores (brew and gem updates, cleanup)"
 
 sudo -v
 # Keep-alive: update existing `sudo` time stamp until `chores` has finished
