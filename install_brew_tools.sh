@@ -46,6 +46,10 @@ brew install sf-symbols
 brew install chrome
 brew install db-browser-for-sqlite
 
+# Fixes crackling sound issues
+# https://developer.apple.com/forums/thread/668170?answerId=675677022#675677022
+brew install blackhole-2ch
+
 # Fonts
 
 brew tap homebrew/cask-fonts
