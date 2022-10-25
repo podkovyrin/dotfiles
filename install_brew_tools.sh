@@ -11,14 +11,15 @@ brew update
 # Upgrade any already-installed formulae.
 brew upgrade
 
-# brew install ruby
-# brew install python3
+brew install ruby
+brew install python3
 
 # Install GnuPG to enable PGP-signing commits.
 brew install gnupg
 
 brew install git
 brew install git-lfs
+brew install git-secret
 brew install tig
 brew install gh
 brew install mercurial
@@ -27,6 +28,16 @@ brew install colordiff
 brew install tldr
 brew install carthage
 brew install svn
+brew install bazelisk
+
+brew install cocoapods
+brew install crowdin
+brew install mint
+
+brew install exa
+brew install bat
+brew install httpie
+
 
 # Install GUI Apps
 

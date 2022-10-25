@@ -71,6 +71,7 @@
   uncommit = reset --soft HEAD^     # go back before last commit, with files in uncommitted state
   filelog = log -u                  # show changes to a file
   mt = mergetool                    # fire up the merge tool
+  nuke = !git clean -xdf && git reset --hard
 
   # stash
   ss = stash                        # stash changes
@@ -164,3 +165,5 @@
   required = true
 [pull]
   ff = only
+[url "git@github.com:"]
+	insteadOf = https://github.com/
