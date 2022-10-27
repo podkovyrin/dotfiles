@@ -2,8 +2,7 @@
 
 # Install command-line tools using Homebrew.
 
-# brew needs to be installed manually from https://brew.sh
-# brew || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 # Make sure we’re using the latest Homebrew.
 brew update
@@ -56,6 +55,7 @@ brew install nrlquaker-winbox
 brew install sf-symbols
 brew install chrome
 brew install db-browser-for-sqlite
+brew install visual-studio-code
 
 # Fixes crackling sound issues
 # https://developer.apple.com/forums/thread/668170?answerId=675677022#675677022
