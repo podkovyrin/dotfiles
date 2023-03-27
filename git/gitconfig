@@ -100,6 +100,8 @@
   bclean = "!f() { git branch --merged | grep  -v '\\*\\|master\\|develop\\|main\\|dev' | xargs -n 1 git branch -d; }; f"
 
   subs = submodule update --init --recursive
+
+  changelog = "!f() { git log $1..HEAD --pretty=\"format:%s%n%b\" | grep changelog: | /usr/bin/sed -e \"s/^.*changelog\\://\" | awk \"{\\$1=\\$1};1\"; }; f"
   
 [format]
   pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset
