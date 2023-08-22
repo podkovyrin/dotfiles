@@ -56,6 +56,7 @@ brew install sf-symbols
 brew install chrome
 brew install db-browser-for-sqlite
 brew install visual-studio-code
+brew install nvm
 
 # Fixes crackling sound issues
 # https://developer.apple.com/forums/thread/668170?answerId=675677022#675677022
