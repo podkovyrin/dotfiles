@@ -144,7 +144,7 @@
 [remote "origin"]
   prune = true
 [user]
-  name = Andrew Podkovyrin
+  name = Andrei Podkovyrin
   email = podkovyrin@gmail.com
 [filter "lfs"]
   required = true

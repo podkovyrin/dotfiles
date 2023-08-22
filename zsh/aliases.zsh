@@ -92,11 +92,12 @@ alias pipod="pod install --project-directory=Example && osascript -e 'display no
 # Misc
 # alias jsp='underscore print --color'
 alias xtrmntdd='rm -rf ~/Library/Developer/Xcode/DerivedData'
-alias t='tig --all'
+alias tig='/opt/homebrew/bin/tig --all'
+alias t='/opt/homebrew/bin/tig'
+alias xcgen='mint run xcodegen'
 
 # Maintance
 alias brewu='brew update && brew upgrade && brew cleanup && brew doctor'
 alias gemu='gem update && gem cleanup'
-alias clean_my_mac='$yadr/clean_my_mac/clean_my_mac.sh'
 alias chores='$yadr/chores/chores.sh'
 alias reload='source ~/.zshrc'
