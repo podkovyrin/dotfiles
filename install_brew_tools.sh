@@ -33,6 +33,10 @@ brew install cocoapods
 brew install crowdin
 brew install mint
 
+# xcodes for the fastest Xcode installs
+brew install aria2
+brew install xcodesorg/made/xcodes
+
 brew install exa
 brew install bat
 brew install httpie
