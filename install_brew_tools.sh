@@ -37,7 +37,6 @@ brew install mint
 brew install aria2
 brew install xcodesorg/made/xcodes
 
-brew install exa
 brew install bat
 brew install httpie
 

@@ -41,8 +41,8 @@ if [[ $platform == 'linux' ]]; then
   alias ll='ls -alh --color=auto'
   alias ls='ls --color=auto'
 elif [[ $platform == 'darwin' ]]; then
-  alias ll='exa -alGh'
-  alias ls='exa -Gh'
+  alias ll='ls -alGh'
+  alias ls='ls -Gh'
 fi
 
 # show me files matching "ls grep"
