@@ -90,14 +90,23 @@ alias pi="pod install && osascript -e 'display notification \"Cocoapods installe
 alias pipod="pod install --project-directory=Example && osascript -e 'display notification \"Cocoapods installed\" with title \"iTerm2\"'"
 
 # Misc
+
 # alias jsp='underscore print --color'
 alias xtrmntdd='rm -rf ~/Library/Developer/Xcode/DerivedData'
 alias tig='/opt/homebrew/bin/tig --all'
 alias t='/opt/homebrew/bin/tig'
 alias xcgen='mint run xcodegen'
 
+# creates a http server of the local dir contents
+alias localsrv=`python3 -m http.server`
+
 # Maintance
 alias brewu='brew update && brew upgrade && brew cleanup && brew doctor'
 alias gemu='gem update && gem cleanup'
 alias chores='$yadr/chores/chores.sh'
 alias reload='source ~/.zshrc'
+
+# ML
+alias ml_on='conda config --set auto_activate_base true'
+alias ml_off='conda config --set auto_activate_base false'
+alias ml_start='~/anaconda3/bin/jupyter_mac.command'

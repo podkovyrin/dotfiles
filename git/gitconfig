@@ -168,5 +168,7 @@
 [pull]
   ff = only
   rebase = true
-[url "git@github.com:"]
-	insteadOf = https://github.com/
+
+# https://stackoverflow.com/questions/58816416/xcode-swift-package-manager-error-the-repository-could-not-be-found
+# [url "git@github.com:"]
+# 	insteadOf = https://github.com/
