@@ -98,7 +98,7 @@ alias t='/opt/homebrew/bin/tig'
 alias xcgen='mint run xcodegen'
 
 # creates a http server of the local dir contents
-alias localsrv=`python3 -m http.server`
+alias localsrv='python3 -m http.server'
 
 # Maintance
 alias brewu='brew update && brew upgrade && brew cleanup && brew doctor'

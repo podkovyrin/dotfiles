@@ -27,9 +27,9 @@ brew install colordiff
 brew install tldr
 brew install carthage
 brew install svn
-brew install bazelisk
+# brew install bazelisk
 
-brew install cocoapods
+# brew install cocoapods
 brew install crowdin
 brew install mint
 
@@ -37,8 +37,8 @@ brew install mint
 brew install aria2
 brew install xcodesorg/made/xcodes
 
-brew install bat
-brew install httpie
+# brew install bat
+# brew install httpie
 
 
 # Install GUI Apps
@@ -50,20 +50,26 @@ brew install spotify
 brew install the-unarchiver
 brew install vlc
 brew install macmediakeyforwarder
-brew install skype
+# brew install skype
 brew install telegram
 brew install opensim
-brew install wwdc
-brew install nrlquaker-winbox
+# brew install wwdc
+# brew install nrlquaker-winbox
 brew install sf-symbols
-brew install chrome
+brew install google-chrome
 brew install db-browser-for-sqlite
 brew install visual-studio-code
 brew install nvm
+brew install steermouse
+brew install anaconda
+brew install zoom
+brew install jabra-direct
+brew install raycast
+brew install google-drive
 
 # Fixes crackling sound issues
 # https://developer.apple.com/forums/thread/668170?answerId=675677022#675677022
-brew install blackhole-2ch
+# brew install blackhole-2ch
 
 # Fonts
 

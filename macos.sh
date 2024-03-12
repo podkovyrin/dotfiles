@@ -29,7 +29,7 @@ defaults write -g NSColorSimulatedHardwareEnclosureNumber -int 4
 # defaults write NSGlobalDomain NSQuitAlwaysKeepsWindows 1
 
 # Reduce transparency
-defaults write com.apple.universalaccess reduceTransparency -bool true
+# defaults write com.apple.universalaccess reduceTransparency -bool true
 
 # Set sidebar icon size to medium
 defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 3
@@ -46,7 +46,7 @@ defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
 defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
 
 # Save to disk (not to iCloud) by default
-defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
+# defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 
 # Automatically quit printer app once the print jobs complete
 defaults write com.apple.print.PrintingPrefs "Quit When Finished" -bool true
@@ -62,13 +62,6 @@ defaults write com.apple.LaunchServices LSQuarantine -bool false
 
 # Restart automatically if the computer freezes
 sudo systemsetup -setrestartfreeze on
-
-# Set language and text formats
-defaults write NSGlobalDomain AppleLanguages -array "en-GB" "ru-GB"
-defaults write NSGlobalDomain AppleLocale -string "en_GB@currency=EUR"
-defaults write NSGlobalDomain AppleMeasurementUnits -string "Centimeters"
-defaults write NSGlobalDomain AppleTemperatureUnit -string "Celsius"
-defaults write NSGlobalDomain AppleMetricUnits -bool true
 
 # Disable automatic capitalization as it’s annoying when typing code
 defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
@@ -324,29 +317,6 @@ defaults write com.crowdcafe.windowmagnet moveWindowToPreviousDisplay -dict
 defaults write com.crowdcafe.windowmagnet restoreWindowComboKey -dict
 
 ###############################################################################
-# Transmission.app                                                            #
-###############################################################################
-
-# Use `~/Downloads` to store completed downloads
-defaults write org.m0k.transmission DownloadLocationConstant -bool true
-
-# Trash original torrent files
-defaults write org.m0k.transmission DeleteOriginalTorrent -bool true
-
-# Hide the donate message
-defaults write org.m0k.transmission WarningDonate -bool false
-
-# Hide the legal disclaimer
-defaults write org.m0k.transmission WarningLegal -bool false
-
-###############################################################################
-# Additional Hacks                                                            #
-###############################################################################
-
-# Enable Mac's startup chime
-# sudo nvram StartupMute=%00
-
-###############################################################################
 # Xcode                                                                       #
 ###############################################################################
 
@@ -375,7 +345,6 @@ for app in "Activity Monitor" \
 	"Photos" \
 	"Safari" \
 	"SystemUIServer" \
-	"Transmission" \
 	"iCal"; do
 	killall "${app}" &> /dev/null
 done
