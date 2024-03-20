@@ -24,10 +24,6 @@ sh -c "`curl -fsSL https://raw.githubusercontent.com/podkovyrin/dotfiles/master/
 ./install_gem_tools.sh
 ```
 
-```bash
-./install_appstore.sh
-```
-
 ### Updating
 
 Update everything to latest versions from github:

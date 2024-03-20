@@ -20,26 +20,25 @@ brew install git
 brew install git-lfs
 brew install git-secret
 brew install tig
-brew install gh
 brew install mercurial
 brew install cmake
 brew install colordiff
 brew install tldr
 brew install carthage
 brew install svn
-# brew install bazelisk
 
-# brew install cocoapods
+# GitHub Tools
+brew install gh
+# GitHub Copilot CLI installation:
+# gh auth login
+# gh extension install github/gh-copilot
+
 brew install crowdin
 brew install mint
 
 # xcodes for the fastest Xcode installs
 brew install aria2
 brew install xcodesorg/made/xcodes
-
-# brew install bat
-# brew install httpie
-
 
 # Install GUI Apps
 
@@ -50,10 +49,8 @@ brew install spotify
 brew install the-unarchiver
 brew install vlc
 brew install macmediakeyforwarder
-# brew install skype
 brew install telegram
 brew install opensim
-# brew install wwdc
 # brew install nrlquaker-winbox
 brew install sf-symbols
 brew install google-chrome
@@ -66,6 +63,7 @@ brew install zoom
 brew install jabra-direct
 brew install raycast
 brew install google-drive
+brew install firefox
 
 # Fixes crackling sound issues
 # https://developer.apple.com/forums/thread/668170?answerId=675677022#675677022
