@@ -93,8 +93,8 @@ alias pipod="pod install --project-directory=Example && osascript -e 'display no
 
 # alias jsp='underscore print --color'
 alias xtrmntdd='rm -rf ~/Library/Developer/Xcode/DerivedData'
-alias tig='/opt/homebrew/bin/tig --all'
-alias t='/opt/homebrew/bin/tig'
+alias tig='$HOMEBREW_PREFIX/bin/tig --all'
+alias t='$HOMEBREW_PREFIX/bin/tig'
 alias xcgen='mint run xcodegen'
 
 # creates a http server of the local dir contents
@@ -107,6 +107,6 @@ alias chores='$yadr/chores/chores.sh'
 alias reload='source ~/.zshrc'
 
 # ML
-alias ml_on='conda config --set auto_activate_base true'
-alias ml_off='conda config --set auto_activate_base false'
-alias ml_start='~/anaconda3/bin/jupyter_mac.command'
+alias ml_on='$HOMEBREW_PREFIX/anaconda3/bin/conda config --set auto_activate_base true'
+alias ml_off='$HOMEBREW_PREFIX/anaconda3/bin/conda config --set auto_activate_base false'
+alias ml_start='$HOMEBREW_PREFIX/anaconda3/bin/jupyter_mac.command'
