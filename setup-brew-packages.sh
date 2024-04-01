@@ -1,9 +1,5 @@
 #!/bin/sh
 
-# Install command-line tools using Homebrew.
-
-brew || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
 # Make sure we’re using the latest Homebrew.
 brew update
 
@@ -56,7 +52,6 @@ brew install sf-symbols
 brew install google-chrome
 brew install db-browser-for-sqlite
 brew install visual-studio-code
-brew install nvm
 brew install steermouse
 brew install anaconda
 brew install zoom

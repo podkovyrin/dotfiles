@@ -1,1 +1,0 @@
-pathInsert "$HOME/.mint/bin"

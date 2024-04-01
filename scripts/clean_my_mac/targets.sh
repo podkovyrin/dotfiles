@@ -1,3 +1,5 @@
+#!/bin/sh
+
 targets() {
   local TRASH_FOLDER="$HOME/.Trash/*"
   local USER_CACHE="$HOME/Library/Caches/*"

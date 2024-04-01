@@ -1,0 +1,6 @@
+# Exclude .fish files starting with _
+_*.fish
+
+# Exclude installed plugins
+nvm.fish
+fisher.fish

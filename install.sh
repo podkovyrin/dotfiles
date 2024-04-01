@@ -1,10 +1,14 @@
 #!/bin/sh
 
-if [ ! -d "$HOME/.yadr" ]; then
-    echo "Installing YADR for the first time"
-    git clone -b master --depth=1 https://github.com/podkovyrin/dotfiles.git "$HOME/.yadr"
-    cd "$HOME/.yadr"
-    rake install
+if [ ! -d "$HOME/.dotfiles" ]; then
+    echo "Installing dotfiles for the first time"
+    git clone https://github.com/podkovyrin/dotfiles.git "$HOME/.dotfiles"
+    cd "$HOME/.dotfiles"
+    ./setup-main.sh
+
+    git remote remove origin
+    git remote add origin git@github.com:podkovyrin/dotfiles.git
+    git branch --set-upstream-to origin/master
 else
-    echo "YADR is already installed"
+    echo "dotfiles is already installed"
 fi

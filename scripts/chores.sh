@@ -12,10 +12,7 @@ brew update && brew upgrade && brew cleanup && brew doctor
 echo "🧹 gem"
 gem update && gem cleanup
 
-echo "🧹 npm upgrade"
-npm install -g @githubnext/github-copilot-cli
-
 echo "🧹 cleanup"
-CMM=$HOME/.yadr/clean_my_mac/clean_my_mac.sh
+CMM=$HOME/.dotfiles/scripts/clean_my_mac/clean_my_mac.sh
 $CMM
 sudo $CMM

@@ -1,3 +1,5 @@
+#!/bin/sh
+
 #
 # Based on https://github.com/aaronoah/clean-my-mac
 #
@@ -25,7 +27,7 @@
 # SOFTWARE.
 #
 
-source "$HOME/.yadr/clean_my_mac/targets.sh"
+source "$HOME/.dotfiles/scripts/clean_my_mac/targets.sh"
 
 
 clean_my_mac() {
