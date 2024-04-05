@@ -2,7 +2,7 @@ set fish_greeting
 
 # Global variables:
 
-set -Ux LC_AL en_US.UTF-8
+set -Ux LC_ALL en_US.UTF-8
 set -Ux LANG en_US.UTF-8
 set -Ux HOMEBREW_PREFIX /opt/homebrew
 set -Ux HOMEBREW_CELLAR /opt/homebrew/Cellar
@@ -25,8 +25,8 @@ fish_add_path "$HOME/.mint/bin"
 # Abbrevations:
 
 abbr -a g git
-abbr -a tig "tig --all"
 abbr -a t "tig"
+abbr -a tig "tig --all"
 
 abbr -a localsrv "python3 -m http.server"
 
@@ -40,7 +40,8 @@ abbr -a ml_on "$HOMEBREW_PREFIX/anaconda3/bin/conda config --set auto_activate_b
 abbr -a ml_off "$HOMEBREW_PREFIX/anaconda3/bin/conda config --set auto_activate_base false"
 abbr -a ml_start "$HOMEBREW_PREFIX/anaconda3/bin/jupyter_mac.command"
 
-function last_history_item
-    echo $history[1]
-end
 abbr -a !! --position anywhere --function last_history_item
+
+
+zoxide init fish | source
+starship init fish | source

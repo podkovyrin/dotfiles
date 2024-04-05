@@ -8,6 +8,7 @@ brew upgrade
 
 brew install ruby
 brew install python3
+brew install virtualenv
 
 # Install GnuPG to enable PGP-signing commits.
 brew install gnupg
@@ -22,6 +23,15 @@ brew install colordiff
 brew install tldr
 brew install carthage
 brew install svn
+brew install bat
+brew install eza
+brew install uv
+brew install zoxide
+brew install git-delta
+brew install ripgrep
+brew install gitui
+brew install curlie
+
 
 # GitHub Tools
 brew install gh
@@ -69,6 +79,7 @@ brew install firefox
 brew tap homebrew/cask-fonts
 brew install font-montserrat
 brew install font-jetbrains-mono
+brew install font-jetbrains-mono-nerd-font
 
 # Remove outdated versions from the cellar.
 brew cleanup

@@ -1,0 +1,9 @@
+# Exclude private .fish files starting with _
+config/fish/functions/_*.fish
+
+# Exclude installed fish plugins
+config/fish/functions/nvm.fish
+config/fish/functions/fisher.fish
+config/fish/functions/fenv.*
+
+dot/vim/.netrwhist

@@ -1,0 +1,245 @@
+[aws]
+symbol = "\ue33d  "
+
+[buf]
+format = "via [$symbol]($style)"
+symbol = "\uf49d "
+
+[bun]
+format = "via [$symbol]($style)"
+
+[c]
+symbol = "\ue61e "
+
+[cmake]
+format = "via [$symbol]($style)"
+
+[cobol]
+format = "via [$symbol]($style)"
+
+[conda]
+symbol = "\uf10c "
+
+[crystal]
+format = "via [$symbol]($style)"
+symbol = "\ue62f "
+
+[daml]
+format = "via [$symbol]($style)"
+
+[dart]
+format = "via [$symbol]($style)"
+symbol = "\ue798 "
+
+[deno]
+format = "via [$symbol]($style)"
+
+[directory]
+read_only = " \U000f033e"
+
+[docker_context]
+symbol = "\uf308 "
+
+[dotnet]
+format = "[$symbol(🎯 $tfm )]($style)"
+
+[elixir]
+format = "via [$symbol]($style)"
+symbol = "\ue62d "
+
+[elm]
+format = "via [$symbol]($style)"
+symbol = "\ue62c "
+
+[erlang]
+format = "via [$symbol]($style)"
+
+[fennel]
+format = "via [$symbol]($style)"
+symbol = "\ue6af "
+
+[fossil_branch]
+symbol = "\uf418 "
+
+[git_branch]
+symbol = "\uf418 "
+
+[golang]
+format = "via [$symbol]($style)"
+symbol = "\ue627 "
+
+[gradle]
+format = "via [$symbol]($style)"
+
+[guix_shell]
+symbol = "\uf325 "
+
+[haskell]
+symbol = "\ue777 "
+
+[haxe]
+format = "via [$symbol]($style)"
+symbol = "\ue666 "
+
+[helm]
+format = "via [$symbol]($style)"
+
+[hg_branch]
+symbol = "\uf418 "
+
+[hostname]
+ssh_symbol = "\ueb01 "
+
+[java]
+format = "via [$symbol]($style)"
+symbol = "\ue256 "
+
+[julia]
+format = "via [$symbol]($style)"
+symbol = "\ue624 "
+
+[kotlin]
+format = "via [$symbol]($style)"
+symbol = "\ue634 "
+
+[lua]
+format = "via [$symbol]($style)"
+symbol = "\ue620 "
+
+[memory_usage]
+symbol = "\U000f035b "
+
+[meson]
+format = "via [$symbol]($style)"
+symbol = "\U000f0537 "
+
+[nim]
+format = "via [$symbol]($style)"
+symbol = "\U000f01a5 "
+
+[nix_shell]
+symbol = "\uf313 "
+
+[nodejs]
+format = "via [$symbol]($style)"
+symbol = "\ue718 "
+
+[ocaml]
+format = "via [$symbol(\\($switch_indicator$switch_name\\) )]($style)"
+symbol = "\ue67a "
+
+[opa]
+format = "via [$symbol]($style)"
+
+[package]
+symbol = "\U000f03d7 "
+
+[perl]
+format = "via [$symbol]($style)"
+symbol = "\ue67e "
+
+[php]
+format = "via [$symbol]($style)"
+symbol = "\ue608 "
+
+[pijul_channel]
+symbol = "\uf418 "
+
+[pulumi]
+format = "via [$symbol$stack]($style)"
+
+[purescript]
+format = "via [$symbol]($style)"
+
+[python]
+format = "[${symbol}${pyenv_prefix}(\\($virtualenv\\))]($style)"
+symbol = "\ue606 "
+
+[quarto]
+format = "via [$symbol]($style)"
+
+[raku]
+format = "via [$symbol]($style)"
+
+[red]
+format = "via [$symbol]($style)"
+
+[rlang]
+format = "via [$symbol]($style)"
+symbol = "\U000f07d4 "
+
+[ruby]
+format = "via [$symbol]($style)"
+symbol = "\ue791 "
+
+[rust]
+format = "via [$symbol]($style)"
+symbol = "\ue7a8 "
+
+[scala]
+symbol = "\ue737 "
+
+[solidity]
+format = "via [$symbol]($style)"
+
+[swift]
+format = "via [$symbol]($style)"
+symbol = "\ue755 "
+
+[typst]
+format = "via [$symbol]($style)"
+
+[vagrant]
+format = "via [$symbol]($style)"
+
+[vlang]
+format = "via [$symbol]($style)"
+
+[zig]
+format = "via [$symbol]($style)"
+symbol = "\ue6a9 "
+
+[os.symbols]
+Alpaquita = "\ueaa2 "
+Alpine = "\uf300 "
+AlmaLinux = "\uf31d "
+Amazon = "\uf270 "
+Android = "\uf17b "
+Arch = "\uf303 "
+Artix = "\uf31f "
+CentOS = "\uf304 "
+Debian = "\uf306 "
+DragonFly = "\ue28e "
+Emscripten = "\uf205 "
+EndeavourOS = "\uf197 "
+Fedora = "\uf30a "
+FreeBSD = "\uf30c "
+Garuda = "\U000f06d3 "
+Gentoo = "\uf30d "
+HardenedBSD = "\U000f078c "
+Illumos = "\U000f0238 "
+Kali = "\uf327 "
+Linux = "\uf31a "
+Mabox = "\ueb29 "
+Macos = "\uf302 "
+Manjaro = "\uf312 "
+Mariner = "\uf1cd "
+MidnightBSD = "\uf186 "
+Mint = "\uf30e "
+NetBSD = "\uf024 "
+NixOS = "\uf313 "
+OpenBSD = "\U000f023a "
+openSUSE = "\uf314 "
+OracleLinux = "\U000f0337 "
+Pop = "\uf32a "
+Raspbian = "\uf315 "
+Redhat = "\uf316 "
+RedHatEnterprise = "\uf316 "
+RockyLinux = "\uf32b "
+Redox = "\U000f0018 "
+Solus = "\U000f0833 "
+SUSE = "\uf314 "
+Ubuntu = "\uf31b "
+Unknown = "\uf22d "
+Void = "\uf32e "
+Windows = "\U000f0372 "
