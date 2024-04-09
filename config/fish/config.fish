@@ -25,8 +25,8 @@ fish_add_path "$HOME/.mint/bin"
 # Abbrevations:
 
 abbr -a g git
-abbr -a t "tig"
-abbr -a tig "tig --all"
+abbr -a t tig
+abbr -a gu gitui
 
 abbr -a localsrv "python3 -m http.server"
 

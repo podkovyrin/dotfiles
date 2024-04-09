@@ -12,6 +12,9 @@ brew update && brew upgrade && brew cleanup && brew doctor
 echo "🧹 gem"
 gem update && gem cleanup
 
+echo "🧹 fisher"
+fish -c "fisher update"
+
 echo "🧹 cleanup"
 CMM=$HOME/.dotfiles/scripts/clean_my_mac/clean_my_mac.sh
 $CMM
