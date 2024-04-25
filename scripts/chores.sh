@@ -7,7 +7,7 @@ sudo -v
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 echo "🧹 brew"
-brew update && brew upgrade && brew cleanup && brew doctor
+brew update && brew upgrade && brew cleanup && brew doctor && brew autoremove
 
 echo "🧹 gem"
 gem update && gem cleanup
