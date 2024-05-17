@@ -21,12 +21,13 @@ fish_add_path "/Applications/Sublime Text.app/Contents/SharedSupport/bin"
 fish_add_path "/opt/homebrew/opt/ruby/bin"
 fish_add_path "$HOME/.mint/bin"
 
+# Abbrevation definition helpers
+
+source $HOME/.config/fish/abbr.fish
 
 # Abbrevations:
 
-abbr -a g git
-abbr -a t tig
-abbr -a gu gitui
+abbr -a "p3" "python3"
 
 abbr -a localsrv "python3 -m http.server"
 
@@ -42,6 +43,9 @@ abbr -a ml_start "$HOMEBREW_PREFIX/anaconda3/bin/jupyter_mac.command"
 
 abbr -a !! --position anywhere --function last_history_item
 
+abbr_subcommand brew i install
+
+source $HOME/.config/fish/git.fish
 
 zoxide init fish | source
 starship init fish | source
