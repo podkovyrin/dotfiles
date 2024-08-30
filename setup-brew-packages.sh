@@ -31,6 +31,13 @@ brew install git-delta
 brew install ripgrep
 brew install gitui
 brew install curlie
+brew install xcbeautify
+
+# In testing:
+brew install glances
+brew install htop
+brew install btop
+brew install htop
 
 
 # GitHub Tools
@@ -69,6 +76,7 @@ brew install jabra-direct
 brew install raycast
 brew install google-drive
 brew install firefox
+brew install notunes
 
 # Fixes crackling sound issues
 # https://developer.apple.com/forums/thread/668170?answerId=675677022#675677022
@@ -83,6 +91,11 @@ brew install font-jetbrains-mono-nerd-font
 
 # Remove outdated versions from the cellar.
 brew cleanup
+
+# LLMs
+brew install ollama
+brew install llm
+llm install llm-ollama
 
 # Fix Catalina compatibility
 

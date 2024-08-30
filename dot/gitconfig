@@ -23,6 +23,8 @@
 
   changelog = "!f() { git log $1..HEAD --pretty=\"format:%s%n%b\" | grep changelog: | /usr/bin/sed -e \"s/^.*changelog\\://\" | awk \"{\\$1=\\$1};1\"; }; f"
   
+  aic = "!f() { if [ -n \"$(git diff --cached)\" ]; then git commit -m \"$(git diff --cached | llm -m llama3:70b 'Below is a diff of all staged changes, coming from the command:\\n```\\ngit diff --cached\\n```\\nPlease generate a concise, one-line commit message for these changes. Omit minor changes and emphasize the most important changes. OUTPUT ONLY THE MESSAGE.')\"; else echo 'No changes to commit'; fi }; f"
+
 [format]
   pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset
 [mergetool]
@@ -64,13 +66,9 @@
 [remote "origin"]
   prune = true
 [user]
-  name = Andrei Podkovyrin
-  email = podkovyrin@gmail.com
+	name = Andrei Podkovyrin
+	email = podkovyrin@gmail.com
 [filter "lfs"]
-  required = true
-  clean = git-lfs clean -- %f
-  smudge = git-lfs smudge -- %f
-  process = git-lfs filter-process
 [commit]
   gpgsign = true
 
@@ -81,10 +79,10 @@
   cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
   trustExitCode = true
 [filter "lfs"]
-  clean = git-lfs clean -- %f
-  smudge = git-lfs smudge -- %f
-  process = git-lfs filter-process
-  required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
 [pull]
   ff = only
   rebase = true

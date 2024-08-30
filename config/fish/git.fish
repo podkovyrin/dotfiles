@@ -116,6 +116,9 @@ abbr -a gu gitui
     # git ca⎵ → git commit -am
     abbr_subcommand git ca "commit -am"
 
+    # git ci⎵ → git commit -anm
+    abbr_subcommand git ci "commit -anm"
+
     # git commit a⎵ → git commit --amend
     abbr_subcommand_arg git a "--amend" commit
 
