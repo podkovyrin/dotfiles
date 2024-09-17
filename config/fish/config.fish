@@ -33,6 +33,7 @@ abbr -a localsrv "python3 -m http.server"
 
 abbr -a plistbuddy /usr/libexec/PlistBuddy
 abbr -a xcgen "mint run xcodegen"
+abbr -a slint "mint run swiftlint --quiet"
 abbr -a xtrmntdd "rm -rf ~/Library/Developer/Xcode/DerivedData"
 
 abbr -a chores "$HOME/.dotfiles/scripts/chores.sh"
@@ -42,6 +43,8 @@ abbr -a ml_off "$HOMEBREW_PREFIX/anaconda3/bin/conda config --set auto_activate_
 abbr -a ml_start "$HOMEBREW_PREFIX/anaconda3/bin/jupyter_mac.command"
 
 abbr -a !! --position anywhere --function last_history_item
+
+abbr -a fix_llama "find . -type f -perm +111 -exec xattr -cr {} +"
 
 abbr_subcommand brew i install
 

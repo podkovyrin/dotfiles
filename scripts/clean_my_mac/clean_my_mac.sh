@@ -33,15 +33,15 @@ source "$HOME/.dotfiles/scripts/clean_my_mac/targets.sh"
 clean_my_mac() {
 
   detect_shell() {
-    local DETECTED_SHELL=''
-
-    if [[ -n "$BASH_VERSION" ]]; then
-      DETECTED_SHELL="bash"
-    elif [[ -n "$ZSH_VERSION" ]]; then
-      DETECTED_SHELL="zsh"
+    if [ -n "$BASH_VERSION" ]; then
+      echo "bash"
+    elif [ -n "$ZSH_VERSION" ]; then
+      echo "zsh"
+    elif [ -n "$FISH_VERSION" ]; then
+      echo "fish"
+    else
+      echo "unknown"
     fi
-
-    echo $DETECTED_SHELL
   }
 
   local colors
@@ -75,31 +75,26 @@ clean_my_mac() {
 
   for target in ${TARGETS[@]}; do
     set +f
-    if [[ "$(detect_shell)" = "zsh" ]]; then
-      if [ $(command find ${~target} 2>/dev/null | wc -l) -eq 0 ]; then
-        continue
-      fi
-      printf "${GREEN}Estimating size of ${~target} ... "
-      space=$(command du -ch ${~target} | tail -n 1 | cut -f 1)
-
-      printf "$space.${NORMAL}\n"
-      printf "${BLUE}Removing ${~target} ... "
-      rm -rf ${~target} >/dev/null 2>&1 || {
-        printf "${RED}Error removing ${target}.${NORMAL}\n"
-      }
-    elif [[ "$(detect_shell)" = "bash" ]]; then
-      if [ $(command find ${target} 2>/dev/null | wc -l) -eq 0 ]; then
-        continue
-      fi
-      printf "${GREEN}Estimating size of ${target} ... "
-      space=$(command du -ch ${target} | tail -n 1 | cut -f 1)
-
-      printf "$space.${NORMAL}\n"
-      printf "${BLUE}Removing $target ... "
-      rm -rf ${target} >/dev/null 2>&1 || {
-        printf "${RED}Error removing ${target}.${NORMAL}\n"
-      }
+    local shell_type=$(detect_shell)
+    
+    if [ "$shell_type" = "zsh" ]; then
+      target=${~target}
+    elif [ "$shell_type" = "fish" ]; then
+      target=$(eval echo $target)
     fi
+
+    if [ $(command find $target 2>/dev/null | wc -l) -eq 0 ]; then
+      continue
+    fi
+    
+    printf "${GREEN}Estimating size of $target ... "
+    space=$(command du -ch $target | tail -n 1 | cut -f 1)
+
+    printf "$space.${NORMAL}\n"
+    printf "${BLUE}Removing $target ... "
+    rm -rf $target >/dev/null 2>&1 || {
+      printf "${RED}Error removing $target.${NORMAL}\n"
+    }
 
     printf "${BLUE}done.\n"
     printf "${NORMAL}"

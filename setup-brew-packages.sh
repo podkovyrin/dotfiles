@@ -37,7 +37,6 @@ brew install xcbeautify
 brew install glances
 brew install htop
 brew install btop
-brew install htop
 
 
 # GitHub Tools
@@ -77,6 +76,7 @@ brew install raycast
 brew install google-drive
 brew install firefox
 brew install notunes
+brew install MonitorControl
 
 # Fixes crackling sound issues
 # https://developer.apple.com/forums/thread/668170?answerId=675677022#675677022
