@@ -1,5 +1,25 @@
 #!/bin/sh
 
+###############################################################################
+# Package manager
+
+echo
+echo "➡️ Setting up brew..."
+
+install_brew() {
+    if test ! $(which brew); then
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+        brew update
+        brew upgrade
+    else
+        echo "Brew is already installed."
+    fi
+}
+
+install_brew
+
+
 # Make sure we’re using the latest Homebrew.
 brew update
 
@@ -32,12 +52,7 @@ brew install ripgrep
 brew install gitui
 brew install curlie
 brew install xcbeautify
-
-# In testing:
-brew install glances
-brew install htop
 brew install btop
-
 
 # GitHub Tools
 brew install gh
@@ -77,6 +92,13 @@ brew install google-drive
 brew install firefox
 brew install notunes
 brew install MonitorControl
+brew install cursor
+brew install 1password
+brew install android-studio
+brew install chatgpt
+brew install github-copilot-for-xcode
+brew install postman
+brew install slack
 
 # Fixes crackling sound issues
 # https://developer.apple.com/forums/thread/668170?answerId=675677022#675677022

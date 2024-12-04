@@ -32,25 +32,6 @@ install_dot_configs() {
 install_dot_configs
 
 ###############################################################################
-# Package manager
-
-echo
-echo "➡️ Setting up brew..."
-
-install_brew() {
-    if test ! $(which brew); then
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-        brew update
-        brew upgrade
-    else
-        echo "Brew is already installed."
-    fi
-}
-
-install_brew
-
-###############################################################################
 # Fish shell
 
 echo
@@ -110,4 +91,4 @@ install_fish() {
 install_fish
 
 echo
-echo "✅ dotfiles has been installed. Please restart your terminal."
+echo "Please restart your terminal."
