@@ -8,6 +8,9 @@ if [ ! -d "$HOME/.dotfiles" ]; then
     git remote remove origin
     git remote add origin git@github.com:podkovyrin/dotfiles.git
     git branch --set-upstream-to origin/master
+
+    echo
+    echo "To continue, run ./setup-main.sh"
 else
     echo "dotfiles is already installed"
 fi

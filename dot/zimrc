@@ -1,0 +1,16 @@
+zmodule zsh-users/zsh-completions --fpath src
+zmodule completion
+zmodule termtitle
+zmodule utility
+zmodule environment
+zmodule input
+zmodule zsh-users/zsh-history-substring-search
+zmodule olets/zsh-abbr
+zmodule olets/zsh-autosuggestions-abbreviations-strategy
+zmodule lukechilds/zsh-nvm
+zmodule zimfw/fzf
+zmodule zimfw/archive
+zmodule MichaelAquilina/zsh-you-should-use
+
+zmodule zsh-users/zsh-syntax-highlighting
+zmodule zsh-users/zsh-autosuggestions
