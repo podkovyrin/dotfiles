@@ -29,7 +29,6 @@ brew install git-lfs
 brew install git-secret
 brew install tig
 brew install cmake
-brew install colordiff
 brew install tldr
 brew install bat # shell
 brew install eza # shell, ls

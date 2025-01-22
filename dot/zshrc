@@ -73,6 +73,9 @@ o() { [[ $# -gt 0 ]] && open "$@" || open .; }
 s() { [[ $# -gt 0 ]] && subl "$@" || subl .; }
 ws() { [[ $# -gt 0 ]] && windsurf "$@" || windsurf .; }
 
+alias diff='diff --color=auto'
+alias grep='grep --color=auto'
+
 # prompt
 eval "$(starship init zsh)"
 

@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/zsh
+
+source "${HOME}/.zshrc"
 
 echo "🧹 Running chores (brew and gem updates, cleanup)"
 
