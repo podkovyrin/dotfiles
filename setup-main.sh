@@ -1,104 +1,102 @@
 #!/bin/sh
 
-###############################################################################
-# Brew
+setup_brew() {
+    echo
+    echo "➡️ Setting up brew..."
 
-echo
-echo "➡️ Setting up brew..."
+    if test ! $(which brew); then
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    else
+        echo "Brew is already installed."
+    fi
 
-if test ! $(which brew); then
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-else
-    echo "Brew is already installed."
-fi
+    # Make sure we’re using the latest Homebrew.
+    brew update
 
-# Make sure we’re using the latest Homebrew.
-brew update
+    # Upgrade any already-installed formulae.
+    brew upgrade
 
-# Upgrade any already-installed formulae.
-brew upgrade
+    # Command Line Tools
 
-# Command Line Tools
+    brew install ruby
+    brew install python3
+    brew install virtualenv
+    brew install gnupg
+    brew install git
+    brew install git-lfs
+    brew install git-secret
+    brew install tig
+    brew install cmake
+    brew install tldr
+    brew install bat # shell
+    brew install eza # shell, ls
+    brew install fd # shell, find
+    brew install uv
+    brew install zoxide # shell, z
+    brew install git-delta
+    brew install ripgrep # shell
+    brew install curlie
+    brew install xcbeautify
+    brew install btop
+    brew install fzf # shell
+    brew install starship # shell, prompt
+    brew install gh
+    brew install crowdin
+    brew install mint
 
-brew install ruby
-brew install python3
-brew install virtualenv
-brew install gnupg
-brew install git
-brew install git-lfs
-brew install git-secret
-brew install tig
-brew install cmake
-brew install tldr
-brew install bat # shell
-brew install eza # shell, ls
-brew install uv
-brew install zoxide # shell, z
-brew install git-delta
-brew install ripgrep # shell
-brew install curlie
-brew install xcbeautify
-brew install btop
-brew install fzf # shell
-brew install starship # shell, prompt
-brew install gh
-brew install crowdin
-brew install mint
+    # Install GUI Apps
 
-# Install GUI Apps
+    brew install ghostty
+    brew install sublime-text
+    brew install fork
+    brew install spotify
+    brew install the-unarchiver
+    brew install vlc
+    brew install macmediakeyforwarder
+    brew install telegram
+    brew install opensim
+    brew install sf-symbols
+    brew install google-chrome
+    brew install db-browser-for-sqlite
+    brew install visual-studio-code
+    brew install steermouse
+    brew install anaconda
+    brew install zoom
+    brew install jabra-direct
+    brew install raycast
+    brew install google-drive
+    brew install firefox
+    brew install notunes
+    brew install MonitorControl
+    brew install cursor
+    brew install 1password
+    brew install android-studio
+    brew install chatgpt
+    brew install github-copilot-for-xcode
+    brew install postman
+    brew install slack
+    # brew install nrlquaker-winbox
 
-brew install iterm2
-brew install sublime-text
-brew install fork
-brew install spotify
-brew install the-unarchiver
-brew install vlc
-brew install macmediakeyforwarder
-brew install telegram
-brew install opensim
-brew install sf-symbols
-brew install google-chrome
-brew install db-browser-for-sqlite
-brew install visual-studio-code
-brew install steermouse
-brew install anaconda
-brew install zoom
-brew install jabra-direct
-brew install raycast
-brew install google-drive
-brew install firefox
-brew install notunes
-brew install MonitorControl
-brew install cursor
-brew install 1password
-brew install android-studio
-brew install chatgpt
-brew install github-copilot-for-xcode
-brew install postman
-brew install slack
-# brew install nrlquaker-winbox
+    # Fonts
 
-# Fonts
+    brew tap homebrew/cask-fonts
+    brew install font-montserrat
+    brew install font-jetbrains-mono
+    # TODO: consider removing
+    brew install font-jetbrains-mono-nerd-font
 
-brew tap homebrew/cask-fonts
-brew install font-montserrat
-brew install font-jetbrains-mono
-brew install font-jetbrains-mono-nerd-font
+    # LLMs
 
-# LLMs
+    brew install ollama
+    brew install llm
+    llm install llm-ollama
 
-brew install ollama
-brew install llm
-llm install llm-ollama
+    # Remove outdated versions from the cellar.
+    brew cleanup
 
-# Remove outdated versions from the cellar.
-brew cleanup
-
-# Fix Catalina compatibility
-xattr -cr /Applications/MacMediaKeyForwarder.app
-
-#############################################################################
-# Dotfiles
+    # Fix Catalina compatibility
+    xattr -cr /Applications/MacMediaKeyForwarder.app
+}
 
 _link_file() {
     local src=$1
@@ -113,19 +111,34 @@ _link_file() {
     ln -nfs "$src" "$target"
 }
 
-echo
-echo "➡️ Setting up shell..."
+setup_dotfiles() {
+    echo
+    echo "➡️ Setting up dotfiles..."
 
-# Configs
-_link_file "$(pwd)/config/starship.toml" "$HOME/.config/starship.toml"
-_link_file "$(pwd)/config/zsh-abbr" "$HOME/.config/zsh-abbr"
+    for src in $(pwd)/dot/*; do
+        local target="$HOME/.$(basename "$src")"
+        _link_file "$src" "$target"
+    done
 
-for src in $(pwd)/dot/*; do
-    local target="$HOME/.$(basename "$src")"
-    _link_file "$src" "$target"
-done
+    # Disable Last Login Message
+    touch $HOME/.hushlogin
+}
 
-# Disable Last Login Message
-touch $HOME/.hushlogin
+setup_tools() {
+    echo
+    echo "➡️ Setting up tools..."
+
+    _link_file "$(pwd)/config/starship.toml" "$HOME/.config/starship.toml"
+    _link_file "$(pwd)/config/zsh-abbr" "$HOME/.config/zsh-abbr"
+    _link_file "$(pwd)/config/ghostty" "$HOME/.config/ghostty"
+}
+
+###############################################################################
+
+setup_brew
+
+setup_dotfiles
+
+setup_tools
 
 exec zsh -l
