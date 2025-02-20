@@ -7,8 +7,6 @@ font-size = 14
 
 window-inherit-working-directory = false
 
-copy-on-select = true
-
 auto-update = download
 auto-update-channel = tip
 
