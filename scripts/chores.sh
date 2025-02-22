@@ -11,8 +11,8 @@ echo "🧹 Running chores (brew and gem updates, cleanup)"
 echo "🧹 brew"
 brew update && brew upgrade && brew cleanup && brew doctor && brew autoremove
 
-echo "🧹 gem"
-gem update && gem cleanup
+# echo "🧹 gem"
+# gem update && gem cleanup
 
 echo "🧹 shell"
 zimfw update
