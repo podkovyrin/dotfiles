@@ -15,6 +15,7 @@ brew update && brew upgrade && brew cleanup && brew doctor && brew autoremove
 # gem update && gem cleanup
 
 echo "🧹 shell"
+zimfw upgrade
 zimfw update
 
 echo "🧹 cleanup"
