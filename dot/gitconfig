@@ -1,5 +1,7 @@
 # set your user tokens as environment variables, such as ~/.secrets
 # See the README for examples.
+[init]
+	defaultBranch = main
 [color]
   ui = true
 [color "branch"]
@@ -36,33 +38,44 @@
   summary = true
   verbosity = 1
   tool = vimdiff
+  conflictstyle = diff3
 [apply]
   whitespace = nowarn
 [branch]
   autosetupmerge = true
+	sort = -committerdate
 [push]
   # 'git push' will push the current branch to its tracking branch
   # the usual default is to push all branches
   default = upstream
+	autoSetupRemote = true
+	followTags = true
 [core]
   autocrlf = false
   editor = vim
-  excludesfile = ~/.yadr/git/gitignore
+  excludesfile = ~/.gitignore
+	fsmonitor = true
+	untrackedCache = true
 [advice]
   statusHints = false
 [diff]
   # Git diff will use (i)ndex, (w)ork tree, (c)ommit and (o)bject
   # instead of a/b/c/d as prefixes for patches
-  mnemonicprefix = true
-	algorithm = patience
+	mnemonicPrefix = true
+	algorithm = histogram
+	colorMoved = plain
+	renames = true
 [rerere]
   # Remember my merges
   # http://gitfu.wordpress.com/2008/04/20/git-rerere-rereremember-what-you-did-last-time/
-  enabled = true
+	enabled = true
+	autoupdate = true
 [include]
   path = .gitconfig.user
 [fetch]
-  prune = true
+	prune = true
+	pruneTags = true
+	all = true
 [remote "origin"]
   prune = true
 [user]
@@ -83,25 +96,25 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+[rebase]
+	updateRefs = true
 [pull]
   ff = only
-  rebase = true
+	rebase = true
+[help]
+	autocorrect = prompt
 
 # git-delta config
 
-[core]
-  pager = delta
-[interactive]
-  diffFilter = delta --color-only
-[delta]
-  navigate = true    # use n and N to move between diff sections
-  # delta detects terminal colors automatically; set one of these to disable auto-detection
-  # dark = true
-  # light = true
-[merge]
-  conflictstyle = diff3
-[diff]
-  colorMoved = default
+# [core]
+#   pager = delta
+# [interactive]
+#   diffFilter = delta --color-only
+# [delta]
+#   navigate = true    # use n and N to move between diff sections
+#   # delta detects terminal colors automatically; set one of these to disable auto-detection
+#   # dark = true
+#   # light = true
 
 # https://stackoverflow.com/questions/58816416/xcode-swift-package-manager-error-the-repository-could-not-be-found
 # [url "git@github.com:"]
