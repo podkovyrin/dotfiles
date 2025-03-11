@@ -7,6 +7,17 @@
 .Spotlight-V100
 .Trashes
 
+# IDEs
+.idea/
+.vscode/
+
+# Compiled Files
+*.class
+*.pyc
+
+# Logs
+*.log
+
 # Windows   taken from: https://github.com/github/gitignore/blob/master/Global/Windows.gitignore
 # ----------------------------------------------------------------------------------------------
 # Windows image file caches
