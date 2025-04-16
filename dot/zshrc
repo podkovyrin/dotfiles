@@ -98,3 +98,6 @@ export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$PATH"
 
 # Load secret env variables
 [ -e ~/.secrets ] && source ~/.secrets
+
+# VSCode workaround
+[[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code --locate-shell-integration-path zsh)"
