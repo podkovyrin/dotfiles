@@ -53,11 +53,12 @@
 [alias]
 	unstage = reset HEAD              # remove files from index (tracking)
 	uncommit = reset --soft HEAD^     # go back before last commit, with files in uncommitted state
-	nuke = !git clean -df && git reset --hard
+	nuke = !git clean -ffdx && git reset --hard
 	bclean = "!f() { git branch --merged | grep  -v '\\*\\|master\\|develop\\|main\\|dev' | xargs -n 1 git branch -d; }; f"
 	subs = submodule update --init --recursive
 	changelog = "!f() { git log $1..HEAD --pretty=\"format:%s%n%b\" | grep changelog: | /usr/bin/sed -e \"s/^.*changelog\\://\" | awk \"{\\$1=\\$1};1\"; }; f"
 	aic = "!f() { if [ -n \"$(git diff --cached)\" ]; then git commit -m \"$(git diff --cached | llm -m llama3:70b 'Below is a diff of all staged changes, coming from the command:\\n```\\ngit diff --cached\\n```\\nPlease generate a concise, one-line commit message for these changes. Omit minor changes and emphasize the most important changes. OUTPUT ONLY THE MESSAGE.')\"; else echo 'No changes to commit'; fi }; f"
+	chores = !git fetch --prune && git remote prune origin && git reflog expire --expire=now --all && git gc --prune=now --aggressive && git fsck --full && git submodule foreach \"git fetch --prune && git remote prune origin && git reflog expire --expire=now --all && git gc --prune=now --aggressive && git fsck --full\"
 [format]
 	pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset
 [advice]
