@@ -53,6 +53,7 @@
 [alias]
 	unstage = reset HEAD              # remove files from index (tracking)
 	uncommit = reset --soft HEAD^     # go back before last commit, with files in uncommitted state
+	mop = !git clean -df && git reset --hard
 	nuke = !git clean -ffdx && git reset --hard
 	bclean = "!f() { git branch --merged | grep  -v '\\*\\|master\\|develop\\|main\\|dev' | xargs -n 1 git branch -d; }; f"
 	subs = submodule update --init --recursive
