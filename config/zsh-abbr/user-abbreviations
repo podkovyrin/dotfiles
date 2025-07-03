@@ -1,4 +1,5 @@
 abbr "chores"="~/.dotfiles/scripts/chores.sh"
+abbr "su-chores"="~/.dotfiles/scripts/su-chores.sh"
 abbr ".."="cd .."
 
 abbr "p3"="python3"
