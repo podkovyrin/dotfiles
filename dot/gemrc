@@ -1,8 +1,12 @@
 ---
-:update_sources: true
+:backtrace: "false"
+:bulk_threshold: "1000"
 :sources:
-- http://rubygems.org
-:benchmark: false
-:backtrace: false
-:verbose: true
-gem: --no-document
+- "http://rubygems.org"
+- "https://rubygems.org"
+:update_sources: "true"
+:verbose: "true"
+:concurrent_downloads: "8"
+:install_extension_in_lib: "true"
+benchmark: "false"
+gem: "--no-document"
