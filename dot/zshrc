@@ -71,7 +71,7 @@ unset key
 ls() { command -v eza &> /dev/null && eza "$@" || command ls --color=auto "$@"; }
 o() { [[ $# -gt 0 ]] && open "$@" || open .; }
 s() { [[ $# -gt 0 ]] && subl "$@" || subl .; }
-ws() { [[ $# -gt 0 ]] && windsurf "$@" || windsurf .; }
+batrg() { bat "$1" | rg --color=always -C5 "$2" }
 
 alias diff='diff --color=auto'
 alias grep='grep --color=auto'
@@ -101,3 +101,9 @@ export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$PATH"
 
 # VSCode workaround
 [[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code --locate-shell-integration-path zsh)"
+
+# Claude Code NVM Workaround
+
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"

@@ -7,7 +7,7 @@ zmodule input
 zmodule zsh-users/zsh-history-substring-search
 zmodule olets/zsh-abbr
 zmodule olets/zsh-autosuggestions-abbreviations-strategy
-zmodule lukechilds/zsh-nvm
+# zmodule lukechilds/zsh-nvm
 zmodule zimfw/fzf
 zmodule zimfw/archive
 zmodule MichaelAquilina/zsh-you-should-use
