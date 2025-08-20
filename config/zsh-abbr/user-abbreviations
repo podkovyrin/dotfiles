@@ -1,5 +1,6 @@
 abbr "chores"="~/.dotfiles/scripts/chores.sh"
-abbr "su-chores"="~/.dotfiles/scripts/su-chores.sh"
+abbr "cmm"="~/.dotfiles/scripts/clean_my_mac/clean_my_mac.sh"
+
 abbr ".."="cd .."
 
 abbr "p3"="python3"

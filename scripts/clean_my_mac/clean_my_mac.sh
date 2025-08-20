@@ -101,9 +101,6 @@ clean_my_mac() {
     set -f
   done
 
-  printf "Removing unavailable simulators..."
-  xcrun simctl delete unavailable
-
   set +f
 
   local SYSTEM_CACHES="/tmp, /var, /private"
