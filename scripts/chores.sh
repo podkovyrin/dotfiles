@@ -34,11 +34,21 @@ while [[ $# -gt 0 ]]; do
 done
 
 # ---------- logging ----------
+# Check if we're already in a script session to avoid infinite recursion
+if [[ -z "$SCRIPT_SESSION" ]]; then
+    export SCRIPT_SESSION=1
+    STAMP="$(date +%F_%H-%M-%S)"
+    LOGDIR="${HOME}/Library/Logs"
+    LOGFILE="${LOGDIR}/toolchain_update-${STAMP}.log"
+    mkdir -p "${LOGDIR}"
+    exec script -q "${LOGFILE}" "$0" "$@"
+    exit $?
+fi
+
+# If we reach here, we're in the script session - no additional logging setup needed
 STAMP="$(date +%F_%H-%M-%S)"
 LOGDIR="${HOME}/Library/Logs"
 LOGFILE="${LOGDIR}/toolchain_update-${STAMP}.log"
-mkdir -p "${LOGDIR}"
-exec > >(tee -a "${LOGFILE}") 2>&1
 
 # ---------- utils ----------
 BLUE="\033[1;34m"; GREEN="\033[1;32m"; YELLOW="\033[1;33m"; RED="\033[1;31m"; NC="\033[0m"
@@ -244,9 +254,6 @@ if [[ $EUID -eq 0 ]]; then
 else
   warn "Firewall status requires sudo: sudo /usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate"
 fi
-
-# ---------- Final sanity ----------
-run "brew doctor"
 
 ok "Done. Full log at ${LOGFILE}"
 if [[ "${SKIP_OS_UPDATE}" -eq 0 ]]; then
