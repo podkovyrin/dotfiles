@@ -34,21 +34,29 @@ while [[ $# -gt 0 ]]; do
 done
 
 # ---------- logging ----------
-# Check if we're already in a script session to avoid infinite recursion
+# Logging strategy:
+# - Run this script under a PTY using /usr/bin/script so tools detect a TTY and keep colorized output in the console.
+# - Capture raw PTY output to *.rawlog, then post-process into a plain-text *.log by stripping ANSI escapes (CSI/OSC/other)
+#   and carriage returns. Console remains colored; saved file is plain text.
 if [[ -z "$SCRIPT_SESSION" ]]; then
-    export SCRIPT_SESSION=1
-    STAMP="$(date +%F_%H-%M-%S)"
-    LOGDIR="${HOME}/Library/Logs"
-    LOGFILE="${LOGDIR}/toolchain_update-${STAMP}.log"
-    mkdir -p "${LOGDIR}"
-    exec script -q "${LOGFILE}" "$0" "$@"
-    exit $?
+  STAMP="$(date +%F_%H-%M-%S)"
+  LOGDIR="${HOME}/Library/Logs"
+  RAWFILE="${LOGDIR}/toolchain_update-${STAMP}.rawlog"
+  LOGFILE="${LOGDIR}/toolchain_update-${STAMP}.log"
+  mkdir -p "${LOGDIR}"
+  # Run this script inside a pseudo-terminal so tools keep color on console
+  script -q "${RAWFILE}" env SCRIPT_SESSION=1 LOGFILE="${LOGFILE}" "$0" "$@"
+  rc=$?
+  # Strip ANSI (CSI/OSC/other) escape sequences and carriage returns for the saved log
+  # - CSI: ESC [ ... final @-~
+  # - OSC: ESC ] ... terminated by BEL (\a) or ST (ESC \)
+  # - Other single-char escapes: ESC @-Z\[\\\]^_
+  perl -0777 -pe 's/\x1b\[[0-9;?]*[ -\/]*[@-~]//g; s/\x1b\][^\a]*(?:\a|\x1b\\)//g; s/\x1b[@-Z\\-_]//g; s/\r//g' "${RAWFILE}" > "${LOGFILE}" || cp "${RAWFILE}" "${LOGFILE}"
+  rm -f "${RAWFILE}" 2>/dev/null || true
+  exit $rc
 fi
 
-# If we reach here, we're in the script session - no additional logging setup needed
-STAMP="$(date +%F_%H-%M-%S)"
-LOGDIR="${HOME}/Library/Logs"
-LOGFILE="${LOGDIR}/toolchain_update-${STAMP}.log"
+# In PTY session; LOGFILE is provided so footer can reference it.
 
 # ---------- utils ----------
 BLUE="\033[1;34m"; GREEN="\033[1;32m"; YELLOW="\033[1;33m"; RED="\033[1;31m"; NC="\033[0m"
