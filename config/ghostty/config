@@ -4,6 +4,7 @@ font-family = ""
 font-family = "JetBrainsMonoNL Nerd Font Mono"
 font-thicken = true
 font-size = 14
+font-thicken-strength = 100
 
 window-inherit-working-directory = false
 
