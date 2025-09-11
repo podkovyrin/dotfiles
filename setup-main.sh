@@ -43,6 +43,9 @@ setup_brew() {
     brew install gh
     brew install crowdin
     brew install mint
+    brew install mas
+    brew install duti
+    brew install fastfetch
 
     # Install GUI Apps
 
@@ -75,6 +78,8 @@ setup_brew() {
     brew install github-copilot-for-xcode
     brew install postman
     brew install slack
+    brew install --no-quarantine grishka/grishka/neardrop
+    brew install --cask nikitabobko/tap/aerospace
     # brew install nrlquaker-winbox
 
     # Fonts

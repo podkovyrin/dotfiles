@@ -25,7 +25,7 @@
 	summary = true
 	verbosity = 1
 	tool = vimdiff
-	conflictstyle = diff3
+	conflictStyle = zdiff3
 [rebase]
 	updateRefs = true
 [rerere]

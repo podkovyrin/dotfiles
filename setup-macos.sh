@@ -75,6 +75,17 @@ defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
 # Disable smart quotes as they’re annoying when typing code
 defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 
+# Disable Displays have separate Spaces
+# https://nikitabobko.github.io/AeroSpace/guide#a-note-on-displays-have-separate-spaces
+defaults write com.apple.spaces spans-displays -bool true
+
+# Move windows by dragging any part of the window
+# move windows by holding ctrl + cmd and dragging any part of the window (not necessarily the window title)
+defaults write -g NSWindowShouldDragOnGesture -bool true
+
+# Disable windows opening animations
+defaults write -g NSAutomaticWindowAnimationsEnabled -bool false
+
 ###############################################################################
 # Trackpad, mouse, keyboard, Bluetooth accessories, and input                 #
 ###############################################################################
@@ -287,34 +298,6 @@ defaults write com.google.Chrome.canary DisablePrintPreview -bool true
 # Expand the print dialog by default
 defaults write com.google.Chrome PMPrintingExpandedStateForPrint2 -bool true
 defaults write com.google.Chrome.canary PMPrintingExpandedStateForPrint2 -bool true
-
-###############################################################################
-# Magnet                                                                      #
-###############################################################################
-
-# Disable ads
-defaults write com.crowdcafe.windowmagnet alreadyClickedDynamoItem -bool true
-defaults write com.crowdcafe.windowmagnet seenDynamo -bool true
-
-# Disable all shortcuts
-defaults write com.crowdcafe.windowmagnet centerWindowComboKey -dict
-defaults write com.crowdcafe.windowmagnet expandWindowCenterThirdComboKey -dict
-defaults write com.crowdcafe.windowmagnet expandWindowEastComboKey -dict
-defaults write com.crowdcafe.windowmagnet expandWindowLeftThirdComboKey -dict
-defaults write com.crowdcafe.windowmagnet expandWindowLeftTwoThirdsComboKey -dict
-defaults write com.crowdcafe.windowmagnet expandWindowNorthComboKey -dict
-defaults write com.crowdcafe.windowmagnet expandWindowNorthEastComboKey -dict
-defaults write com.crowdcafe.windowmagnet expandWindowNorthWestComboKey -dict
-defaults write com.crowdcafe.windowmagnet expandWindowRightThirdComboKey -dict
-defaults write com.crowdcafe.windowmagnet expandWindowRightTwoThirdsComboKey -dict
-defaults write com.crowdcafe.windowmagnet expandWindowSouthComboKey -dict
-defaults write com.crowdcafe.windowmagnet expandWindowSouthEastComboKey -dict
-defaults write com.crowdcafe.windowmagnet expandWindowSouthWestComboKey -dict
-defaults write com.crowdcafe.windowmagnet expandWindowWestComboKey -dict
-defaults write com.crowdcafe.windowmagnet maximizeWindowComboKey -dict
-defaults write com.crowdcafe.windowmagnet moveWindowToNextDisplay -dict
-defaults write com.crowdcafe.windowmagnet moveWindowToPreviousDisplay -dict
-defaults write com.crowdcafe.windowmagnet restoreWindowComboKey -dict
 
 ###############################################################################
 # Xcode                                                                       #
