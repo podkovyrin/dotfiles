@@ -20,6 +20,7 @@ setup_brew() {
 
     brew install ruby
     brew install python3
+    brew install lua
     brew install virtualenv
     brew install gnupg
     brew install git
@@ -82,6 +83,13 @@ setup_brew() {
     brew install --cask nikitabobko/tap/aerospace
     # brew install nrlquaker-winbox
 
+    # Sketchybar
+    brew install FelixKratz/formulae/sketchybar
+    brew install switchaudio-osx
+    brew install daipeihust/tap/im-select
+    # + lua, installed above
+    (git clone https://github.com/FelixKratz/SbarLua.git /tmp/SbarLua && cd /tmp/SbarLua/ && make install && rm -rf /tmp/SbarLua/)
+
     # Fonts
 
     brew tap homebrew/cask-fonts
@@ -89,6 +97,8 @@ setup_brew() {
     brew install font-jetbrains-mono
     # TODO: consider removing
     brew install font-jetbrains-mono-nerd-font
+    brew install --cask font-sf-mono
+    brew install --cask font-sf-pro
 
     # LLMs
 
