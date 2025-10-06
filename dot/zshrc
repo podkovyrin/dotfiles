@@ -82,16 +82,13 @@ eval "$(starship init zsh)"
 # z
 eval "$(zoxide init zsh)"
 
+# mise
+eval "$(mise activate zsh)"
+
 # path
-export PATH="/opt/homebrew/bin:$PATH"
-export PATH="/opt/homebrew/sbin:$PATH"
-export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
-export PATH="/opt/homebrew/lib/ruby/gems/3.4.0/bin:$PATH"
-export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 export PATH="/Applications/Sublime Text.app/Contents/SharedSupport/bin:$PATH"
 
 export PATH="$HOME/.mint/bin:$PATH"
-export PATH="$HOME/.codeium/windsurf/bin:$PATH"
 
 export PATH="$ANDROID_HOME/platform-tools:$PATH"
 export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$PATH"
@@ -101,8 +98,3 @@ export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$PATH"
 
 # VSCode workaround
 [[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code --locate-shell-integration-path zsh)"
-
-# Claude Code NVM Workaround
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
