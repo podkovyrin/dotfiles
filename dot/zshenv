@@ -1,13 +1,4 @@
-source "$HOME/.cargo/env"
-
 export LC_ALL="en_US.UTF-8"
 export LANG="en_US.UTF-8"
 
-export MANPATH="/opt/homebrew/share/man:$MANPATH"
-export INFOPATH="/opt/homebrew/share/info:$INFOPATH"
-
-export BOOST_ROOT=/opt/homebrew/opt/boost
-
-export ANDROID_HOME="$HOME/Library/Android/sdk"
-
-export JAVA_HOME="$(/usr/libexec/java_home)"
+source "$HOME/.cargo/env"
