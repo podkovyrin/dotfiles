@@ -208,6 +208,13 @@ if has asdf; then
   # 'asdf install' would (re)install versions from .tool-versions if present in cwd
 fi
 
+# ---------- mise ----------
+if has mise; then
+  log "mise maintenance"
+  run "mise doctor"
+  run "mise upgrade" || true
+fi
+
 # ---------- iOS/Pods ----------
 if has pod; then
   log "CocoaPods specs repo update"
