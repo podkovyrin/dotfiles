@@ -180,8 +180,10 @@ defaults write com.apple.dock expose-group-apps -bool true
 # Don’t automatically rearrange Spaces based on most recent use
 defaults write com.apple.dock mru-spaces -bool false
 
-# Automatically hide and show the Dock
+# Hide the Dock
 defaults write com.apple.dock autohide -bool true
+defaults write com.apple.dock autohide-delay -float 100
+defaults write com.apple.dock no-bouncing -bool true
 
 # Don’t show recent applications in Dock
 defaults write com.apple.dock show-recents -bool false

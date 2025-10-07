@@ -3,7 +3,7 @@ return {
   white = 0xffffffff,
   red = 0xfffc5d7c,
   green = 0xff9ed072,
-  blue = 0xff76cce0,
+  blue = 0xff1165ba,
   yellow = 0xffe7c664,
   orange = 0xfff39660,
   magenta = 0xffb39df3,
@@ -15,8 +15,8 @@ return {
     border = 0xff000000,
   },
   popup = {
-    bg = 0x40000000,
-    border = 0xff7f8490
+    bg = 0xffeaebec,
+    border = 0xffb8b9ba
   },
   bg1 = 0x38ffffff,
   bg2 = 0x44ffffff,

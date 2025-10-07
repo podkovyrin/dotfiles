@@ -62,3 +62,5 @@ Session.vim
 .clinerules
 
 .npmrc
+
+.claude/*.local.json

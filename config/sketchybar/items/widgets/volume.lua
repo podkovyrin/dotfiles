@@ -1,6 +1,5 @@
 local colors = require("colors")
 local icons = require("icons")
-local settings = require("settings")
 
 local popup_width = 250
 
@@ -57,6 +56,8 @@ local function volume_collapse_details()
   sbar.remove('/volume.device\\.*/')
 end
 
+local popup_timer_id = 0
+
 local current_audio_device = "None"
 local function volume_toggle_details(env)
   if env.BUTTON == "right" then
@@ -66,7 +67,20 @@ local function volume_toggle_details(env)
 
   local should_draw = volume_icon:query().popup.drawing == "off"
   if should_draw then
+    -- Increment timer ID to invalidate any previous timers
+    popup_timer_id = popup_timer_id + 1
+    local current_timer_id = popup_timer_id
+    
     volume_icon:set({ popup = { drawing = true } })
+    
+    -- Auto-hide timer: close popup after 5 seconds
+    sbar.exec("sleep 5", function()
+      -- Only close if this is still the current timer
+      if current_timer_id == popup_timer_id then
+        volume_icon:set({ popup = { drawing = false } })
+        sbar.remove('/volume.device\\.*/')
+      end
+    end)
     sbar.exec("SwitchAudioSource -t output -c", function(result)
       current_audio_device = result:sub(1, -2)
       sbar.exec("SwitchAudioSource -a -t output", function(available)
@@ -74,7 +88,7 @@ local function volume_toggle_details(env)
         local counter = 0
 
         local active_color = colors.blue
-        local inactive_color = colors.with_alpha(colors.white, 0.75)
+        local inactive_color = colors.with_alpha(colors.black, 0.7)
 
         for device in string.gmatch(available, '[^\r\n]+') do
           local color = inactive_color
@@ -96,6 +110,8 @@ local function volume_toggle_details(env)
       end)
     end)
   else
+    -- Increment timer ID to cancel any running timers
+    popup_timer_id = popup_timer_id + 1
     volume_collapse_details()
   end
 end
@@ -108,5 +124,4 @@ local function volume_scroll(env)
 end
 
 volume_icon:subscribe("mouse.clicked", volume_toggle_details)
-volume_icon:subscribe("mouse.scrolled", volume_scroll)
 volume_icon:subscribe("mouse.scrolled", volume_scroll)

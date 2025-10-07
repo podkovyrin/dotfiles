@@ -28,8 +28,11 @@ macos-titlebar-style = tabs
 
 scrollback-limit = 20000000
 
-keybind = "super+f=text:batrg "
-
 # Search entire scrollback history in default text editor
-# keybind = cmd+f=write_screen_file:open
+keybind = cmd+f=write_screen_file:open
 
+# insert batrg search command into terminal
+# keybind = "cmd+f=text:batrg "
+
+# claude code bindings
+keybind = shift+enter=text:\x1b\r
