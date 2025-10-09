@@ -137,7 +137,7 @@ exec-on-workspace-change = ['/bin/bash', '-c',
     alt-s = 'workspace S'
     alt-d = 'workspace D'
 
-    cmd-esc = 'workspace Z' # special combination with fast access
+    cmd-esc = 'workspace Q' # special combination with fast access
     alt-z = 'workspace Z'
     alt-x = 'workspace X'
     alt-c = 'workspace C'
@@ -208,12 +208,10 @@ exec-on-workspace-change = ['/bin/bash', '-c',
 
 
 [[on-window-detected]]
-    if.app-id = 'ru.keepcoder.Telegram'
-    run = 'move-node-to-workspace Q' 
-
-[[on-window-detected]]
-    if.app-id = 'com.apple.MobileSMS'
-    run = 'move-node-to-workspace Q'
+    if.app-id = 'com.mitchellh.ghostty'
+    # FIX: this is a workaround for https://github.com/nikitabobko/AeroSpace/issues/68
+    # Then, optionally, after launching Ghostty, hit `alt-shift-;` to enter mode service. Hit `f` to toggle off floating.
+    run = ['layout floating', 'move-node-to-workspace Q']
 
 [[on-window-detected]]
     if.app-id = 'com.google.Chrome'
@@ -237,15 +235,17 @@ exec-on-workspace-change = ['/bin/bash', '-c',
     run = 'move-node-to-workspace S'
 
 [[on-window-detected]]
-    if.app-id = 'us.zoom.xos'
+    if.app-id = 'ru.keepcoder.Telegram'
+    run = 'move-node-to-workspace D' 
+
+[[on-window-detected]]
+    if.app-id = 'com.apple.MobileSMS'
     run = 'move-node-to-workspace D'
 
 
 [[on-window-detected]]
-    if.app-id = 'com.mitchellh.ghostty'
-    # FIX: this is a workaround for https://github.com/nikitabobko/AeroSpace/issues/68
-    # Then, optionally, after launching Ghostty, hit `alt-shift-;` to enter mode service. Hit `f` to toggle off floating.
-    run = ['layout floating', 'move-node-to-workspace Z']
+    if.app-id = 'us.zoom.xos'
+    run = 'move-node-to-workspace Z'
 
 [[on-window-detected]]
     if.app-id = 'com.spotify.client'

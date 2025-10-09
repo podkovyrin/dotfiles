@@ -49,9 +49,30 @@ local function get_aerospace_workspaces()
   }
 end
 
+local function get_workspaces_with_windows()
+  local workspaces_set = {}
+  local handle = io.popen("aerospace list-workspaces --monitor all --empty no 2>/dev/null")
+  if handle then
+    for line in handle:lines() do
+      local workspace_id = line:match("^%s*(.-)%s*$") -- trim whitespace
+      if workspace_id and workspace_id ~= "" then
+        workspaces_set[workspace_id] = true
+      end
+    end
+    handle:close()
+  end
+  return workspaces_set
+end
+
 local workspaces = get_aerospace_workspaces()
+local workspace_items = {}
+
+local workspaces_with_windows = get_workspaces_with_windows()
 
 for _, workspace_id in ipairs(workspaces) do
+  local has_windows = workspaces_with_windows[workspace_id] == true
+  local label_color = has_windows and colors.white or colors.with_alpha(colors.white, 0.75)
+  
   local aerospace_item = sbar.add("item", "space." .. workspace_id, {
     position = "left",
     background = {
@@ -65,7 +86,7 @@ for _, workspace_id in ipairs(workspaces) do
     },
     label = {
       string = workspace_id,
-      color = colors.white,
+      color = label_color,
       width = 30,
       align = "center",
     },
@@ -73,8 +94,20 @@ for _, workspace_id in ipairs(workspaces) do
     padding_left = 1,
     padding_right = 1,
   })
-  aerospace_item:subscribe("aerospace_workspace_change", function(env)
-    sbar.animate("linear", 16, function()
+  
+  workspace_items[workspace_id] = aerospace_item
+end
+
+-- Use the first item's subscription to update ALL items
+-- This ensures the event handler fires and updates all workspaces
+workspace_items["1"]:subscribe("aerospace_workspace_change", function(env)
+  local workspaces_with_windows_now = get_workspaces_with_windows()
+
+  sbar.animate("linear", 16, function()
+    for workspace_id, item in pairs(workspace_items) do
+      local has_windows_now = workspaces_with_windows_now[workspace_id] == true
+      local label_color = has_windows_now and colors.white or colors.grey
+
       local color
       if env.FOCUSED_WORKSPACE == workspace_id then
         color = colors.bg1
@@ -82,11 +115,14 @@ for _, workspace_id in ipairs(workspaces) do
         color = colors.transparent
       end
 
-      aerospace_item:set({
+      item:set({
+        label = {
+          color = label_color
+        },
         background = {
           color = color
         }
       })
-    end)
+    end
   end)
-end
+end)
