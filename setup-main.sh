@@ -20,6 +20,7 @@ setup_brew() {
 
     # Command Line Tools
 
+    brew install stow
     brew install lua
     brew install cmake
     brew install gnupg
@@ -135,41 +136,27 @@ setup_devtools() {
     mise use -g npm:@crowdin/cli
 }
 
-_link_file() {
-    local src=$1
-    local target=$2
-
-    echo "Set: '${src}' -> '${target}'"
-    
-    if [ -e "$target" ]; then
-        rm -rf "$target"
-    fi
-
-    ln -nfs "$src" "$target"
-}
-
 setup_dotfiles() {
     echo
     echo "➡️ Setting up dotfiles..."
 
-    for src in $(pwd)/dot/*; do
-        local target="$HOME/.$(basename "$src")"
-        _link_file "$src" "$target"
-    done
+    stow zsh
+    stow starship
+    stow git
+    stow vim
+    stow editorconfig
+    stow editrc
+    stow gem
+    stow aerospace
+    stow sketchybar
+    stow btop
+    stow ghostty
+
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    stow tmux
 
     # Disable Last Login Message
     touch $HOME/.hushlogin
-}
-
-setup_tools() {
-    echo
-    echo "➡️ Setting up tools..."
-
-    _link_file "$(pwd)/config/btop" "$HOME/.config/btop"
-    _link_file "$(pwd)/config/ghostty" "$HOME/.config/ghostty"
-    _link_file "$(pwd)/config/sketchybar" "$HOME/.config/sketchybar"
-    _link_file "$(pwd)/config/zsh-abbr" "$HOME/.config/zsh-abbr"
-    _link_file "$(pwd)/config/starship.toml" "$HOME/.config/starship.toml"
 }
 
 ###############################################################################
@@ -177,8 +164,6 @@ setup_tools() {
 setup_brew
 
 setup_dotfiles
-
-setup_tools
 
 setup_devtools
 
