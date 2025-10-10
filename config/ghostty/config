@@ -6,6 +6,8 @@ font-thicken = true
 font-size = 14
 font-thicken-strength = 100
 
+macos-titlebar-style = hidden
+macos-option-as-alt = true
 window-inherit-working-directory = false
 
 auto-update = download
@@ -16,6 +18,10 @@ cursor-style-blink = false
 
 copy-on-select = clipboard
 
+clipboard-read = "allow"
+clipboard-write = "allow"
+clipboard-trim-trailing-spaces = true
+
 shell-integration = zsh
 shell-integration-features = no-cursor
 
@@ -23,16 +29,12 @@ window-height = 49
 window-width = 177
 window-padding-x = 8
 
-macos-option-as-alt = true
-macos-titlebar-style = tabs
 
 scrollback-limit = 20000000
 
-# Search entire scrollback history in default text editor
-keybind = cmd+f=write_screen_file:open
-
-# insert batrg search command into terminal
-# keybind = "cmd+f=text:batrg "
+keybind = cmd+s=text:\x02
+keybind = "cmd+f=text:\x02[/"
+keybind = cmd+t=ignore
 
 # claude code bindings
 keybind = shift+enter=text:\x1b\r
