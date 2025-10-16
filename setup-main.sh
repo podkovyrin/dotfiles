@@ -23,6 +23,7 @@ setup_brew() {
     brew install stow
     brew install lua
     brew install cmake
+    brew install mint
     brew install gnupg
     brew install git
     brew install git-lfs
@@ -41,6 +42,7 @@ setup_brew() {
     brew install mas
     brew install duti
     brew install fastfetch
+    brew install yazi
 
     # Install GUI Apps
 
@@ -126,7 +128,6 @@ setup_devtools() {
     mise use -g python
     mise use -g ruby
     mise use -g uv
-    mise use -g mint
     mise use -g xcbeautify
     mise use -g gh
 
