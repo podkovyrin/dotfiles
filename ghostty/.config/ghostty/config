@@ -34,9 +34,9 @@ scrollback-limit = 20000000
 # tmux, ctrl+b
 keybind = cmd+s=text:\x02
 keybind = cmd+f=text:\x02?
-keybind = cmd+w=text:\x02x
 keybind = cmd+n=text:\x02n
 keybind = cmd+p=text:\x02p
+keybind = cmd+w=text:\x04 # ctrl+d
 
 keybind = cmd+t=ignore
 
