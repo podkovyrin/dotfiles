@@ -1,7 +1,10 @@
 abbr "chores"="~/.dotfiles/_scripts/chores.sh"
 abbr "cmm"="~/.dotfiles/_scripts/clean_my_mac/clean_my_mac.sh"
 
-abbr ".."="cd .."
+abbr ".."="z .."
+abbr "cd"="z"
+
+abbr "y"="yazi"
 
 abbr "p3"="python3"
 abbr "localsrv"="python3 -m http.server"
