@@ -82,6 +82,7 @@ setup_brew() {
     brew install switchaudio-osx
     brew install daipeihust/tap/im-select
     # + lua, installed above
+    mkdir -p $HOME/.local/share/sketchybar_lua
     (git clone https://github.com/FelixKratz/SbarLua.git /tmp/SbarLua && cd /tmp/SbarLua/ && make install && rm -rf /tmp/SbarLua/)
 
     # Fonts
@@ -153,7 +154,7 @@ setup_dotfiles() {
     stow btop
     stow ghostty
 
-    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
     stow tmux
 
     # Disable Last Login Message
