@@ -2,10 +2,6 @@ local icons = require("icons")
 
 local front_app = sbar.add("item", "front_app", {
   display = "active",
-  icon = { 
-    string = icons.chevron,
-    padding_right = 5,
-  },
   updates = true,
 })
 
