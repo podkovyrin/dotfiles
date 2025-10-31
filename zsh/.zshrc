@@ -75,6 +75,7 @@ batrg() { bat "$1" | rg --color=always -C5 "$2" }
 
 alias diff='diff --color=auto'
 alias grep='grep --color=auto'
+alias cd='z'
 
 # prompt
 eval "$(starship init zsh)"

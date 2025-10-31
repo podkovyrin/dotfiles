@@ -2,7 +2,6 @@ abbr "chores"="~/.dotfiles/_scripts/chores.sh"
 abbr "cmm"="~/.dotfiles/_scripts/clean_my_mac/clean_my_mac.sh"
 
 abbr ".."="z .."
-abbr "cd"="z"
 
 abbr "y"="yazi"
 

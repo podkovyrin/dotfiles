@@ -49,18 +49,13 @@ battery:subscribe({"routine", "power_source_change", "system_woke"}, function()
         icon = icons.battery._50
       elseif found and charge > 20 then
         icon = icons.battery._25
-        color = colors.orange
       else
         icon = icons.battery._0
         color = colors.red
       end
     end
 
-    local lead = ""
-    if found and charge < 10 then
-      lead = "0"
-    end
-    label_config.string = lead .. label
+    label_config.string = label
 
     battery:set({
       icon = {

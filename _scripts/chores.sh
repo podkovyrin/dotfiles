@@ -228,6 +228,12 @@ if has zimfw; then
   run "zimfw update"
 fi
 
+# ---------- tmux tpm ----------
+if has tmux; then
+  log "tmux plugin manager (tpm) update"
+  run "~/.tmux/plugins/tpm/bin/update_plugins all"
+fi
+
 # ---------- Flutter ----------
 if has flutter; then
   log "Flutter SDK upgrade"
