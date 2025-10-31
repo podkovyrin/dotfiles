@@ -38,11 +38,12 @@ setup_brew() {
     brew install curlie
     brew install btop
     brew install fzf # shell
-    brew install starship # shell, prompt
     brew install mas
     brew install duti
     brew install fastfetch
     brew install yazi
+    brew install tmux
+    brew install gitmux
 
     # Install GUI Apps
 
@@ -143,7 +144,6 @@ setup_dotfiles() {
     echo "➡️ Setting up dotfiles..."
 
     stow zsh
-    stow starship
     stow git
     stow vim
     stow editorconfig
@@ -153,8 +153,6 @@ setup_dotfiles() {
     stow sketchybar
     stow btop
     stow ghostty
-
-    git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
     stow tmux
 
     # Disable Last Login Message

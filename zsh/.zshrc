@@ -77,11 +77,78 @@ alias diff='diff --color=auto'
 alias grep='grep --color=auto'
 alias cd='z'
 
-# prompt
-eval "$(starship init zsh)"
-
 # z
 eval "$(zoxide init zsh)"
 
+# prompt
+
+zmodload zsh/datetime 2>/dev/null
+
+setopt prompt_subst
+
+typeset -g LAST_CMD_START_TIME="0"
+typeset -g LAST_EXECUTED_CMD=""
+typeset -g LAST_DISPLAYED_EXIT_CODE=0
+
+preexec() {
+    LAST_CMD_START_TIME=$EPOCHREALTIME
+    LAST_EXECUTED_CMD="$1"
+}
+
+precmd() {
+    local exitcode=$?
+
+    local spent_time_info=""
+    local start_time=$LAST_CMD_START_TIME
+    if [[ -n $LAST_EXECUTED_CMD && $start_time != 0 ]]; then
+        local -i spent_ms=$(( (EPOCHREALTIME - start_time) * 1000 ))
+        if (( spent_ms > 500 )); then
+            local -i days=$(( spent_ms / 86400000 ))
+            local -i hours=$(( (spent_ms / 3600000) % 24 ))
+            local -i minutes=$(( (spent_ms / 60000) % 60 ))
+            local -i seconds=$(( (spent_ms / 1000) % 60 ))
+            local -i millis=$(( spent_ms % 1000 ))
+            local -a chunks=()
+            (( days )) && chunks+=("${days}d")
+            (( hours )) && chunks+=("${hours}h")
+            (( minutes )) && chunks+=("${minutes}m")
+            (( seconds )) && chunks+=("${seconds}s")
+            (( millis )) && chunks+=("${millis}ms")
+            if (( ${#chunks[@]} )); then
+                local command_text="%F{magenta}${LAST_EXECUTED_CMD}%f"
+                local spent_text=" took ${(j: :)chunks}"
+                if (( exitcode == 0 )); then
+                    spent_time_info="${command_text}%F{blue}${spent_text}%f"
+                else
+                    spent_time_info="${command_text}%F{red}${spent_text}%f"
+                fi
+            fi
+        fi
+    fi
+    LAST_EXECUTED_CMD=""
+
+    local prev_exit_command=""
+    if (( exitcode != 0 )); then
+        if (( exitcode != LAST_DISPLAYED_EXIT_CODE )); then
+            prev_exit_command="%F{red}Exit Code: ${exitcode} %f"$'\n'
+        fi
+        LAST_DISPLAYED_EXIT_CODE=$exitcode
+    else
+        LAST_DISPLAYED_EXIT_CODE=0
+    fi
+
+    local current_path="%F{cyan}%B%~%b%f"
+    local python_env=""
+    if [[ -n $VIRTUAL_ENV ]]; then
+        local relative_env="${VIRTUAL_ENV/#$PWD\//}"
+        [[ $relative_env == $VIRTUAL_ENV ]] && relative_env="${VIRTUAL_ENV:A}"
+        python_env="(${relative_env}) "
+    fi
+    RPROMPT="$spent_time_info"
+    PS1="${prev_exit_command}${python_env}${current_path} %F{green}%B❯%b%f "
+}
+
 # VSCode workaround
-[[ "$TERM_PROGRAM" == "vscode" ]] && . "$(code --locate-shell-integration-path zsh)"
+if [[ "$TERM_PROGRAM" == "vscode" ]]; then
+  . "$(code --locate-shell-integration-path zsh)"
+fi
