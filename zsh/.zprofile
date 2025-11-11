@@ -1,4 +1,6 @@
-eval "$(/opt/homebrew/bin/brew shellenv)"
+# https://github.com/openai/codex/issues/4620
+# eval "$(/opt/homebrew/bin/brew shellenv)"
+eval $(/opt/homebrew/bin/brew shellenv bash)
 eval "$(mise activate zsh)"
 
 export MANPATH="/opt/homebrew/share/man:$MANPATH"

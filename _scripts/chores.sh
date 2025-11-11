@@ -97,14 +97,6 @@ else
   fi
 fi
 
-log "System info"
-if has fastfetch; then
-  fastfetch || true
-else
-  sw_vers  || true
-  uname -mr || true
-fi
-
 # ---------- Homebrew core ----------
 if ! has brew; then
   err "Homebrew not found. Install from https://brew.sh and re-run."
