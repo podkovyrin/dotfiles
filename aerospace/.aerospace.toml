@@ -57,10 +57,10 @@ exec-on-workspace-change = ['/bin/bash', '-c',
 [gaps]
     inner.horizontal = 0
     inner.vertical =   0
-    outer.left =       0
+    outer.left =       [{ monitor."dell" = 0 }, 0]
     outer.bottom =     0
     outer.top =        [{ monitor."dell" = 30 }, 0]
-    outer.right =      0
+    outer.right =      [{ monitor."dell" = 0 }, 0]
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -112,6 +112,7 @@ exec-on-workspace-change = ['/bin/bash', '-c',
     alt-shift-cmd-comma = 'layout accordion horizontal vertical'
     alt-shift-cmd-period = 'layout floating tiling'
     alt-cmd-enter = 'fullscreen'
+    alt-shift-cmd-enter = 'exec-and-forget /bin/bash -lc "$HOME/.dotfiles/_scripts/toggle_aerospace_gaps.sh"'
 
     alt-shift-cmd-h = 'join-with left'
     alt-shift-cmd-j = 'join-with down'
