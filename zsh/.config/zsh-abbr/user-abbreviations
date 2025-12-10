@@ -21,6 +21,7 @@ abbr "fix_llama"="find . -type f -perm +111 -exec xattr -cr {} +"
 abbr "g"="git"
 abbr "t"="tig"
 abbr "ta"="tig --all"
+abbr "gg"="lazygit"
 
 abbr "git b"="git branch"
 abbr "git branch m"="git branch --move"
