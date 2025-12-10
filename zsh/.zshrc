@@ -7,6 +7,9 @@ bindkey -v
 # Prompt for spelling correction of commands.
 setopt CORRECT
 
+export EDITOR="nvim"
+export VISUAL="nvim"
+
 # Remove path separator from WORDCHARS.
 WORDCHARS=${WORDCHARS//[\/]}
 
@@ -76,6 +79,7 @@ batrg() { bat "$1" | rg --color=always -C5 "$2" }
 alias diff='diff --color=auto'
 alias grep='grep --color=auto'
 alias cd='z'
+alias vim="nvim"
 
 # z
 eval "$(zoxide init zsh)"

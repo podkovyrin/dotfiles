@@ -145,7 +145,7 @@ setup_dotfiles() {
 
     stow zsh
     stow git
-    stow vim
+    stow nvim
     stow editorconfig
     stow editrc
     stow gem
