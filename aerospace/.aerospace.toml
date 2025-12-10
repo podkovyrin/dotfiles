@@ -37,14 +37,16 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 automatically-unhide-macos-hidden-apps = true
 
 # Notify Sketchybar about workspace change
-exec-on-workspace-change = ['/bin/bash', '-c',
-    'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+exec-on-workspace-change = [
+    '/bin/bash',
+    '-c',
+    'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
 ]
 
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
 [key-mapping]
-    preset = 'qwerty'
+preset = 'qwerty'
 
 # Gaps between windows (inner-*) and between monitor edges (outer-*).
 # Possible values:
@@ -55,12 +57,12 @@ exec-on-workspace-change = ['/bin/bash', '-c',
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-    inner.horizontal = 0
-    inner.vertical =   0
-    outer.left =       [{ monitor."dell" = 0 }, 0]
-    outer.bottom =     0
-    outer.top =        [{ monitor."dell" = 30 }, 0]
-    outer.right =      [{ monitor."dell" = 0 }, 0]
+inner.horizontal = 0
+inner.vertical = 0
+outer.left = [{ monitor."dell" = 250 }, 0]
+outer.bottom = 0
+outer.top = [{ monitor."dell" = 30 }, 0]
+outer.right = [{ monitor."dell" = 250 }, 0]
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -68,118 +70,117 @@ exec-on-workspace-change = ['/bin/bash', '-c',
 # Fallback value (if you omit the key): mode.main.binding = {}
 [mode.main.binding]
 
-    # All possible keys:
-    # - Letters.        a, b, c, ..., z
-    # - Numbers.        0, 1, 2, ..., 9
-    # - Keypad numbers. keypad0, keypad1, keypad2, ..., keypad9
-    # - F-keys.         f1, f2, ..., f20
-    # - Special keys.   minus, equal, period, comma, slash, backslash, quote, semicolon,
-    #                   backtick, leftSquareBracket, rightSquareBracket, space, enter, esc,
-    #                   backspace, tab, pageUp, pageDown, home, end, forwardDelete,
-    #                   sectionSign (ISO keyboards only, european keyboards only)
-    # - Keypad special. keypadClear, keypadDecimalMark, keypadDivide, keypadEnter, keypadEqual,
-    #                   keypadMinus, keypadMultiply, keypadPlus
-    # - Arrows.         left, down, up, right
+# All possible keys:
+# - Letters.        a, b, c, ..., z
+# - Numbers.        0, 1, 2, ..., 9
+# - Keypad numbers. keypad0, keypad1, keypad2, ..., keypad9
+# - F-keys.         f1, f2, ..., f20
+# - Special keys.   minus, equal, period, comma, slash, backslash, quote, semicolon,
+#                   backtick, leftSquareBracket, rightSquareBracket, space, enter, esc,
+#                   backspace, tab, pageUp, pageDown, home, end, forwardDelete,
+#                   sectionSign (ISO keyboards only, european keyboards only)
+# - Keypad special. keypadClear, keypadDecimalMark, keypadDivide, keypadEnter, keypadEqual,
+#                   keypadMinus, keypadMultiply, keypadPlus
+# - Arrows.         left, down, up, right
 
-    # All possible modifiers: cmd, alt, ctrl, shift
+# All possible modifiers: cmd, alt, ctrl, shift
 
-    # All possible commands: https://nikitabobko.github.io/AeroSpace/commands
+# All possible commands: https://nikitabobko.github.io/AeroSpace/commands
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#exec-and-forget
-    # You can uncomment the following lines to open up terminal with alt + enter shortcut
-    # (like in i3)
-    # alt-enter = '''exec-and-forget osascript -e '
-    # tell application "Terminal"
-    #     do script
-    #     activate
-    # end tell'
-    # '''
+# See: https://nikitabobko.github.io/AeroSpace/commands#exec-and-forget
+# You can uncomment the following lines to open up terminal with alt + enter shortcut
+# (like in i3)
+# alt-enter = '''exec-and-forget osascript -e '
+# tell application "Terminal"
+#     do script
+#     activate
+# end tell'
+# '''
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#focus
-    alt-h = 'focus left'
-    alt-j = 'focus down'
-    alt-k = 'focus up'
-    alt-l = 'focus right'
+# See: https://nikitabobko.github.io/AeroSpace/commands#focus
+# alt-cmd-h = 'focus left'
+# alt-cmd-j = 'focus down'
+# alt-cmd-k = 'focus up'
+# alt-cmd-l = 'focus right'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#move
-    alt-shift-h = 'move left'
-    alt-shift-j = 'move down'
-    alt-shift-k = 'move up'
-    alt-shift-l = 'move right'
+# See: https://nikitabobko.github.io/AeroSpace/commands#move
+alt-shift-cmd-h = 'move left'
+alt-shift-cmd-j = 'move down'
+alt-shift-cmd-k = 'move up'
+alt-shift-cmd-l = 'move right'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#layout
-    alt-shift-cmd-slash = 'layout tiles horizontal vertical'
-    alt-shift-cmd-comma = 'layout accordion horizontal vertical'
-    alt-shift-cmd-period = 'layout floating tiling'
-    alt-cmd-enter = 'fullscreen'
-    alt-shift-cmd-enter = 'exec-and-forget /bin/bash -lc "$HOME/.dotfiles/_scripts/toggle_aerospace_gaps.sh"'
+# See: https://nikitabobko.github.io/AeroSpace/commands#layout
+alt-shift-cmd-slash = 'layout tiles horizontal vertical'
+alt-shift-cmd-period = 'layout floating tiling'
+# alt-shift-cmd-comma = 'layout accordion horizontal vertical'
+alt-cmd-enter = ['fullscreen', 'layout floating']
+alt-shift-cmd-enter = 'exec-and-forget /bin/bash -lc "$HOME/.dotfiles/_scripts/toggle_aerospace_gaps.sh"'
 
-    alt-shift-cmd-h = 'join-with left'
-    alt-shift-cmd-j = 'join-with down'
-    alt-shift-cmd-k = 'join-with up' 
-    alt-shift-cmd-l = 'join-with right'
+# alt-shift-cmd-h = 'join-with left'
+# alt-shift-cmd-j = 'join-with down'
+# alt-shift-cmd-k = 'join-with up'
+# alt-shift-cmd-l = 'join-with right'
 
-    alt-shift-cmd-backspace = 'close-all-windows-but-current'
+# alt-shift-cmd-backspace = 'close-all-windows-but-current'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#resize
-    alt-shift-cmd-minus = 'resize smart -50'
-    alt-shift-cmd-equal = 'resize smart +50'
+# See: https://nikitabobko.github.io/AeroSpace/commands#resize
+alt-shift-cmd-minus = 'resize smart -50'
+alt-shift-cmd-equal = 'resize smart +50'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-    alt-1 = 'workspace 1'
-    alt-2 = 'workspace 2'
-    alt-3 = 'workspace 3'
+# See: https://nikitabobko.github.io/AeroSpace/commands#workspace
+alt-1 = 'workspace 1'
+alt-2 = 'workspace 2'
+alt-3 = 'workspace 3'
 
-    alt-q = 'workspace Q'
-    alt-w = 'workspace W'
-    alt-e = 'workspace E'
+alt-q = 'workspace Q'
+alt-w = 'workspace W'
+alt-e = 'workspace E'
 
-    alt-a = 'workspace A' 
-    alt-s = 'workspace S'
-    alt-d = 'workspace D'
+alt-a = 'workspace A'
+alt-s = 'workspace S'
+alt-d = 'workspace D'
 
-    cmd-esc = 'workspace Q' # special combination with fast access
-    alt-z = 'workspace Z'
-    alt-x = 'workspace X'
-    alt-c = 'workspace C'
+cmd-esc = 'workspace Q' # special combination with fast access
+alt-z = 'workspace Z'
+alt-x = 'workspace X'
+alt-c = 'workspace C'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-    alt-shift-1 = 'move-node-to-workspace 1'
-    alt-shift-2 = 'move-node-to-workspace 2'
-    alt-shift-3 = 'move-node-to-workspace 3'
+# See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
+alt-shift-1 = 'move-node-to-workspace 1'
+alt-shift-2 = 'move-node-to-workspace 2'
+alt-shift-3 = 'move-node-to-workspace 3'
 
-    alt-shift-q = 'move-node-to-workspace Q'
-    alt-shift-w = 'move-node-to-workspace W'
-    alt-shift-e = 'move-node-to-workspace E'
+alt-shift-q = 'move-node-to-workspace Q'
+alt-shift-w = 'move-node-to-workspace W'
+alt-shift-e = 'move-node-to-workspace E'
 
-    alt-shift-a = 'move-node-to-workspace A'
-    alt-shift-s = 'move-node-to-workspace S'
-    alt-shift-d = 'move-node-to-workspace D'
+alt-shift-a = 'move-node-to-workspace A'
+alt-shift-s = 'move-node-to-workspace S'
+alt-shift-d = 'move-node-to-workspace D'
 
-    alt-shift-z = 'move-node-to-workspace Z'
-    alt-shift-x = 'move-node-to-workspace X'
-    alt-shift-c = 'move-node-to-workspace C'
+alt-shift-z = 'move-node-to-workspace Z'
+alt-shift-x = 'move-node-to-workspace X'
+alt-shift-c = 'move-node-to-workspace C'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
-    alt-tab = 'workspace-back-and-forth'
-    # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
-    alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+# See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
+alt-tab = 'workspace-back-and-forth'
+# See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
+alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#mode
-    alt-shift-cmd-semicolon = 'mode service'
+# See: https://nikitabobko.github.io/AeroSpace/commands#mode
+alt-shift-cmd-semicolon = 'mode service'
 
-    # Disable "hide application" shortcuts
-    cmd-h = []
-    alt-cmd-h = []
+# Disable "hide application" shortcuts
+cmd-h = []
 
 # 'service' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 [mode.service.binding]
-    esc = ['reload-config', 'mode main']
-    r = ['flatten-workspace-tree', 'mode main'] # reset layout
+esc = ['reload-config', 'mode main']
+r = ['flatten-workspace-tree', 'mode main'] # reset layout
 
-    # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
-    #s = ['layout sticky tiling', 'mode main']
+# sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
+#s = ['layout sticky tiling', 'mode main']
 
 
 # [[on-window-detected]]
@@ -188,70 +189,70 @@ exec-on-workspace-change = ['/bin/bash', '-c',
 
 
 [[on-window-detected]]
-    if.app-id = 'com.microsoft.VSCode'
-    run = 'move-node-to-workspace 1' 
+if.app-id = 'com.microsoft.VSCode'
+run = 'move-node-to-workspace 1'
 
 [[on-window-detected]]
-    if.app-id = 'com.apple.dt.Xcode'
-    run = 'move-node-to-workspace 2'
+if.app-id = 'com.apple.dt.Xcode'
+run = ['layout floating', 'move-node-to-workspace 2']
 
 [[on-window-detected]]
-    if.app-id = 'com.apple.iphonesimulator'
-    run = 'move-node-to-workspace 2'
+if.app-id = 'com.apple.iphonesimulator'
+run = ['layout floating', 'move-node-to-workspace 2']
 
 [[on-window-detected]]
-    if.app-id = 'com.jetbrains.intellij.ce'
-    run = 'move-node-to-workspace 3'
+if.app-id = 'com.jetbrains.intellij.ce'
+run = 'move-node-to-workspace 3'
 
 [[on-window-detected]]
-    if.app-id = 'com.google.android.studio'
-    run = 'move-node-to-workspace 3'
-
-
-[[on-window-detected]]
-    if.app-id = 'com.mitchellh.ghostty'
-    # FIX: this is a workaround for https://github.com/nikitabobko/AeroSpace/issues/68
-    # Then, optionally, after launching Ghostty, hit `alt-shift-;` to enter mode service. Hit `f` to toggle off floating.
-    run = ['layout floating', 'move-node-to-workspace Q']
-
-[[on-window-detected]]
-    if.app-id = 'com.google.Chrome'
-    run = 'move-node-to-workspace W'
-
-[[on-window-detected]]
-    if.app-id = 'com.openai.chat'
-    run = 'move-node-to-workspace E'
-
-[[on-window-detected]]
-    if.app-id = 'com.anthropic.claudefordesktop'
-    run = 'move-node-to-workspace E'
+if.app-id = 'com.google.android.studio'
+run = 'move-node-to-workspace 3'
 
 
 [[on-window-detected]]
-    if.app-id = 'com.apple.iCal'
-    run = 'move-node-to-workspace A'
+if.app-id = 'com.mitchellh.ghostty'
+# FIX: this is a workaround for https://github.com/nikitabobko/AeroSpace/issues/68
+# Then, optionally, after launching Ghostty, hit `alt-shift-;` to enter mode service. Hit `f` to toggle off floating.
+run = ['layout floating', 'move-node-to-workspace Q']
 
 [[on-window-detected]]
-    if.app-id = 'com.tinyspeck.slackmacgap'
-    run = 'move-node-to-workspace S'
+if.app-id = 'com.google.Chrome'
+run = 'move-node-to-workspace W'
 
 [[on-window-detected]]
-    if.app-id = 'ru.keepcoder.Telegram'
-    run = 'move-node-to-workspace D' 
+if.app-id = 'com.openai.chat'
+run = 'move-node-to-workspace E'
 
 [[on-window-detected]]
-    if.app-id = 'com.apple.MobileSMS'
-    run = 'move-node-to-workspace D'
+if.app-id = 'com.anthropic.claudefordesktop'
+run = 'move-node-to-workspace E'
 
 
 [[on-window-detected]]
-    if.app-id = 'us.zoom.xos'
-    run = 'move-node-to-workspace Z'
+if.app-id = 'com.apple.iCal'
+run = 'move-node-to-workspace A'
 
 [[on-window-detected]]
-    if.app-id = 'com.spotify.client'
-    run = 'move-node-to-workspace X'
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = 'move-node-to-workspace S'
 
 [[on-window-detected]]
-    if.app-id = 'com.apple.Safari'
-    run = 'move-node-to-workspace C'
+if.app-id = 'ru.keepcoder.Telegram'
+run = 'move-node-to-workspace D'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.MobileSMS'
+run = 'move-node-to-workspace D'
+
+
+[[on-window-detected]]
+if.app-id = 'us.zoom.xos'
+run = 'move-node-to-workspace Z'
+
+[[on-window-detected]]
+if.app-id = 'com.spotify.client'
+run = 'move-node-to-workspace X'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.Safari'
+run = 'move-node-to-workspace C'
