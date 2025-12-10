@@ -1,7 +1,7 @@
 theme = light:One Double Light,dark:One Double Dark
 
 font-family = ""
-font-family = "JetBrainsMonoNL Nerd Font Mono"
+font-family = "JetBrainsMonoNL Nerd Font"
 font-thicken = true
 font-size = 14
 font-thicken-strength = 100

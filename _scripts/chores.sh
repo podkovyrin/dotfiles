@@ -112,20 +112,20 @@ run "brew cleanup"
 run "brew autoremove"
 run "brew doctor"
 
-# ---------- App Store (mas) ----------
-if has mas; then
-  log "Updating Mac App Store apps (mas)"
-  run "mas upgrade"
-else
-  warn "'mas' not installed (brew install mas) — skipping App Store updates"
-fi
-
 # ---------- macOS software updates ----------
 if [[ "${INCLUDE_OS_UPDATE}" -eq 1 ]]; then
+  # ---------- App Store (mas) ----------
+  if has mas; then
+    log "Updating Mac App Store apps (mas)"
+    run "mas upgrade"
+  else
+    warn "'mas' not installed (brew install mas) — skipping App Store updates"
+  fi
+
   log "Checking for macOS updates (may prompt for sudo)"
   run "sudo softwareupdate -ia --verbose"
 else
-  warn "Skipping macOS softwareupdate (per flag)"
+  warn "Skipping macOS and App Store updates (use --include-os-update to enable)"
 fi
 
 # ---------- Xcode / CLT maintenance ----------

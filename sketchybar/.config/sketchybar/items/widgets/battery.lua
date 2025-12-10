@@ -10,7 +10,6 @@ local battery = sbar.add("item", "widgets.battery", {
       size = 16.0,
     }
   },
-  label = { font = { family = settings.font.numbers } },
   update_freq = 180,
   popup = { align = "center" }
 })
@@ -18,28 +17,17 @@ local battery = sbar.add("item", "widgets.battery", {
 battery:subscribe({"routine", "power_source_change", "system_woke"}, function()
   sbar.exec("pmset -g batt", function(batt_info)
     local icon = "!"
-    local label = "?"
 
     local found, _, charge = batt_info:find("(%d+)%%")
     if found then
       charge = tonumber(charge)
-      label = charge .. "%"
     end
 
     local color = colors.white
     local charging, _, _ = batt_info:find("AC Power")
 
-    local label_config = {
-      string = "",
-      drawing = true,
-      padding_left = 5,
-    }
-
     if charging then
       icon = icons.battery.charging
-      if found and charge == 100 then
-        label_config.drawing = false
-      end
     else
       if found and charge > 80 then
         icon = icons.battery._100
@@ -51,18 +39,17 @@ battery:subscribe({"routine", "power_source_change", "system_woke"}, function()
         icon = icons.battery._25
       else
         icon = icons.battery._0
-        color = colors.red
+        if charge <= 10 then
+          color = colors.red
+        end
       end
     end
-
-    label_config.string = label
 
     battery:set({
       icon = {
         string = icon,
         color = color
       },
-      label = label_config,
     })
   end)
 end)
