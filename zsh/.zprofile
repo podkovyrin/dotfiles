@@ -15,6 +15,7 @@ export PATH="/Applications/Sublime Text.app/Contents/SharedSupport/bin:$PATH"
 export PATH="$HOME/.mint/bin:$PATH"
 export PATH="$ANDROID_HOME/platform-tools:$PATH"
 export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$PATH"
+export PATH="$PATH:/Users/andrei/.local/bin"
 
 # LLVM via Homebrew
 export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
@@ -23,3 +24,4 @@ export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
 export CMAKE_PREFIX_PATH="/opt/homebrew/opt/llvm"
 
 [ -e ~/.secrets ] && source ~/.secrets
+
