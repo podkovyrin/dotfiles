@@ -79,7 +79,7 @@ batrg() { bat "$1" | rg --color=always -C5 "$2" }
 alias diff='diff --color=auto'
 alias grep='grep --color=auto'
 alias cd='z'
-alias vim="nvim"
+alias v="nvim"
 
 # z
 eval "$(zoxide init zsh)"
