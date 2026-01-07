@@ -7,6 +7,7 @@
 	excludesfile = ~/.gitignore
 	fsmonitor = true
 	untrackedCache = true
+	pager = delta
 [init]
 	defaultBranch = main
 [commit]
@@ -92,3 +93,7 @@
 # https://stackoverflow.com/questions/58816416/xcode-swift-package-manager-error-the-repository-could-not-be-found
 [url "git@github.com:"]
 	insteadOf = https://github.com/
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	navigate = true

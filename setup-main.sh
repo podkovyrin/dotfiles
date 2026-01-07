@@ -44,6 +44,8 @@ setup_brew() {
     brew install yazi
     brew install tmux
     brew install gitmux
+    brew install git-delta
+    brew install mole
 
     # Install GUI Apps
 
@@ -112,7 +114,7 @@ setup_brew() {
 setup_devtools() {
     echo
     echo "➡️ Setting up devtools..."
-    
+
     brew install mise
     eval "$(mise activate zsh)"
 

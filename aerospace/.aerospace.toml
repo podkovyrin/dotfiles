@@ -140,10 +140,22 @@ alt-a = 'workspace A'
 alt-s = 'workspace S'
 alt-d = 'workspace D'
 
-cmd-esc = 'workspace Q' # special combination with fast access
 alt-z = 'workspace Z'
 alt-x = 'workspace X'
 alt-c = 'workspace C'
+
+f20 = 'workspace Q'
+f1 = 'workspace W'
+f2 = 'workspace E'
+f3 = 'workspace A'
+f4 = 'workspace S'
+f5 = 'workspace D'
+f6 = 'workspace 1'
+f7 = 'workspace 2'
+f8 = 'workspace 3'
+f9 = 'workspace Z'
+f10 = 'workspace X'
+f11 = 'workspace C'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
 alt-shift-1 = 'move-node-to-workspace 1'

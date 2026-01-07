@@ -1,1 +1,5 @@
 promptToReturnFromSubprocess: false
+
+git:
+    pagers:
+        - pager: delta --paging=never
