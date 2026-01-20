@@ -80,14 +80,6 @@ setup_brew() {
     # brew install jabra-direct # outdated - Rosetta
     # brew install opensim # outdated - Rosetta
 
-    # Sketchybar
-    brew install FelixKratz/formulae/sketchybar
-    brew install switchaudio-osx
-    brew install daipeihust/tap/im-select
-    # + lua, installed above
-    mkdir -p $HOME/.local/share/sketchybar_lua
-    (git clone https://github.com/FelixKratz/SbarLua.git /tmp/SbarLua && cd /tmp/SbarLua/ && make install && rm -rf /tmp/SbarLua/)
-
     # Fonts
 
     brew tap homebrew/cask-fonts
@@ -152,7 +144,6 @@ setup_dotfiles() {
     stow editrc
     stow gem
     stow aerospace
-    stow sketchybar
     stow btop
     stow ghostty
     stow tmux

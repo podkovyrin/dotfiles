@@ -2,7 +2,6 @@
 
 # You can use it to add commands that run after AeroSpace startup.
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
-after-startup-command = ['exec-and-forget sketchybar']
 
 # Start AeroSpace at login
 start-at-login = true
@@ -36,13 +35,6 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 # Also see: https://nikitabobko.github.io/AeroSpace/goodies#disable-hide-app
 automatically-unhide-macos-hidden-apps = true
 
-# Notify Sketchybar about workspace change
-exec-on-workspace-change = [
-    '/bin/bash',
-    '-c',
-    'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
-]
-
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
 [key-mapping]
@@ -61,7 +53,7 @@ inner.horizontal = 0
 inner.vertical = 0
 outer.left = [{ monitor."dell" = 250 }, 0]
 outer.bottom = 0
-outer.top = [{ monitor."dell" = 30 }, 0]
+outer.top = 0
 outer.right = [{ monitor."dell" = 250 }, 0]
 
 # 'main' binding mode declaration
