@@ -61,6 +61,7 @@ setup_brew() {
     brew install google-chrome
     brew install db-browser-for-sqlite
     brew install visual-studio-code
+    brew install zed
     brew install steermouse
     brew install zoom
     brew install raycast
@@ -147,6 +148,7 @@ setup_dotfiles() {
     stow btop
     stow ghostty
     stow tmux
+    stow zed
 
     # Disable Last Login Message
     touch $HOME/.hushlogin
