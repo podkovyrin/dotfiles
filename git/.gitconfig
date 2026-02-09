@@ -55,7 +55,7 @@
 	unstage = reset HEAD              # remove files from index (tracking)
 	uncommit = reset --soft HEAD^     # go back before last commit, with files in uncommitted state
 	mop = !git clean -df && git reset --hard
-	nuke = !git clean -ffdx && git reset --hard
+	nuke = !git submodule deinit -f --all && git clean -ffdx && git reset --hard && git submodule sync --recursive && git submodule update --init --recursive --force && git submodule foreach --recursive 'git reset --hard && git clean -ffdx'
 	bclean = "!f() { git branch --merged | grep  -v '\\*\\|master\\|develop\\|main\\|dev' | xargs -n 1 git branch -d; }; f"
 	subs = submodule update --init --recursive
 	changelog = "!f() { git log $1..HEAD --pretty=\"format:%s%n%b\" | grep changelog: | /usr/bin/sed -e \"s/^.*changelog\\://\" | awk \"{\\$1=\\$1};1\"; }; f"
