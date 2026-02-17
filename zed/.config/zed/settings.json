@@ -7,75 +7,76 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
-    "calls": {
-        "mute_on_join": true,
-    },
-    "use_system_window_tabs": false,
-    "bottom_dock_layout": "contained",
-    "tabs": {
-        "file_icons": true,
-        "git_status": true,
-    },
-    "title_bar": {
-        "show_user_menu": true,
-        "show_menus": true,
-        "show_branch_icon": true,
-    },
-    "show_signature_help_after_edits": true,
-    "auto_signature_help": true,
-    "which_key": {
-        "delay_ms": 500,
-        "enabled": true,
-    },
-    "agent": {
-        "tool_permissions": {
-            "tools": {
-                "terminal": {
-                    "default_mode": "allow",
-                },
-            },
+  "edit_predictions": {
+    "provider": "copilot",
+  },
+  "calls": {
+    "mute_on_join": true,
+  },
+  "use_system_window_tabs": false,
+  "bottom_dock_layout": "contained",
+  "tabs": {
+    "file_icons": true,
+    "git_status": true,
+  },
+  "title_bar": {
+    "show_user_menu": true,
+    "show_menus": true,
+    "show_branch_icon": true,
+  },
+  "show_signature_help_after_edits": true,
+  "auto_signature_help": true,
+  "which_key": {
+    "delay_ms": 500,
+    "enabled": true,
+  },
+  "agent": {
+    "tool_permissions": {
+      "tools": {
+        "terminal": {
+          "default_mode": "allow",
         },
-        "default_model": {
-            "provider": "openrouter",
-            "model": "openai/gpt-5.2-codex",
-        },
-        "favorite_models": [],
-        "model_parameters": [],
+      },
     },
-    "icon_theme": "Material Icon Theme",
-    "features": {
-        "edit_prediction_provider": "copilot",
+    "default_model": {
+      "provider": "openrouter",
+      "model": "openai/gpt-5.2-codex",
     },
-    "terminal": {
-        "font_size": 14.0,
-        "font_family": "JetBrainsMonoNL Nerd Font Mono",
-        "copy_on_select": true,
-    },
-    "base_keymap": "VSCode",
-    "fast_scroll_sensitivity": 2.0,
-    "scroll_sensitivity": 0.25,
-    "minimap": {
-        "show": "never",
-    },
-    "buffer_font_fallbacks": ["Menlo", "Monaco", "Courier New"],
-    "show_edit_predictions": true,
-    "wrap_guides": [120],
-    "ui_font_weight": 400.0,
-    "ui_font_family": ".SystemUIFont",
-    "buffer_font_family": "JetBrains Mono NL",
-    "telemetry": {
-        "diagnostics": false,
-        "metrics": false,
-    },
-    "session": {
-        "trust_all_worktrees": true,
-    },
-    "vim_mode": true,
-    "ui_font_size": 16.0,
-    "buffer_font_size": 14.0,
-    "theme": {
-        "mode": "system",
-        "light": "GitHub Light",
-        "dark": "GitHub Dark",
-    },
+    "favorite_models": [],
+    "model_parameters": [],
+  },
+  "icon_theme": "Material Icon Theme",
+  "terminal": {
+    "font_size": 14.0,
+    "font_family": "JetBrainsMonoNL Nerd Font Mono",
+    "copy_on_select": true,
+  },
+  "base_keymap": "VSCode",
+  "fast_scroll_sensitivity": 2.0,
+  "scroll_sensitivity": 0.25,
+  "minimap": {
+    "show": "never",
+  },
+  "buffer_font_fallbacks": ["Menlo", "Monaco", "Courier New"],
+  "show_edit_predictions": true,
+  "wrap_guides": [120],
+  "ui_font_weight": 400.0,
+  "ui_font_family": ".SystemUIFont",
+  "buffer_font_family": "JetBrains Mono NL",
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false,
+  },
+  "session": {
+    "trust_all_worktrees": true,
+  },
+  "vim_mode": true,
+  "ui_font_size": 16.0,
+  "buffer_font_size": 14.0,
+  "theme": {
+    "mode": "system",
+    "light": "GitHub Light",
+    "dark": "GitHub Dark",
+  },
+  "soft_wrap": "editor_width",
 }
