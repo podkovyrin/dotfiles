@@ -130,8 +130,6 @@ setup_devtools() {
 
     mise use -g npm:@anthropic-ai/claude-code
     mise use -g npm:@openai/codex
-
-    mise use -g npm:@crowdin/cli
 }
 
 setup_dotfiles() {
