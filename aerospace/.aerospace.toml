@@ -51,10 +51,10 @@ preset = 'qwerty'
 [gaps]
 inner.horizontal = 0
 inner.vertical = 0
-outer.left = [{ monitor."dell" = 250 }, 0]
+outer.left = [{ monitor."dell" = 200 }, 0]
 outer.bottom = 0
 outer.top = 0
-outer.right = [{ monitor."dell" = 250 }, 0]
+outer.right = [{ monitor."dell" = 200 }, 0]
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -107,6 +107,7 @@ alt-shift-cmd-period = 'layout floating tiling'
 # alt-shift-cmd-comma = 'layout accordion horizontal vertical'
 alt-cmd-enter = ['fullscreen', 'layout floating']
 alt-shift-cmd-enter = 'exec-and-forget /bin/bash -lc "$HOME/.dotfiles/_scripts/toggle_aerospace_gaps.sh"'
+alt-cmd-y = 'enable toggle'
 
 # alt-shift-cmd-h = 'join-with left'
 # alt-shift-cmd-j = 'join-with down'
@@ -123,10 +124,12 @@ alt-shift-cmd-equal = 'resize smart +50'
 alt-1 = 'workspace 1'
 alt-2 = 'workspace 2'
 alt-3 = 'workspace 3'
+alt-4 = 'workspace 4'
 
 alt-q = 'workspace Q'
 alt-w = 'workspace W'
 alt-e = 'workspace E'
+alt-r = 'workspace R'
 
 alt-a = 'workspace A'
 alt-s = 'workspace S'
@@ -136,27 +139,16 @@ alt-z = 'workspace Z'
 alt-x = 'workspace X'
 alt-c = 'workspace C'
 
-f20 = 'workspace Q'
-f1 = 'workspace W'
-f2 = 'workspace E'
-f3 = 'workspace A'
-f4 = 'workspace S'
-f5 = 'workspace D'
-f6 = 'workspace 1'
-f7 = 'workspace 2'
-f8 = 'workspace 3'
-f9 = 'workspace Z'
-f10 = 'workspace X'
-f11 = 'workspace C'
-
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
 alt-shift-1 = 'move-node-to-workspace 1'
 alt-shift-2 = 'move-node-to-workspace 2'
 alt-shift-3 = 'move-node-to-workspace 3'
+alt-shift-4 = 'move-node-to-workspace 4'
 
 alt-shift-q = 'move-node-to-workspace Q'
 alt-shift-w = 'move-node-to-workspace W'
 alt-shift-e = 'move-node-to-workspace E'
+alt-shift-r = 'move-node-to-workspace R'
 
 alt-shift-a = 'move-node-to-workspace A'
 alt-shift-s = 'move-node-to-workspace S'
@@ -201,20 +193,24 @@ if.app-id = 'dev.zed.Zed'
 run = 'move-node-to-workspace 1'
 
 [[on-window-detected]]
+if.app-id = 'com.openai.codex'
+run = 'move-node-to-workspace 2'
+
+[[on-window-detected]]
 if.app-id = 'com.apple.dt.Xcode'
-run = ['layout floating', 'move-node-to-workspace 2']
+run = ['layout floating', 'move-node-to-workspace 3']
 
 [[on-window-detected]]
 if.app-id = 'com.apple.iphonesimulator'
-run = ['layout floating', 'move-node-to-workspace 2']
+run = ['layout floating', 'move-node-to-workspace 3']
 
 [[on-window-detected]]
 if.app-id = 'com.jetbrains.intellij.ce'
-run = 'move-node-to-workspace 3'
+run = 'move-node-to-workspace 4'
 
 [[on-window-detected]]
 if.app-id = 'com.google.android.studio'
-run = 'move-node-to-workspace 3'
+run = 'move-node-to-workspace 4'
 
 
 [[on-window-detected]]
@@ -234,6 +230,10 @@ run = 'move-node-to-workspace E'
 [[on-window-detected]]
 if.app-id = 'com.anthropic.claudefordesktop'
 run = 'move-node-to-workspace E'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.ScreenSharing'
+run = ['layout floating', 'move-node-to-workspace R']
 
 
 [[on-window-detected]]

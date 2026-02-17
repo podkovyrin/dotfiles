@@ -12,7 +12,7 @@ if [[ ! -f "$CONFIG_PATH" ]]; then
 fi
 
 NEW_VALUE="$(
-python3 - "$CONFIG_PATH" 250 <<'PY'
+python3 - "$CONFIG_PATH" 200 <<'PY'
 import sys
 import re
 from pathlib import Path
