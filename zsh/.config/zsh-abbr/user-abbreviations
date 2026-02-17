@@ -4,6 +4,8 @@ abbr ".."="z .."
 
 abbr "y"="yazi"
 
+abbr "zd"="zed ."
+
 abbr "p3"="python3"
 abbr "localsrv"="python3 -m http.server"
 

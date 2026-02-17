@@ -4,6 +4,15 @@ setopt HIST_IGNORE_ALL_DUPS
 # Set editor default keymap to emacs (`-e`) or vi (`-v`)
 bindkey -v
 
+# Guard against broken TTY input flags (Enter shows as ^M when icrnl is off).
+# Some programs can leave the terminal in this state for the current session.
+fix_tty_enter_key() {
+  [[ -t 0 ]] || return
+  stty icrnl -inlcr -igncr 2>/dev/null
+}
+(( ${precmd_functions[(Ie)fix_tty_enter_key]} )) || precmd_functions+=(fix_tty_enter_key)
+fix_tty_enter_key
+
 # Prompt for spelling correction of commands.
 setopt CORRECT
 
