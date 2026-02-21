@@ -80,21 +80,30 @@ run() {
 
 # ---------- Environment bootstrap ----------
 
-if [ -n "$ZSH_VERSION" ]; then
-  source "${HOME}/.zshrc" > /dev/null
-else
-  # Avoid sourcing interactive shell rc files (e.g., .zshrc) inside bash to prevent cross-shell syntax errors.
-  # Instead, directly bootstrap common tool shims when present.
+source_with_default_ifs() {
+  local file="$1"
+  [[ -r "${file}" ]] || return 1
+  local old_ifs="${IFS}"
+  IFS=$' \t\n'
+  source "${file}"
+  local rc=$?
+  IFS="${old_ifs}"
+  return ${rc}
+}
 
-  # NVM (if installed but not loaded)
-  if [[ -z "$(command -v nvm)" && -d "${HOME}/.nvm" && -f "${HOME}/.nvm/nvm.sh" ]]; then
-    source "${HOME}/.nvm/nvm.sh"
-  fi
+# Do not source interactive shell config (~/.zshrc) from this maintenance script.
+# It can trigger compdump with a non-default IFS and corrupt ~/.zcompdump.
+source_with_default_ifs "${HOME}/.zprofile" >/dev/null 2>&1 || true
+source_with_default_ifs "${HOME}/.cargo/env" >/dev/null 2>&1 || true
 
-  # asdf (if installed but not loaded)
-  if [[ -z "$(command -v asdf)" && -f "${HOME}/.asdf/asdf.sh" ]]; then
-    source "${HOME}/.asdf/asdf.sh"
-  fi
+# NVM (if installed but not loaded)
+if [[ -z "$(command -v nvm)" && -d "${HOME}/.nvm" && -f "${HOME}/.nvm/nvm.sh" ]]; then
+  source_with_default_ifs "${HOME}/.nvm/nvm.sh" >/dev/null 2>&1 || true
+fi
+
+# asdf (if installed but not loaded)
+if [[ -z "$(command -v asdf)" && -f "${HOME}/.asdf/asdf.sh" ]]; then
+  source_with_default_ifs "${HOME}/.asdf/asdf.sh" >/dev/null 2>&1 || true
 fi
 
 # ---------- Homebrew core ----------
