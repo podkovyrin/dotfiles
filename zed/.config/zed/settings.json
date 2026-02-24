@@ -34,7 +34,7 @@
     "tool_permissions": {
       "tools": {
         "terminal": {
-          "default_mode": "allow",
+          "default": "allow"
         },
       },
     },
