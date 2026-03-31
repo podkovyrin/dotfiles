@@ -147,6 +147,8 @@ setup_dotfiles() {
     stow ghostty
     stow tmux
     stow zed
+    stow uv
+    stow npmrc
 
     # Disable Last Login Message
     touch $HOME/.hushlogin
