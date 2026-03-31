@@ -1,0 +1,17 @@
+[settings]
+install_before = "7d"
+
+[tools]
+cocoapods = "latest"
+emsdk = "latest"
+gh = "latest"
+go = "latest"
+node = "lts"
+"npm:@anthropic-ai/claude-code" = "latest"
+"npm:@crowdin/cli" = "latest"
+"npm:@openai/codex" = "latest"
+python = "latest"
+ruby = "3"
+rust = "latest"
+uv = "latest"
+xcbeautify = "latest"
