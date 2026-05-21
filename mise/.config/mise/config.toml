@@ -2,6 +2,7 @@
 install_before = "7d"
 
 [tools]
+bun = "latest"
 cocoapods = "latest"
 emsdk = "latest"
 gh = "latest"

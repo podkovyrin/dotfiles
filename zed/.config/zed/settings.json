@@ -7,6 +7,19 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
+  "cli_default_open_behavior": "new_window",
+  "project_panel": {
+    "dock": "left",
+  },
+  "outline_panel": {
+    "dock": "left",
+  },
+  "collaboration_panel": {
+    "dock": "right",
+  },
+  "git_panel": {
+    "dock": "left",
+  },
   "edit_predictions": {
     "provider": "copilot",
   },
@@ -20,9 +33,9 @@
     "git_status": true,
   },
   "title_bar": {
+    "show_branch_status_icon": true,
     "show_user_menu": true,
     "show_menus": true,
-    "show_branch_icon": true,
   },
   "show_signature_help_after_edits": true,
   "auto_signature_help": true,
@@ -31,16 +44,18 @@
     "enabled": true,
   },
   "agent": {
+    "dock": "right",
     "tool_permissions": {
       "tools": {
         "terminal": {
-          "default": "allow"
+          "default": "allow",
         },
       },
     },
     "default_model": {
+      "enable_thinking": true,
       "provider": "openrouter",
-      "model": "openai/gpt-5.2-codex",
+      "model": "openai/gpt-5.5",
     },
     "favorite_models": [],
     "model_parameters": [],

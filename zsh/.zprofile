@@ -1,8 +1,3 @@
-# https://github.com/openai/codex/issues/4620
-# eval "$(/opt/homebrew/bin/brew shellenv)"
-eval $(/opt/homebrew/bin/brew shellenv bash)
-eval "$(mise activate zsh)"
-
 export MANPATH="/opt/homebrew/share/man:$MANPATH"
 export INFOPATH="/opt/homebrew/share/info:$INFOPATH"
 
@@ -25,3 +20,9 @@ export CMAKE_PREFIX_PATH="/opt/homebrew/opt/llvm"
 
 [ -e ~/.secrets ] && source ~/.secrets
 
+# brew and mise activation should be executed after setting $PATH
+
+# https://github.com/openai/codex/issues/4620
+# eval "$(/opt/homebrew/bin/brew shellenv)"
+eval $(/opt/homebrew/bin/brew shellenv bash)
+eval "$(mise activate zsh)"
