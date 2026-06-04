@@ -63,6 +63,10 @@ fi
 # Initialize modules.
 source ${ZIM_HOME}/init.zsh
 
+if (( ${+commands[pnpm]} )); then
+  eval "$(pnpm completion zsh)"
+fi
+
 # Post-init module configuration
 #
 # See https://github.com/zsh-users/zsh-autosuggestions/blob/master/README.md#suggestion-highlight-style
