@@ -7,91 +7,142 @@
 // custom settings, run `zed: open default settings` from the
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
-  "cli_default_open_behavior": "new_window",
-  "project_panel": {
-    "dock": "left",
-  },
-  "outline_panel": {
-    "dock": "left",
-  },
-  "collaboration_panel": {
-    "dock": "right",
-  },
-  "git_panel": {
-    "dock": "left",
-  },
-  "edit_predictions": {
-    "provider": "copilot",
-  },
-  "calls": {
-    "mute_on_join": true,
-  },
-  "use_system_window_tabs": false,
-  "bottom_dock_layout": "contained",
-  "tabs": {
-    "file_icons": true,
-    "git_status": true,
-  },
-  "title_bar": {
-    "show_branch_status_icon": true,
-    "show_user_menu": true,
-    "show_menus": true,
-  },
-  "show_signature_help_after_edits": true,
-  "auto_signature_help": true,
-  "which_key": {
-    "delay_ms": 500,
-    "enabled": true,
-  },
-  "agent": {
-    "dock": "right",
-    "tool_permissions": {
-      "tools": {
-        "terminal": {
-          "default": "allow",
+    "diff_view_style": "unified",
+    "cli_default_open_behavior": "new_window",
+    "project_panel": {
+        "dock": "left",
+    },
+    "outline_panel": {
+        "dock": "left",
+    },
+    "collaboration_panel": {
+        "dock": "right",
+    },
+    "git_panel": {
+        "dock": "left",
+    },
+    "language_models": {
+        "openai_compatible": {
+            "openrouter": {
+                "api_url": "https://openrouter.ai/api/v1",
+                "available_models": [
+                    {
+                        "name": "openai/gpt-5.3-codex",
+                        "display_name": "codex 5.3",
+                        "max_tokens": 400000,
+                    },
+                    {
+                        "name": "openai/gpt-5.5",
+                        "display_name": "gpt 5.5",
+                        "max_tokens": 1000000,
+                    },
+                    {
+                        "name": "openrouter/fusion",
+                        "display_name": "fusion",
+                        "max_tokens": 128000,
+                    },
+                ],
+            },
         },
-      },
     },
-    "default_model": {
-      "enable_thinking": true,
-      "provider": "openrouter",
-      "model": "openai/gpt-5.5",
+    "edit_predictions": {
+        "ollama": {
+            "prompt_format": "qwen",
+        },
+        "open_ai_compatible_api": {
+            "api_url": "https://openrouter.ai/api/v1/chat/completions",
+            "model": "openai/gpt-5.4-mini:nitro",
+            "prompt_format": "qwen",
+            "max_output_tokens": 64,
+        },
+        "provider": "copilot",
     },
-    "favorite_models": [],
-    "model_parameters": [],
-  },
-  "icon_theme": "Material Icon Theme",
-  "terminal": {
-    "font_size": 14.0,
-    "font_family": "JetBrainsMonoNL Nerd Font Mono",
-    "copy_on_select": true,
-  },
-  "base_keymap": "VSCode",
-  "fast_scroll_sensitivity": 2.0,
-  "scroll_sensitivity": 0.25,
-  "minimap": {
-    "show": "never",
-  },
-  "buffer_font_fallbacks": ["Menlo", "Monaco", "Courier New"],
-  "show_edit_predictions": true,
-  "wrap_guides": [120],
-  "ui_font_weight": 400.0,
-  "ui_font_family": ".SystemUIFont",
-  "buffer_font_family": "JetBrains Mono NL",
-  "telemetry": {
-    "diagnostics": false,
-    "metrics": false,
-  },
-  "session": {
-    "trust_all_worktrees": true,
-  },
-  "vim_mode": true,
-  "ui_font_size": 16.0,
-  "buffer_font_size": 14.0,
-  "theme": {
-    "mode": "system",
-    "light": "GitHub Light",
-    "dark": "GitHub Dark",
-  },
-  "soft_wrap": "editor_width",
+    "calls": {
+        "mute_on_join": true,
+    },
+    "use_system_window_tabs": false,
+    "bottom_dock_layout": "contained",
+    "tabs": {
+        "file_icons": true,
+        "git_status": true,
+    },
+    "title_bar": {
+        "show_branch_status_icon": true,
+        "show_user_menu": true,
+        "show_menus": true,
+    },
+    "show_signature_help_after_edits": true,
+    "auto_signature_help": true,
+    "which_key": {
+        "delay_ms": 500,
+        "enabled": true,
+    },
+    "agent": {
+        "dock": "right",
+        "tool_permissions": {
+            "tools": {
+                "terminal": {
+                    "default": "allow",
+                },
+            },
+        },
+        "default_model": {
+            "enable_thinking": false,
+            "provider": "openrouter",
+            "model": "openai/gpt-5.5",
+        },
+        "favorite_models": [
+            {
+                "provider": "openrouter",
+                "model": "openai/gpt-5.5",
+                "enable_thinking": false,
+            },
+            {
+                "provider": "openrouter",
+                "model": "openai/gpt-5.3-codex",
+                "enable_thinking": false,
+            },
+            {
+                "provider": "openrouter",
+                "model": "openrouter/fusion",
+                "enable_thinking": false,
+            },
+        ],
+        "model_parameters": [],
+    },
+    "icon_theme": "Material Icon Theme",
+    "terminal": {
+        "font_size": 14.0,
+        "font_family": "JetBrainsMonoNL Nerd Font Mono",
+        "copy_on_select": true,
+    },
+    "base_keymap": "VSCode",
+    "fast_scroll_sensitivity": 2.0,
+    "scroll_sensitivity": 0.25,
+    "minimap": {
+        "show": "never",
+    },
+    "buffer_font_fallbacks": ["Menlo", "Monaco", "Courier New"],
+    "show_edit_predictions": true,
+    "wrap_guides": [120],
+    "ui_font_weight": 400.0,
+    "ui_font_family": ".SystemUIFont",
+    "buffer_font_family": "JetBrains Mono NL",
+    "telemetry": {
+        "diagnostics": false,
+        "metrics": false,
+    },
+    "session": {
+        "trust_all_worktrees": true,
+    },
+    "vim_mode": true,
+    "ui_font_size": 16.0,
+    "buffer_font_size": 14.0,
+    "theme": {
+        "mode": "system",
+        "light": "GitHub Light",
+        "dark": "One Dark",
+    },
+    "soft_wrap": "editor_width",
+    "excerpt_context_lines": 4,
 }

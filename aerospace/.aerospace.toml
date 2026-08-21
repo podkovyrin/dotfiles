@@ -1,5 +1,7 @@
 # Place a copy of this config to ~/.aerospace.toml
 
+config-version = 2
+
 # You can use it to add commands that run after AeroSpace startup.
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 
@@ -134,10 +136,12 @@ alt-r = 'workspace R'
 alt-a = 'workspace A'
 alt-s = 'workspace S'
 alt-d = 'workspace D'
+alt-f = 'workspace F'
 
 alt-z = 'workspace Z'
 alt-x = 'workspace X'
 alt-c = 'workspace C'
+alt-v = 'workspace V'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
 alt-shift-1 = 'move-node-to-workspace 1'
@@ -153,10 +157,12 @@ alt-shift-r = 'move-node-to-workspace R'
 alt-shift-a = 'move-node-to-workspace A'
 alt-shift-s = 'move-node-to-workspace S'
 alt-shift-d = 'move-node-to-workspace D'
+alt-shift-f = 'move-node-to-workspace F'
 
 alt-shift-z = 'move-node-to-workspace Z'
 alt-shift-x = 'move-node-to-workspace X'
 alt-shift-c = 'move-node-to-workspace C'
+alt-shift-v = 'move-node-to-workspace V'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 alt-tab = 'workspace-back-and-forth'
@@ -220,7 +226,7 @@ if.app-id = 'com.mitchellh.ghostty'
 run = ['layout floating', 'move-node-to-workspace Q']
 
 [[on-window-detected]]
-if.app-id = 'com.google.Chrome'
+if.app-id = 'com.brave.Browser'
 run = 'move-node-to-workspace W'
 
 [[on-window-detected]]
@@ -263,4 +269,8 @@ run = 'move-node-to-workspace X'
 
 [[on-window-detected]]
 if.app-id = 'com.apple.Safari'
+run = 'move-node-to-workspace C'
+
+[[on-window-detected]]
+if.app-id = 'com.google.Chrome'
 run = 'move-node-to-workspace C'
