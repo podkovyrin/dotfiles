@@ -85,7 +85,18 @@ unset key
 
 # Shortcuts
 ls() { command -v eza &> /dev/null && eza "$@" || command ls --color=auto "$@"; }
-o() { [[ $# -gt 0 ]] && open "$@" || open .; }
+o() {
+  local opener
+  if (( ${+commands[open]} )); then
+    opener=open
+  elif (( ${+commands[xdg-open]} )); then
+    opener=xdg-open
+  else
+    print -u2 "No file opener found"
+    return 127
+  fi
+  [[ $# -gt 0 ]] && command "$opener" "$@" || command "$opener" .
+}
 s() { [[ $# -gt 0 ]] && subl "$@" || subl .; }
 batrg() { bat "$1" | rg --color=always -C5 "$2" }
 
@@ -95,7 +106,7 @@ alias cd='z'
 alias v="nvim"
 
 # z
-eval "$(zoxide init zsh)"
+(( ${+commands[zoxide]} )) && eval "$(zoxide init zsh)"
 
 # prompt
 

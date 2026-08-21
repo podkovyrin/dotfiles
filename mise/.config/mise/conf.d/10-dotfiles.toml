@@ -1,0 +1,18 @@
+[settings]
+install_before = "7d"
+
+[tools]
+bun = "latest"
+cocoapods = { version = "latest", os = ["macos"] }
+gh = { version = "latest", os = ["macos"] }
+go = "latest"
+node = "22.22.3"
+"npm:@anthropic-ai/claude-code" = { version = "latest", os = ["macos"] }
+"npm:@crowdin/cli" = "latest"
+"npm:@earendil-works/pi-coding-agent" = { version = "latest", os = ["macos"] }
+"npm:@openai/codex" = { version = "latest", os = ["macos"] }
+python = "latest"
+ruby = "3.2"
+rust = "latest"
+uv = "latest"
+xcbeautify = { version = "latest", os = ["macos"] }
