@@ -86,6 +86,7 @@ setup_brew() {
     brew install slack
     brew install --no-quarantine grishka/grishka/neardrop
     brew install --cask nikitabobko/tap/aerospace
+    brew install --cask karabiner-elements
 
     # brew install nrlquaker-winbox
     # brew install postman
@@ -152,7 +153,7 @@ setup_dotfiles() {
     fi
 
     local packages=(
-        zsh git nvim editorconfig editrc gem aerospace btop ghostty tmux zed
+        zsh git nvim editorconfig editrc gem aerospace karabiner btop ghostty tmux zed
         mise uv npmrc pnpm pnpm-macos yarn bun
     )
     local package
