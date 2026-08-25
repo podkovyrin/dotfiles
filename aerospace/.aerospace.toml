@@ -29,8 +29,10 @@ default-root-container-orientation = 'auto'
 # Drop it from your config, if you don't like this behavior
 # See https://nikitabobko.github.io/AeroSpace/guide#on-focus-changed-callbacks
 # See https://nikitabobko.github.io/AeroSpace/commands#move-mouse
-# Fallback value (if you omit the key): on-focused-monitor-changed = []
-on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+# Fallback value (if you omit the key): on-focus-changed = []
+on-focus-changed = ['move-mouse window-lazy-center']
+
+# focus-follows-mouse.enabled = true
 
 # You can effectively turn off macOS "Hide application" (cmd-h) feature by toggling this flag
 # Useful if you don't use this macOS feature, but accidentally hit cmd-h or cmd-alt-h key
@@ -51,12 +53,12 @@ preset = 'qwerty'
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-inner.horizontal = 0
-inner.vertical = 0
-outer.left = [{ monitor."dell" = 200 }, 0]
-outer.bottom = 0
-outer.top = 0
-outer.right = [{ monitor."dell" = 200 }, 0]
+inner.horizontal = [{ monitor."DELL U2723QE" = 5 }, 3]
+inner.vertical = [{ monitor."DELL U2723QE" = 5 }, 3]
+outer.left = [{ monitor."DELL U2723QE" = 5 }, 3]
+outer.bottom = [{ monitor."DELL U2723QE" = 5 }, 3]
+outer.top = [{ monitor."DELL U2723QE" = 5 }, 3]
+outer.right = [{ monitor."DELL U2723QE" = 5 }, 3]
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -93,10 +95,10 @@ outer.right = [{ monitor."dell" = 200 }, 0]
 # '''
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
-# ctrl-alt-cmd-h = 'focus left'
-# ctrl-alt-cmd-j = 'focus down'
-# ctrl-alt-cmd-k = 'focus up'
-# ctrl-alt-cmd-l = 'focus right'
+ctrl-alt-cmd-h = 'focus left'
+ctrl-alt-cmd-j = 'focus down'
+ctrl-alt-cmd-k = 'focus up'
+ctrl-alt-cmd-l = 'focus right'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move
 ctrl-alt-shift-cmd-h = 'move left'
@@ -105,11 +107,11 @@ ctrl-alt-shift-cmd-k = 'move up'
 ctrl-alt-shift-cmd-l = 'move right'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
-ctrl-alt-shift-cmd-slash = 'layout tiles horizontal vertical'
+ctrl-alt-cmd-slash = 'layout tiles horizontal vertical'
 ctrl-alt-shift-cmd-period = 'layout floating tiling'
 # ctrl-alt-shift-cmd-comma = 'layout accordion horizontal vertical'
-ctrl-alt-cmd-enter = ['fullscreen', 'layout floating']
-ctrl-alt-shift-cmd-enter = 'exec-and-forget /bin/bash -lc "$HOME/.dotfiles/_scripts/toggle_aerospace_gaps.sh"'
+ctrl-alt-cmd-enter = 'fullscreen'
+ctrl-alt-cmd-t = 'layout floating tiling'
 ctrl-alt-cmd-y = 'enable toggle'
 
 # ctrl-alt-shift-cmd-h = 'join-with left'
@@ -120,15 +122,10 @@ ctrl-alt-cmd-y = 'enable toggle'
 # ctrl-alt-shift-cmd-backspace = 'close-all-windows-but-current'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#resize
-ctrl-alt-shift-cmd-minus = 'resize smart -50'
-ctrl-alt-shift-cmd-equal = 'resize smart +50'
+ctrl-alt-cmd-minus = 'resize smart -50'
+ctrl-alt-cmd-equal = 'resize smart +50'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-ctrl-alt-cmd-1 = 'workspace 1'
-ctrl-alt-cmd-2 = 'workspace 2'
-ctrl-alt-cmd-3 = 'workspace 3'
-ctrl-alt-cmd-4 = 'workspace 4'
-
 ctrl-alt-cmd-q = 'workspace Q'
 ctrl-alt-cmd-w = 'workspace W'
 ctrl-alt-cmd-e = 'workspace E'
@@ -145,11 +142,6 @@ ctrl-alt-cmd-c = 'workspace C'
 ctrl-alt-cmd-v = 'workspace V'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-ctrl-alt-shift-cmd-1 = 'move-node-to-workspace 1'
-ctrl-alt-shift-cmd-2 = 'move-node-to-workspace 2'
-ctrl-alt-shift-cmd-3 = 'move-node-to-workspace 3'
-ctrl-alt-shift-cmd-4 = 'move-node-to-workspace 4'
-
 ctrl-alt-shift-cmd-q = 'move-node-to-workspace Q'
 ctrl-alt-shift-cmd-w = 'move-node-to-workspace W'
 ctrl-alt-shift-cmd-e = 'move-node-to-workspace E'
@@ -181,66 +173,54 @@ cmd-h = []
 [mode.service.binding]
 esc = ['reload-config', 'mode main']
 r = ['flatten-workspace-tree', 'mode main'] # reset layout
+ctrl-alt-shift-cmd-h = ['join-with left', 'mode main']
+ctrl-alt-shift-cmd-j = ['join-with down', 'mode main']
+ctrl-alt-shift-cmd-k = ['join-with up', 'mode main']
+ctrl-alt-shift-cmd-l = ['join-with right', 'mode main']
 
 # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
 #s = ['layout sticky tiling', 'mode main']
 
 
-# [[on-window-detected]]
-#     if.app-id = 'com.apple.finder'
-#     run = ['layout floating']
-
-
 [[on-window-detected]]
-if.app-id = 'com.microsoft.VSCode'
-run = 'move-node-to-workspace 1'
-
-[[on-window-detected]]
-if.app-id = 'dev.zed.Zed'
-run = 'move-node-to-workspace 1'
+if.app-id = 'com.mitchellh.ghostty'
+run = 'move-node-to-workspace Q'
 
 [[on-window-detected]]
 if.app-id = 'com.openai.codex'
-run = 'move-node-to-workspace 2'
+run = 'move-node-to-workspace Q'
 
 [[on-window-detected]]
-if.app-id = 'com.apple.dt.Xcode'
-run = ['layout floating', 'move-node-to-workspace 3']
-
-[[on-window-detected]]
-if.app-id = 'com.apple.iphonesimulator'
-run = ['layout floating', 'move-node-to-workspace 3']
-
-[[on-window-detected]]
-if.app-id = 'com.jetbrains.intellij.ce'
-run = 'move-node-to-workspace 4'
-
-[[on-window-detected]]
-if.app-id = 'com.google.android.studio'
-run = 'move-node-to-workspace 4'
-
-
-[[on-window-detected]]
-if.app-id = 'com.mitchellh.ghostty'
-# FIX: this is a workaround for https://github.com/nikitabobko/AeroSpace/issues/68
-# Then, optionally, after launching Ghostty, hit Meta+Shift+; to enter mode service. Hit `f` to toggle off floating.
-run = ['layout floating', 'move-node-to-workspace Q']
+if.app-id = 'com.anthropic.claudefordesktop'
+run = 'move-node-to-workspace Q'
 
 [[on-window-detected]]
 if.app-id = 'com.brave.Browser'
 run = 'move-node-to-workspace W'
 
 [[on-window-detected]]
-if.app-id = 'com.openai.chat'
+if.app-id = 'com.microsoft.VSCode'
 run = 'move-node-to-workspace E'
 
 [[on-window-detected]]
-if.app-id = 'com.anthropic.claudefordesktop'
+if.app-id = 'dev.zed.Zed'
 run = 'move-node-to-workspace E'
 
 [[on-window-detected]]
-if.app-id = 'com.apple.ScreenSharing'
-run = ['layout floating', 'move-node-to-workspace R']
+if.app-id = 'com.apple.dt.Xcode'
+run = 'move-node-to-workspace R'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.iphonesimulator'
+run = 'move-node-to-workspace R'
+
+[[on-window-detected]]
+if.app-id = 'com.jetbrains.intellij.ce'
+run = 'move-node-to-workspace R'
+
+[[on-window-detected]]
+if.app-id = 'com.google.android.studio'
+run = 'move-node-to-workspace R'
 
 
 [[on-window-detected]]
@@ -253,11 +233,11 @@ run = 'move-node-to-workspace S'
 
 [[on-window-detected]]
 if.app-id = 'ru.keepcoder.Telegram'
-run = 'move-node-to-workspace D'
+run = 'move-node-to-workspace S'
 
 [[on-window-detected]]
 if.app-id = 'com.apple.MobileSMS'
-run = 'move-node-to-workspace D'
+run = 'move-node-to-workspace S'
 
 
 [[on-window-detected]]
@@ -275,3 +255,7 @@ run = 'move-node-to-workspace C'
 [[on-window-detected]]
 if.app-id = 'com.google.Chrome'
 run = 'move-node-to-workspace C'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.ScreenSharing'
+run = ['layout floating', 'move-node-to-workspace V']
