@@ -65,8 +65,17 @@ source ${ZIM_HOME}/init.zsh
 
 [[ -r ~/.config/herdr/process-name.zsh ]] && source ~/.config/herdr/process-name.zsh
 
+# pnpm completion: cache the script and refresh it when the pnpm binary changes.
+# Generate it outside $HOME: there, pnpm reads ~/.npmrc as a project .npmrc
+# and warns about the env-var auth tokens.
 if (( ${+commands[pnpm]} )); then
-  eval "$(pnpm completion zsh)"
+  _pnpm_comp=${XDG_CACHE_HOME:-$HOME/.cache}/zsh/pnpm-completion.zsh
+  if [[ ! -s $_pnpm_comp || ${commands[pnpm]:A} -nt $_pnpm_comp ]]; then
+    mkdir -p ${_pnpm_comp:h}
+    (cd /tmp && pnpm completion zsh 2>/dev/null) >| $_pnpm_comp
+  fi
+  source $_pnpm_comp
+  unset _pnpm_comp
 fi
 
 # Post-init module configuration
