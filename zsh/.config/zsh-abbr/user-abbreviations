@@ -1,5 +1,3 @@
-abbr "chores"="~/.dotfiles/_scripts/chores.sh"
-
 abbr ".."="z .."
 
 abbr "y"="yazi"
