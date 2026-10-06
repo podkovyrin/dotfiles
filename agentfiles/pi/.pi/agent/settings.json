@@ -16,7 +16,8 @@
     "npm:@ff-labs/pi-fff",
     "npm:@juicesharp/rpiv-ask-user-question",
     "git:github.com/podkovyrin/pi-herdr-side",
-    "npm:pi-open-tui"
+    "npm:pi-open-tui",
+    "npm:@gotgenes/pi-permission-system"
   ],
   "collapseChangelog": true,
   "markdown": {
