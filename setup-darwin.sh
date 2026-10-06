@@ -135,6 +135,13 @@ setup_devtools() {
     # Keeping the declarations in one place prevents setup from rewriting the
     # tracked config through `mise use --global`.
     mise install
+
+    echo
+    echo "Installing Pi with the official installer..."
+    (
+        set -o pipefail
+        curl -fsSL https://pi.dev/install.sh | mise exec -- sh
+    )
 }
 
 setup_dotfiles() {

@@ -14,11 +14,16 @@ case "$OSTYPE" in
     path=(
       "/Applications/Sublime Text.app/Contents/SharedSupport/bin"
       "/opt/homebrew/opt/llvm/bin"
+      /opt/homebrew/bin
       $path
     )
     export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
     export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
     export CMAKE_PREFIX_PATH="/opt/homebrew/opt/llvm"
+
+    if [[ -r "$HOME/.orbstack/shell/init.zsh" ]]; then
+      source "$HOME/.orbstack/shell/init.zsh"
+    fi
     ;;
   linux*)
     [[ -d "$HOME/Android/Sdk" ]] && export ANDROID_HOME="$HOME/Android/Sdk"
