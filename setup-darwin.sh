@@ -56,7 +56,6 @@ setup_brew() {
     brew install yazi
     brew install tmux
     brew install gitmux
-    brew install git-delta
     brew install mole
 
     # Install GUI Apps
