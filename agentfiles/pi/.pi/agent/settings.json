@@ -20,6 +20,10 @@
     "npm:@gotgenes/pi-permission-system",
     "npm:pi-browser-use"
   ],
+  "pi-browser-use": {
+    "mode": "existing",
+    "userDataDir": "~/Library/Application Support/net.imput.helium"
+  },
   "collapseChangelog": true,
   "markdown": {
     "mermaid": "streaming"
