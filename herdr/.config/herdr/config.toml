@@ -1,0 +1,42 @@
+onboarding = false
+
+[ui]
+status_indicators = "dots"
+prompt_new_tab_name = false
+pane_borders = "auto"
+pane_outer_borders = false
+pane_gaps = false
+tab_bar_right = [
+    { type = "command", command = "~/.config/herdr/git-status.sh", interval_seconds = 2, timeout_seconds = 2 },
+]
+
+[ui.sidebar.spaces]
+row_gap = 1
+rows = [
+    ["state_icon", "workspace"],
+    [
+        { token = "$space_number", bold = true },
+        { token = "$git_ahead", fg = "#40a02b" },
+        { token = "$git_behind", fg = "#d20f39" },
+        { token = "$git_staged", fg = "#40a02b" },
+        { token = "$git_modified", fg = "#df8e1d" },
+        { token = "$git_untracked", fg = "#8839ef" },
+        { token = "$git_conflict", fg = "#d20f39", bold = true },
+        { token = "$git_stashed", fg = "#179299" },
+        { token = "$git_clean", fg = "#40a02b" },
+    ],
+]
+
+[keys]
+goto = ["prefix+g", "cmd+d"]
+switch_tab = ["prefix+1..9", "alt+1..9"]
+switch_workspace = "cmd+1..9"
+focus_agent = "ctrl+1..9"
+focus_pane_left = "ctrl+h"
+focus_pane_down = "ctrl+j"
+focus_pane_up = "ctrl+k"
+focus_pane_right = "ctrl+l"
+
+[theme]
+name = "catppuccin-latte"
+auto_switch = false

@@ -154,7 +154,7 @@ setup_dotfiles() {
 
     local packages=(
         zsh git nvim editorconfig editrc gem aerospace karabiner btop ghostty tmux zed
-        mise uv npmrc pnpm pnpm-macos yarn bun
+        mise uv npmrc pnpm pnpm-macos yarn bun herdr
     )
     local package
     for package in "${packages[@]}"; do

@@ -63,6 +63,8 @@ fi
 # Initialize modules.
 source ${ZIM_HOME}/init.zsh
 
+[[ -r ~/.config/herdr/process-name.zsh ]] && source ~/.config/herdr/process-name.zsh
+
 if (( ${+commands[pnpm]} )); then
   eval "$(pnpm completion zsh)"
 fi
