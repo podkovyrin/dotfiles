@@ -17,7 +17,8 @@
     "npm:@juicesharp/rpiv-ask-user-question",
     "git:github.com/podkovyrin/pi-herdr-side",
     "npm:pi-open-tui",
-    "npm:@gotgenes/pi-permission-system"
+    "npm:@gotgenes/pi-permission-system",
+    "npm:pi-browser-use"
   ],
   "collapseChangelog": true,
   "markdown": {
