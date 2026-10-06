@@ -10,6 +10,10 @@ tab_bar_right = [
     { type = "command", command = "~/.config/herdr/git-status.sh", interval_seconds = 2, timeout_seconds = 2 },
 ]
 
+[ui.toast]
+delivery = "herdr"
+delay_seconds = 1
+
 [ui.sidebar.spaces]
 row_gap = 1
 rows = [
