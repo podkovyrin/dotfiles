@@ -7,10 +7,14 @@ standalone instruction — toggle exactly the ones you want per message.
 ## Usage
 
 - Press **alt+n** or run **/snippets** to open the toggle menu.
-  - `up`/`down` to navigate, `space` to toggle, `enter` to apply, `esc` to cancel.
-  - `tab` previews the highlighted snippet (name, placement, order, filename,
-    and full body; `up`/`down` scroll long bodies). `tab` or `esc` returns to
-    the list with your cursor position preserved.
+  - `up`/`down` or `k`/`j` to navigate, `g`/`G` (or `home`/`end`) to jump
+    to the first/last snippet, `ctrl+u`/`ctrl+d` to move half a page.
+  - `space` to toggle, `enter` to apply, `esc` or `q` to cancel.
+  - `tab` or `l` previews the highlighted snippet (name, placement, order,
+    filename, and full body). In the preview, `up`/`down` or `k`/`j` scroll,
+    `ctrl+u`/`ctrl+d` scroll half a page, and `g`/`G` jump to the top/bottom.
+    `tab`, `h`, `q`, or `esc` returns to the list with your cursor position
+    preserved.
   - The menu is framed with top/bottom border lines and scrolls when the list
     exceeds the viewport (max height adapts to your terminal), with
     `↑ n more` / `↓ n more` indicators when clipped.

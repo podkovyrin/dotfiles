@@ -5,7 +5,8 @@
  * placement, order) stored in the `snippets/` directory next to this file.
  *
  * - Press alt+n or run /snippets to open the toggle menu (space: toggle,
- *   tab: preview, enter: apply, esc: cancel). The menu is a bordered,
+ *   tab/l: preview, enter: apply, esc/q: cancel; j/k, g/G, ctrl+d/ctrl+u
+ *   vi motions work alongside arrows). The menu is a bordered,
  *   scrollable view.
  * - Active snippets appear as a widget above the editor, with prepend and
  *   append groups visually distinguished.
@@ -135,6 +136,11 @@ export default function (pi: ExtensionAPI) {
 			let cursor = 0;
 			let listScroll = 0;
 			let previewScroll = 0;
+			// Last rendered viewport height; used for half-page jumps (ctrl+d / ctrl+u).
+			let lastMaxView = 10;
+
+			const isAny = (data: string, ...keys: string[]) => keys.some((k) => matchesKey(data, k));
+			const halfPage = () => Math.max(1, Math.floor(lastMaxView / 2));
 
 			const itemRow = (snippet: Snippet, idx: number, width: number): string => {
 				const pointer = idx === cursor ? theme.fg("accent", "> ") : "  ";
@@ -207,6 +213,7 @@ export default function (pi: ExtensionAPI) {
 				render(width: number): string[] {
 					// Reserve lines for: top border, title, blank, blank, hints, bottom border.
 					const maxView = Math.max(5, tui.terminal.rows - 10);
+					lastMaxView = maxView;
 
 					let content: string[];
 					let title: string;
@@ -218,7 +225,7 @@ export default function (pi: ExtensionAPI) {
 						content = v.out;
 						listScroll = v.scroll;
 						title = "Prompt snippets";
-						hints = "↑↓ navigate • Space toggle • Tab preview • Enter apply • Esc cancel";
+						hints = "↑↓/jk navigate • g/G top/bottom • Space toggle • Tab/l preview • Enter apply • Esc/q cancel";
 					} else {
 						const snippet = items[cursor];
 						const rows = buildPreviewRows(snippet, width);
@@ -226,7 +233,7 @@ export default function (pi: ExtensionAPI) {
 						content = v.out;
 						previewScroll = v.scroll;
 						title = `Preview: ${snippet.name}`;
-						hints = "↑↓ scroll • Tab/Esc back";
+						hints = "↑↓/jk scroll • ^d/^u half page • g/G top/bottom • Tab/h/q/Esc back";
 					}
 
 					return [
@@ -241,35 +248,61 @@ export default function (pi: ExtensionAPI) {
 				},
 				invalidate() {},
 				handleInput(data: string) {
+					const last = items.length - 1;
 					if (mode === "list") {
-						if (matchesKey(data, Key.up)) {
+						if (isAny(data, Key.up, "k")) {
 							cursor = (cursor - 1 + items.length) % items.length;
 							tui.requestRender();
-						} else if (matchesKey(data, Key.down)) {
+						} else if (isAny(data, Key.down, "j")) {
 							cursor = (cursor + 1) % items.length;
+							tui.requestRender();
+						} else if (isAny(data, Key.ctrl("u"))) {
+							cursor = Math.max(0, cursor - halfPage());
+							tui.requestRender();
+						} else if (isAny(data, Key.ctrl("d"))) {
+							cursor = Math.min(last, cursor + halfPage());
+							tui.requestRender();
+						} else if (isAny(data, Key.home, "g")) {
+							cursor = 0;
+							tui.requestRender();
+						} else if (isAny(data, Key.end, "shift+g")) {
+							cursor = last;
 							tui.requestRender();
 						} else if (matchesKey(data, Key.space)) {
 							const id = items[cursor].id;
 							if (working.has(id)) working.delete(id);
 							else working.add(id);
 							tui.requestRender();
-						} else if (matchesKey(data, Key.tab)) {
+						} else if (isAny(data, Key.tab, "l")) {
 							mode = "preview";
 							previewScroll = 0;
 							tui.requestRender();
 						} else if (matchesKey(data, Key.enter)) {
 							done(true);
-						} else if (matchesKey(data, Key.escape)) {
+						} else if (isAny(data, Key.escape, "q")) {
 							done(false);
 						}
 					} else {
-						if (matchesKey(data, Key.up)) {
+						if (isAny(data, Key.up, "k")) {
 							previewScroll--;
 							tui.requestRender();
-						} else if (matchesKey(data, Key.down)) {
+						} else if (isAny(data, Key.down, "j")) {
 							previewScroll++;
 							tui.requestRender();
-						} else if (matchesKey(data, Key.tab) || matchesKey(data, Key.escape)) {
+						} else if (isAny(data, Key.ctrl("u"))) {
+							previewScroll -= halfPage();
+							tui.requestRender();
+						} else if (isAny(data, Key.ctrl("d"))) {
+							previewScroll += halfPage();
+							tui.requestRender();
+						} else if (isAny(data, Key.home, "g")) {
+							previewScroll = 0;
+							tui.requestRender();
+						} else if (isAny(data, Key.end, "shift+g")) {
+							// Clamped to the last page in render().
+							previewScroll = Number.MAX_SAFE_INTEGER;
+							tui.requestRender();
+						} else if (isAny(data, Key.tab, Key.escape, "h", "q")) {
 							mode = "list";
 							tui.requestRender();
 						}
