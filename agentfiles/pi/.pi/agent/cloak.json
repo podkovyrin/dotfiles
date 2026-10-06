@@ -1,0 +1,34 @@
+{
+  "enabled": true,
+  "cloakCharacter": "*",
+  "cloakLength": null,
+  "tryAllPatterns": true,
+  "patterns": [
+    {
+      "filePattern": ["**/*.env*", "**/*.vars*"],
+      "cloakPattern": "(=).+",
+      "replace": "$1"
+    },
+    {
+      "filePattern": "**/config.toml",
+      "cloakPattern": "(token\\s*=\\s*).+",
+      "replace": "$1"
+    },
+    {
+      "filePattern": "**/.npmrc",
+      "cloakPattern": "(_authToken=).+",
+      "replace": "$1"
+    },
+    {
+      "filePattern": [
+        "**/auth.json",
+        "**/mcp-auth.json",
+        "**/telegram.json",
+        "**/models.json",
+        "**/mcp.json"
+      ],
+      "cloakPattern": "(\"(?:key|apiKey|api_key|token|botToken|access|refresh|accessToken|refreshToken|access_token|refresh_token|secret|clientSecret|client_secret|password|idToken|sessionToken|authorization|Authorization)\"\\s*:\\s*\")[^\"]+",
+      "replace": "$1"
+    }
+  ]
+}

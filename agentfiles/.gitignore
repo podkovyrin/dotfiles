@@ -1,0 +1,14 @@
+# Stow folds some target directories into this repo
+# (~/.agents/skills, ~/.pi/agent/extensions, ~/.pi/agent/agents).
+# Tools that write to those paths write here.
+
+# Installed by the cua-driver installer as a symlink to ~/.cua-driver.
+# The installer keeps it at the version of the cua-driver binary.
+/agents/.agents/skills/cua-driver
+
+.DS_Store
+node_modules/
+*.log
+.env
+.env.*
+*.local.*

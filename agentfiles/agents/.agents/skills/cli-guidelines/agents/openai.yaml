@@ -1,0 +1,4 @@
+interface:
+  display_name: "CLI Guidelines"
+  short_description: "Design and review CLI UX against best practices"
+  default_prompt: "Use $cli-guidelines to review this command-line interface for help, flags, output, errors, and composability."

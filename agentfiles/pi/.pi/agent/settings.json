@@ -1,0 +1,36 @@
+{
+  "defaultProvider": "openrouter",
+  "defaultModel": "anthropic/claude-opus-5.5",
+  "defaultThinkingLevel": "medium",
+  "theme": "light",
+  "compaction": {
+    "enabled": true
+  },
+  "hideThinkingBlock": false,
+  "packages": [
+    "git:github.com/podkovyrin/pi-interactive-subagents",
+    "npm:pi-web-access",
+    "npm:@narumitw/pi-btw",
+    "npm:pi-powerline-footer",
+    "npm:pi-context-view",
+    "git:github.com/nicobailon/visual-explainer",
+    "npm:pi-better-render",
+    "npm:@ff-labs/pi-fff",
+    "npm:@juicesharp/rpiv-ask-user-question"
+  ],
+  "collapseChangelog": true,
+  "markdown": {
+    "mermaid": "streaming"
+  },
+  "enableInstallTelemetry": false,
+  "defaultProjectTrust": "ask",
+  "enabledModels": [
+    "openrouter/anthropic/claude-opus-5.5",
+    "openai/gpt-6.1-sol",
+    "openai/gpt-6-astra"
+  ],
+  "powerline": {
+    "preset": "default",
+    "welcome": false
+  }
+}
