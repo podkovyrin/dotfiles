@@ -78,9 +78,9 @@ defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled -bool false
 # Disable smart quotes as they’re annoying when typing code
 defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 
-# Disable Displays have separate Spaces
-# https://nikitabobko.github.io/AeroSpace/guide#a-note-on-displays-have-separate-spaces
-defaults write com.apple.spaces spans-displays -bool true
+# OmniWM requires Displays have separate Spaces. Log out after changing this.
+# https://omniwm.app/help/known-limitations/
+defaults write com.apple.spaces spans-displays -bool false
 
 # Move windows by dragging any part of the window
 # move windows by holding ctrl + cmd and dragging any part of the window (not necessarily the window title)
@@ -88,6 +88,10 @@ defaults write -g NSWindowShouldDragOnGesture -bool true
 
 # Disable windows opening animations
 defaults write -g NSAutomaticWindowAnimationsEnabled -bool false
+
+# Reserve four-finger horizontal swipes for OmniWM column scrolling.
+defaults write com.apple.AppleMultitouchTrackpad TrackpadFourFingerHorizSwipeGesture -int 0
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadFourFingerHorizSwipeGesture -int 0
 
 # Trackpad three-finger drag
 defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool true

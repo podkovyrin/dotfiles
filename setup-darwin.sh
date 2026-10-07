@@ -84,7 +84,9 @@ setup_brew() {
     brew install chatgpt
     brew install slack
     brew install --no-quarantine grishka/grishka/neardrop
+    # Keep AeroSpace installed as a fallback; OmniWM is the active window manager.
     brew install --cask nikitabobko/tap/aerospace
+    brew install --cask omniwm
     brew install --cask karabiner-elements
 
     # brew install nrlquaker-winbox
@@ -159,7 +161,7 @@ setup_dotfiles() {
     fi
 
     local packages=(
-        zsh git nvim editorconfig editrc gem aerospace karabiner btop ghostty tmux zed
+        zsh git nvim editorconfig editrc gem aerospace omniwm karabiner btop ghostty tmux zed
         mise uv npmrc pnpm pnpm-macos yarn bun herdr
     )
     local package

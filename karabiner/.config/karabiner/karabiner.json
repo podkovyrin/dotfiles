@@ -7,6 +7,47 @@
       "complex_modifications": {
         "rules": [
           {
+            "description": "Meta+G summons Helium; Meta+Shift+G returns it to W",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "g",
+                  "modifiers": {"mandatory": ["control", "option", "command"]}
+                },
+                "to": [{"shell_command": "\"$HOME/.local/share/mise/shims/python3\" \"$HOME/.local/bin/omniwm-browser\" summon --notify", "repeat": false}]
+              },
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "g",
+                  "modifiers": {"mandatory": ["control", "option", "command", "shift"]}
+                },
+                "to": [{"shell_command": "\"$HOME/.local/share/mise/shims/python3\" \"$HOME/.local/bin/omniwm-browser\" home --notify", "repeat": false}]
+              }
+            ]
+          },
+          {
+            "description": "Disable Command+H and Command+Shift+H without blocking Meta+H",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "h",
+                  "modifiers": {
+                    "mandatory": ["command"],
+                    "optional": ["shift"]
+                  }
+                },
+                "to": [
+                  {
+                    "key_code": "vk_none"
+                  }
+                ]
+              }
+            ]
+          },
+          {
             "description": "Caps Lock: Escape on tap, Meta (Control+Command+Option) on hold",
             "manipulators": [
               {

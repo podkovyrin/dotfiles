@@ -1,0 +1,105 @@
+#!/usr/bin/env python3
+"""Summon the single Helium window, or return it to workspace W."""
+
+import argparse
+import fcntl
+import json
+from pathlib import Path
+import subprocess
+import sys
+import time
+
+CTL = "/opt/homebrew/bin/omniwmctl"
+BROWSER = "net.imput.helium"
+HOME_WORKSPACE = "2"
+
+
+def ctl(*args):
+    command = [CTL, *args]
+    if args[0] == "query":
+        command.extend(["--format", "json"])
+    result = subprocess.run(command, capture_output=True, text=True, timeout=8)
+    if result.returncode:
+        raise RuntimeError(result.stderr.strip() or result.stdout.strip() or "OmniWM command failed.")
+    if args[0] != "query":
+        return None
+    data = json.loads(result.stdout)
+    if not data.get("ok", False):
+        raise RuntimeError("OmniWM rejected the command. Check that window management is active.")
+    return data.get("result", {}).get("payload", {})
+
+
+def perform(action):
+    windows = ctl("query", "windows", "--bundle-id", BROWSER)["windows"]
+    if not windows:
+        raise RuntimeError("No managed Helium window found. Open Helium first.")
+    if len(windows) != 1:
+        raise RuntimeError("Multiple Helium windows found. Keep one browser window before using this shortcut.")
+    browser = windows[0]
+    if browser.get("isAppHidden") or browser.get("isScratchpad"):
+        raise RuntimeError("Helium is hidden or in a scratchpad. Show its window first.")
+    if action == "home":
+        if browser["workspace"]["rawName"] != HOME_WORKSPACE:
+            ctl("window", "move-to-workspace", browser["id"], HOME_WORKSPACE)
+        return
+
+    focused = ctl("query", "windows", "--focused")["windows"]
+    if len(focused) != 1:
+        raise RuntimeError("No focused managed window found. Focus the window that should sit beside Helium.")
+    anchor = focused[0]
+    if anchor["id"] == browser["id"]:
+        return
+    if browser["mode"] != "tiling" or anchor["mode"] != "tiling":
+        raise RuntimeError("The browser and target must be tiled. Use Caps Lock + T to leave floating mode.")
+    if browser.get("isFullscreen") or anchor.get("isFullscreen"):
+        raise RuntimeError("Exit window fullscreen before summoning. Use Caps Lock + Return for OmniWM fullscreen.")
+    if browser["workspace"]["rawName"] != anchor["workspace"]["rawName"]:
+        # Cross-layout summon can initially stack the browser in the anchor column.
+        # Transfer first, then summon within the destination to create a new column.
+        ctl("window", "move-to-workspace", browser["id"], anchor["workspace"]["rawName"])
+        ctl("window", "focus", anchor["id"])
+        for _ in range(20):
+            focused = ctl("query", "windows", "--focused")["windows"]
+            if focused and focused[0]["id"] == anchor["id"]:
+                break
+            time.sleep(0.1)
+        else:
+            raise RuntimeError("Target focus did not settle. Browser was transferred; retry summon or return it to W.")
+    ctl("window", "summon-right", browser["id"])
+
+
+def notify(message):
+    script = 'on run argv\n display notification (item 1 of argv) with title "OmniWM browser"\nend run'
+    try:
+        subprocess.run(["/usr/bin/osascript", "-e", script, message[:400]],
+                       capture_output=True, timeout=3)
+    except (OSError, subprocess.TimeoutExpired):
+        pass
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("action", choices=["summon", "home"],
+                        help="summon beside the focused window, or return to W without following")
+    parser.add_argument("--notify", action="store_true", help="also show errors as macOS notifications")
+    args = parser.parse_args()
+    try:
+        directory = Path.home() / ".local/state/omniwm"
+        directory.mkdir(parents=True, exist_ok=True)
+        with (directory / "browser-shortcut.lock").open("a") as lock:
+            try:
+                fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            except BlockingIOError:
+                return 0
+            perform(args.action)
+    except (RuntimeError, OSError, subprocess.TimeoutExpired, ValueError, KeyError, TypeError) as error:
+        message = str(error)
+        print(f"omniwm-browser: {message}", file=sys.stderr)
+        if args.notify:
+            notify(message)
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
