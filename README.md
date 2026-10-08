@@ -41,14 +41,17 @@ agentfiles/
 │   ├── settings.json
 │   ├── cloak.json
 │   ├── open-tui.json
-│   ├── agents/
 │   └── extensions/
-└── agents/.agents/       # -> ~/.agents
-    ├── .skill-lock.json
-    └── skills/
+├── agents/.agents/       # -> ~/.agents
+│   ├── .skill-lock.json
+│   └── skills/
+└── copied/               # copied, not linked
+    └── pi-subagent-manager/settings.json  # -> ~/.pi/agent/subagent-manager/
 ```
 
 - Stow links config files and whole skill and extension directories into `$HOME`.
+- `setup.sh` copies the files in `copied/` because their tools reject symlinks.
+  If you change settings in `/agents`, copy the file back into the repo.
 - State and secrets stay outside the repo.
 - The settings git filter strips machine IDs and the changelog version.
 

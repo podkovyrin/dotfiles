@@ -1,0 +1,12 @@
+{
+  "maxLevels": 3,
+  "maxConcurrent": 16,
+  "maxThreads": 64,
+  "modelSelection": "use-current",
+  "subagentMode": "opportunistic",
+  "toolFiltering": "allowed",
+  "widgetMode": "full",
+  "nerdFontIcons": true,
+  "loaderStyle": "circle",
+  "finalRecap": false
+}
