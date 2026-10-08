@@ -7,6 +7,27 @@
       "complex_modifications": {
         "rules": [
           {
+            "description": "Meta+Mute (F10) toggles Jabra and desk audio",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "consumer_key_code": "mute",
+                  "modifiers": {"mandatory": ["control", "option", "command"]}
+                },
+                "to": [{"shell_command": "\"$HOME/.local/share/mise/shims/python3\" \"$HOME/.local/bin/audio-toggle\" --notify", "repeat": false}]
+              },
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "f10",
+                  "modifiers": {"mandatory": ["control", "option", "command"], "optional": ["fn"]}
+                },
+                "to": [{"shell_command": "\"$HOME/.local/share/mise/shims/python3\" \"$HOME/.local/bin/audio-toggle\" --notify", "repeat": false}]
+              }
+            ]
+          },
+          {
             "description": "Meta+G summons Helium; Meta+Shift+G returns it to W",
             "manipulators": [
               {

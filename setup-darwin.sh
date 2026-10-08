@@ -57,6 +57,7 @@ setup_brew() {
     brew install tmux
     brew install gitmux
     brew install mole
+    brew install switchaudio-osx
 
     # Install GUI Apps
 
@@ -162,7 +163,7 @@ setup_dotfiles() {
 
     local packages=(
         zsh git nvim editorconfig editrc gem aerospace omniwm karabiner btop ghostty tmux zed
-        mise uv npmrc pnpm pnpm-macos yarn bun herdr
+        mise uv npmrc pnpm pnpm-macos yarn bun herdr macos
     )
     local package
     for package in "${packages[@]}"; do

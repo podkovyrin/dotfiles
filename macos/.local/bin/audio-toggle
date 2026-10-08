@@ -1,0 +1,122 @@
+#!/usr/bin/env python3
+"""Toggle the desk audio between Jabra and Creative with Logitech BRIO."""
+
+import argparse
+import fcntl
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+
+
+HEADSET = {"output": "Jabra Link 390", "input": "Jabra Link 390"}
+DESK = {"output": "Creative Pebble Pro", "input": "Logitech BRIO"}
+
+
+def run(*command):
+    result = subprocess.run(command, capture_output=True, text=True, timeout=8)
+    if result.returncode:
+        raise RuntimeError(result.stderr.strip() or result.stdout.strip() or "Audio command failed.")
+    return result.stdout.strip()
+
+
+def notify(message):
+    # Pass the message as an argument, never as AppleScript source.
+    script = ('on run argv\n'
+              'display notification (item 1 of argv) with title "Audio"\n'
+              'end run')
+    try:
+        run("/usr/bin/osascript", "-e", script, message)
+    except (RuntimeError, OSError, subprocess.TimeoutExpired) as error:
+        print(f"audio-toggle: Notification failed: {error}", file=sys.stderr)
+
+
+def switch_tool():
+    for candidate in ("/opt/homebrew/bin/SwitchAudioSource", "/usr/local/bin/SwitchAudioSource",
+                      shutil.which("SwitchAudioSource")):
+        if candidate and os.access(candidate, os.X_OK):
+            return candidate
+    raise RuntimeError("SwitchAudioSource is missing. Run: brew install switchaudio-osx")
+
+
+def perform(tool, dry_run=False):
+    devices = [json.loads(line) for line in run(tool, "-a", "-f", "json").splitlines() if line]
+    profiles = []
+    for profile in (HEADSET, DESK):
+        selected = {}
+        for kind, name in profile.items():
+            matches = [d for d in devices if d["type"] == kind and d["name"] == name]
+            if not matches:
+                if dry_run:
+                    print(f"No change: {name} ({kind}) is unavailable.")
+                return None
+            if len(matches) > 1:
+                raise RuntimeError(f"Multiple devices match {name} ({kind}). Disconnect the duplicate device.")
+            selected[kind] = matches[0]["id"]
+        profiles.append(selected)
+
+    def current(kind):
+        return json.loads(run(tool, "-c", "-t", kind, "-f", "json"))["id"]
+
+    def select(kind, device_id):
+        run(tool, "-t", kind, "-i", device_id)
+        if current(kind) != device_id:
+            raise RuntimeError(f"The {kind} device did not change. Check the audio connection.")
+
+    before = {kind: current(kind) for kind in ("output", "input")}
+    # Use the actual output so that manual changes do not leave stale toggle state.
+    desk = before["output"] == profiles[0]["output"]
+    target = profiles[1 if desk else 0]
+    message = "Creative Pebble Pro + Logitech BRIO" if desk else "Jabra Link 390: headphones + microphone"
+    if dry_run:
+        print(f"Would select: {message}")
+        return None
+
+    try:
+        for kind, device_id in target.items():
+            select(kind, device_id)
+        if any(current(kind) != device_id for kind, device_id in target.items()):
+            raise RuntimeError("The audio devices changed during the switch. Try again.")
+    except (RuntimeError, OSError, subprocess.TimeoutExpired) as error:
+        failures = []
+        for kind, device_id in before.items():
+            try:
+                select(kind, device_id)
+            except (RuntimeError, OSError, subprocess.TimeoutExpired):
+                failures.append(kind)
+        detail = f" Could not restore: {', '.join(failures)}." if failures else " Previous devices restored."
+        raise RuntimeError(f"{error}{detail}") from error
+    return message
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--notify", action="store_true", help="show a macOS notification after switching or on error")
+    parser.add_argument("--dry-run", action="store_true", help="show the next mode without changing audio devices")
+    args = parser.parse_args()
+    try:
+        directory = Path.home() / ".local/state/audio-toggle"
+        directory.mkdir(parents=True, exist_ok=True)
+        with (directory / "switch.lock").open("a") as lock:
+            try:
+                fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            except BlockingIOError:
+                return 0
+            message = perform(switch_tool(), args.dry_run)
+            if message:
+                print(message)
+                if args.notify:
+                    notify(message)
+    except (RuntimeError, OSError, subprocess.TimeoutExpired, ValueError, KeyError, TypeError) as error:
+        message = str(error)
+        print(f"audio-toggle: {message}", file=sys.stderr)
+        if args.notify and not args.dry_run:
+            notify(message)
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
