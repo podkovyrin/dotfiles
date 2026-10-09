@@ -18,7 +18,7 @@
     "npm:pi-open-tui",
     "npm:@gotgenes/pi-permission-system",
     "npm:pi-browser-use",
-    "git:github.com/podkovyrin/pi-subagent-manager@compose-custom-editor"
+    "npm:pi-subagent-manager"
   ],
   "pi-browser-use": {
     "mode": "existing",
