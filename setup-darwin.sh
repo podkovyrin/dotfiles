@@ -27,90 +27,9 @@ setup_brew() {
     # Make sure we’re using the latest Homebrew.
     brew update
 
-    # Upgrade any already-installed formulae.
-    brew upgrade
-
-    # Command Line Tools
-
-    brew install stow
-    brew install lua
-    brew install cmake
-    brew install mint
-    brew install gnupg
-    brew install git
-    brew install git-lfs
-    brew install git-secret
-    brew install tig
-    brew install tldr
-    brew install bat # shell
-    brew install eza # shell, ls
-    brew install fd # shell, find
-    brew install zoxide # shell, z
-    brew install starship # shell, prompt
-    brew install ripgrep # shell
-    brew install curlie
-    brew install btop
-    brew install fzf # shell
-    brew install mas
-    brew install duti
-    brew install fastfetch
-    brew install yazi
-    brew install tmux
-    brew install gitmux
-    brew install mole
-    brew install switchaudio-osx
-
-    # Install GUI Apps
-
-    brew install ghostty
-    brew install sublime-text
-    brew install fork
-    brew install spotify
-    brew install the-unarchiver
-    brew install vlc
-    brew install macmediakeyforwarder
-    brew install telegram
-    brew install sf-symbols
-    brew install google-chrome
-    brew install db-browser-for-sqlite
-    brew install visual-studio-code
-    brew install zed
-    brew install steermouse
-    brew install zoom
-    brew install raycast
-    brew install google-drive
-    brew install notunes
-    brew install MonitorControl
-    brew install 1password
-    brew install android-studio
-    brew install chatgpt
-    brew install slack
-    brew install --no-quarantine grishka/grishka/neardrop
-    # Keep AeroSpace installed as a fallback; OmniWM is the active window manager.
-    brew install --cask nikitabobko/tap/aerospace
-    brew install --cask omniwm
-    brew install --cask karabiner-elements
-
-    # brew install nrlquaker-winbox
-    # brew install postman
-    # brew install anaconda
-    # brew install jabra-direct # outdated - Rosetta
-    # brew install opensim # outdated - Rosetta
-
-    # Fonts
-
-    brew install font-montserrat
-    brew install font-jetbrains-mono
-    # TODO: consider removing
-    brew install font-jetbrains-mono-nerd-font
-    brew install --cask font-sf-mono
-    brew install --cask font-sf-pro
-
-    # LLMs
-
-    # brew install ollama
-    # brew install llm
-    # llm install llm-ollama
+    # Install what the Brewfile declares. Upgrades go through upgate.
+    # Edit it when you install or remove packages; `brewextra` lists strays.
+    brew bundle install --no-upgrade --file="$script_dir/Brewfile"
 
     # Remove outdated versions from the cellar.
     brew cleanup
@@ -123,16 +42,8 @@ setup_devtools() {
     echo
     echo "➡️ Setting up devtools..."
 
-    brew install mise
+    # mise and the Ruby build dependencies come from the Brewfile.
     eval "$(mise activate zsh)"
-
-    # Dependencies ruby
-    # https://github.com/rbenv/ruby-build/wiki#suggested-build-environment
-    brew install openssl@3
-    brew install readline
-    brew install libyaml
-    brew install gmp
-    brew install autoconf
 
     # Tool versions are declared in mise/.config/mise/conf.d/10-dotfiles.toml.
     # Keeping the declarations in one place prevents setup from rewriting the

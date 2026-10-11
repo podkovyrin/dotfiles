@@ -10,7 +10,8 @@ sh -c "`curl -fsSL https://raw.githubusercontent.com/podkovyrin/dotfiles/master/
 
 `setup-main.sh` selects the platform-specific setup automatically:
 
-- macOS uses Homebrew and links the complete workstation configuration.
+- macOS installs Homebrew packages from `Brewfile` and links the complete
+  workstation configuration.
 - Omarchy Linux links only the portable subset and leaves Omarchy-managed Bash,
   Neovim, tmux, terminal, btop, LazyGit, and desktop configs untouched.
 
@@ -18,6 +19,19 @@ The Linux setup never invokes Homebrew. It uses `omarchy pkg add` only when GNU
 Stow or mise is missing, then lets mise install the declared language runtimes.
 Tools already supplied by Omarchy as lazy stubs, such as `gh`, Claude, and Codex,
 are marked macOS-only in the mise config. Linux also uses Omarchy's Pi stub.
+
+### Homebrew
+
+`Brewfile` lists the taps, formulae, casks, and Mac App Store apps, grouped by
+section. mise manages the Go, Cargo, and npm tools, so the Brewfile does not
+list them. Edit the file by hand when you install or remove a package. Do not
+use `brew bundle dump`, because it rewrites the file and removes the sections.
+
+- `brewcheck` lists entries that are not installed. It ignores outdated
+  packages, because [upgate](https://github.com/podkovyrin/upgate) does the
+  upgrades.
+- `brewextra` lists installed packages that the Brewfile does not have. It is
+  a dry run. Add `--force` to uninstall them.
 
 ## Agent files
 
