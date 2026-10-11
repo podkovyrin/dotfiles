@@ -46,6 +46,7 @@ setup_brew() {
     brew install eza # shell, ls
     brew install fd # shell, find
     brew install zoxide # shell, z
+    brew install starship # shell, prompt
     brew install ripgrep # shell
     brew install curlie
     brew install btop
@@ -163,7 +164,7 @@ setup_dotfiles() {
 
     local packages=(
         zsh git nvim editorconfig editrc gem aerospace omniwm karabiner btop ghostty tmux zed
-        mise uv npmrc pnpm pnpm-macos yarn bun herdr macos
+        mise uv npmrc pnpm pnpm-macos yarn bun herdr macos starship
     )
     local package
     for package in "${packages[@]}"; do

@@ -4,8 +4,6 @@ onboarding = false
 status_indicators = "dots"
 prompt_new_tab_name = false
 pane_borders = "auto"
-pane_outer_borders = false
-pane_gaps = false
 tab_bar_right = [
     { type = "command", command = "~/.config/herdr/git-status.sh", interval_seconds = 2, timeout_seconds = 2 },
 ]
