@@ -1,0 +1,5 @@
+# Global tool versions belong in nix/packages.nix, not this file.
+[settings]
+minimum_release_age = "7d"
+# Read rust-toolchain.toml, so Rust projects need no extra mise config.
+idiomatic_version_file_enable_tools = ["rust"]

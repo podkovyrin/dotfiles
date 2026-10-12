@@ -1,0 +1,9 @@
+# pnpm 11 reads global settings only from this file, not from rc files.
+# Registry auth still comes from ~/.npmrc.
+
+# Delay newly published packages for 7 days (in minutes).
+minimumReleaseAge: 10080
+
+# Global packages stay outside the read-only Nix store. ~/.local/bin is on PATH.
+globalBinDir: ~/.local/bin
+globalDir: ~/.local/share/pnpm/global

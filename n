@@ -1,0 +1,42 @@
+#!/bin/bash
+# Day-to-day nix-darwin commands. Use ./apply to set up a new Mac.
+set -euo pipefail
+
+repo=$(cd -- "$(dirname -- "$0")" && pwd -P)
+flake="path:$repo/nix"
+result="$repo/.build/system"
+
+usage() {
+  printf '%s\n' \
+    'Usage: ./n <command>' \
+    '' \
+    '  switch            Build and activate the configuration.' \
+    '  build             Build only. Result in .build/system.' \
+    '  diff              Build, then show package changes against the active system.' \
+    '  update [input…]   Update flake inputs (all if none given), diff, confirm, switch.' \
+    '  rollback          Activate the previous system generation.' \
+    '  gc [age]          Delete generations older than age (default 14d), then unused store paths.'
+}
+
+build() { nix build "$flake#darwinConfigurations.mac.system" --out-link "$result"; }
+switch() { sudo darwin-rebuild switch --flake "$flake#mac"; }
+diff() { build && nix store diff-closures /run/current-system "$result"; }
+
+update() {
+  nix flake update "$@" --flake "$flake"
+  git -C "$repo" --no-pager diff --stat -- nix/flake.lock
+  diff
+  read -rp 'Switch to this configuration? [y/N] ' answer
+  if [[ $answer == [yY] ]]; then switch; else echo 'Not switched. Revert with: git restore nix/flake.lock'; fi
+}
+
+case "${1:-}" in
+  switch) switch ;;
+  build) build ;;
+  diff) diff ;;
+  update) shift; update "$@" ;;
+  rollback) sudo darwin-rebuild switch --rollback ;;
+  gc) sudo nix-collect-garbage --delete-older-than "${2:-14d}" ;;
+  -h | --help | '') usage ;;
+  *) printf 'Unknown command: %s. Use --help.\n' "$1" >&2; exit 2 ;;
+esac

@@ -1,1 +1,15 @@
 dot/vim/.netrwhist
+/.build/
+
+# Tools write into the linked ~/.agents/skills and ~/.pi/agent/extensions.
+# The cua-driver installer links its skill to ~/.cua-driver and keeps it at the
+# version of the cua-driver binary.
+/config/agents/skills/cua-driver
+/config/agents/**/node_modules/
+/config/agents/**/.env
+/config/agents/**/.env.*
+/config/agents/**/*.local.*
+/config/pi/**/node_modules/
+/config/pi/**/.env
+/config/pi/**/.env.*
+/config/pi/**/*.local.*

@@ -1,0 +1,20 @@
+if [[ -x /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+[[ -r "$HOME/.orbstack/shell/init.zsh" ]] && source "$HOME/.orbstack/shell/init.zsh"
+[[ -r "$HOME/.secrets" ]] && source "$HOME/.secrets"
+
+# Drop launcher directories that would shadow the Nix tools.
+path=( ${path:#$HOME/.pi/agent/bin} )
+path=( ${path:#$HOME/.local/share/mise/shims} )
+
+# Nix owns global defaults. mise can override them inside a project.
+# DOTFILES_TOOL_PATH comes from nix/home.nix through hm-session-vars.sh.
+typeset -U path PATH
+path=( ${(s.:.)DOTFILES_TOOL_PATH} $path )
+
+# Non-interactive login shells do not read .zshrc.
+if [[ ! -o interactive ]] && (( $+commands[mise] )); then
+  eval "$(mise activate zsh)"
+fi

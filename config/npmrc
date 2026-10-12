@@ -1,0 +1,8 @@
+//npm.pkg.github.com/:_authToken=${GITHUB_NPM_TOKEN}
+//registry.npmjs.org/:_authToken=${NPM_TOKEN}
+
+# Delay newly published packages for 7 days.
+min-release-age=7
+
+# Global packages stay outside the read-only Nix store. ~/.local/bin is on PATH.
+prefix=${HOME}/.local

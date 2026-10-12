@@ -1,3 +1,0 @@
-# Remove per-machine fields before git stores settings.json.
-# Pi creates the fields again on each machine. setup.sh configures the filter.
-pi/.pi/agent/settings.json filter=pi-settings

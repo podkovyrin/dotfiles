@@ -16,7 +16,6 @@
     "npm:@juicesharp/rpiv-ask-user-question",
     "git:github.com/podkovyrin/pi-herdr-side",
     "npm:pi-open-tui",
-    "npm:@gotgenes/pi-permission-system",
     "npm:pi-browser-use",
     "npm:pi-subagent-manager"
   ],

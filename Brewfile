@@ -57,9 +57,7 @@ brew "colima"
 brew "docker"
 brew "dotnet"
 brew "xcbeautify"
-brew "xcode-build-server"
 brew "xcodegen"
-brew "xcp"
 
 # Devtools
 

@@ -1,0 +1,34 @@
+export LC_ALL="en_US.UTF-8"
+export LANG="en_US.UTF-8"
+
+# Load Nix-managed variables. The file does not change PATH, because
+# nix/home.nix sets no home.sessionPath.
+# Refresh variables from long-running parents, but keep inherited SDK selections.
+# Project tools can set these before starting a child shell, including zsh -c.
+if [[ -r /etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh ]]; then
+  () {
+    local java_home=${JAVA_HOME-} android_home=${ANDROID_HOME-}
+    local java_home_set=${+JAVA_HOME} android_home_set=${+ANDROID_HOME}
+    unset __HM_SESS_VARS_SOURCED
+    source /etc/profiles/per-user/$USER/etc/profile.d/hm-session-vars.sh
+    if (( java_home_set )); then
+      if [[ -z $java_home || -d $java_home ]]; then
+        export JAVA_HOME=$java_home
+      elif [[ $java_home != $JAVA_HOME ]]; then
+        print -ru2 -- "JAVA_HOME is not a directory: $java_home. Using Home Manager default: $JAVA_HOME."
+      fi
+    fi
+    if (( android_home_set )); then
+      if [[ -z $android_home || -d $android_home ]]; then
+        export ANDROID_HOME=$android_home
+      elif [[ $android_home != $ANDROID_HOME ]]; then
+        print -ru2 -- "ANDROID_HOME is not a directory: $android_home. Using Home Manager default: $ANDROID_HOME."
+      fi
+    fi
+    # Empty entries select the system terminfo database. Preserve their position.
+    # Deduplicate a separate array because TERMINFO_DIRS is a special scalar.
+    local -aU terminfo_dirs
+    terminfo_dirs=( "${(@s.:.)TERMINFO_DIRS}" )
+    export TERMINFO_DIRS="${(j.:.)terminfo_dirs}"
+  }
+fi

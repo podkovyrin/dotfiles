@@ -1,0 +1,110 @@
+{
+  "global": {
+    "show_in_menu_bar": false
+  },
+  "profiles": [
+    {
+      "complex_modifications": {
+        "rules": [
+          {
+            "description": "Meta+Mute (F10) toggles Jabra and desk audio",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "consumer_key_code": "mute",
+                  "modifiers": {"mandatory": ["control", "option", "command"]}
+                },
+                "to": [{"shell_command": "/bin/zsh -lc 'exec \"$HOME/.local/bin/audio-toggle\" --notify'", "repeat": false}]
+              },
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "f10",
+                  "modifiers": {"mandatory": ["control", "option", "command"], "optional": ["fn"]}
+                },
+                "to": [{"shell_command": "/bin/zsh -lc 'exec \"$HOME/.local/bin/audio-toggle\" --notify'", "repeat": false}]
+              }
+            ]
+          },
+          {
+            "description": "Meta+G summons Helium; Meta+Shift+G returns it to W",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "g",
+                  "modifiers": {"mandatory": ["control", "option", "command"]}
+                },
+                "to": [{"shell_command": "/bin/zsh -lc 'exec \"$HOME/.local/bin/omniwm-browser\" summon --notify'", "repeat": false}]
+              },
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "g",
+                  "modifiers": {"mandatory": ["control", "option", "command", "shift"]}
+                },
+                "to": [{"shell_command": "/bin/zsh -lc 'exec \"$HOME/.local/bin/omniwm-browser\" home --notify'", "repeat": false}]
+              }
+            ]
+          },
+          {
+            "description": "Disable Command+H and Command+Shift+H without blocking Meta+H",
+            "manipulators": [
+              {
+                "type": "basic",
+                "from": {
+                  "key_code": "h",
+                  "modifiers": {
+                    "mandatory": ["command"],
+                    "optional": ["shift"]
+                  }
+                },
+                "to": [
+                  {
+                    "key_code": "vk_none"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Caps Lock: Escape on tap, Meta (Control+Command+Option) on hold",
+            "manipulators": [
+              {
+                "from": {
+                  "key_code": "caps_lock",
+                  "modifiers": {
+                    "optional": [
+                      "any"
+                    ]
+                  }
+                },
+                "to": [
+                  {
+                    "key_code": "left_control",
+                    "modifiers": [
+                      "left_command",
+                      "left_option"
+                    ]
+                  }
+                ],
+                "to_if_alone": [
+                  {
+                    "key_code": "escape"
+                  }
+                ],
+                "type": "basic"
+              }
+            ]
+          }
+        ]
+      },
+      "name": "Default profile",
+      "selected": true,
+      "virtual_hid_keyboard": {
+        "keyboard_type_v2": "ansi"
+      }
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+# Remove per-machine fields that Pi writes. config/gitconfig configures the filter.
+config/pi/settings.json filter=pi-settings
