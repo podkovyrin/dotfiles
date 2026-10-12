@@ -187,10 +187,14 @@ monitorName = "DELL U2723QE"
 
 [statusBar]
 showAppNames = false
+showIcon = false
 showWorkspaceName = true
 useWorkspaceId = false
 
 [workspaceBar]
+autoHide = false
+autoHideHideDelayMilliseconds = 0.0
+autoHideRevealDelayMilliseconds = 0.0
 backgroundOpacity = 0.0
 deduplicateAppIcons = false
 enabled = false
@@ -1098,6 +1102,10 @@ id = "openCommandPalette"
 [[hotkeys]]
 binding = "Hyper+Backslash"
 id = "raiseAllFloatingWindows"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "toggleFloatingFocus"
 
 [[hotkeys]]
 binding = "Unassigned"
