@@ -1,3 +1,0 @@
-[install]
-# Delay newly published npm package versions for 7 days.
-minimumReleaseAge = 604800
