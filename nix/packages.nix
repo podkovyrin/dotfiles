@@ -55,11 +55,9 @@ in
     switchaudio-osx
     inputs.mole.packages.${system}.default
 
-    # Herdr and Pi come from overlays in flake.nix; Hunk and Mole have no overlay.
+    # Herdr comes from an overlay in flake.nix; Hunk and Mole have no overlay.
+    # Pi is in config/mise.toml, so it updates without a rebuild.
     herdr
     inputs.hunk.packages.${system}.default
-    # Pi puts its Node first in PATH for every command it runs. Use the global
-    # Node 24 there too, not a second Node 22.
-    (pi.override { nodejs_22 = nodejs_24; })
   ];
 }

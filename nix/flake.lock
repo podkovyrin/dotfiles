@@ -200,30 +200,6 @@
         "type": "github"
       }
     },
-    "pi": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "nixpkgs-darwin-x64": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1791408813,
-        "narHash": "sha256-lwjspkMGrW+8Fl/yBEDEFsHZJA57OKOhmVQmi6zfej4=",
-        "owner": "earendil-works",
-        "repo": "pi",
-        "rev": "abe508e1b89912adde45528136c3221eb69acdd7",
-        "type": "github"
-      },
-      "original": {
-        "owner": "earendil-works",
-        "ref": "stable",
-        "repo": "pi",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "herdr": "herdr",
@@ -231,8 +207,7 @@
         "hunk": "hunk",
         "mole": "mole",
         "nix-darwin": "nix-darwin",
-        "nixpkgs": "nixpkgs",
-        "pi": "pi"
+        "nixpkgs": "nixpkgs"
       }
     },
     "rust-overlay": {

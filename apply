@@ -213,6 +213,9 @@ case "$mode" in
     # Use darwin-rebuild from the built system, so a first run needs no installed
     # copy. It evaluates the flake again as root; the build is already in the store.
     sudo "$(readlink "$build/system")/sw/bin/darwin-rebuild" switch --flake "$flake#mac"
+    # Global mise tools, for example Pi. Node for npm tools comes from the same profile.
+    printf 'Installing global mise tools...\n' >&2
+    (cd "$HOME" && PATH="/etc/profiles/per-user/$user_name/bin:$PATH" mise install)
     printf 'Setup complete. Open a new terminal to use the updated environment.\n' >&2
     ;;
 esac

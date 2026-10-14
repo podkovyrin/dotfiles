@@ -29,6 +29,12 @@ in
   };
   users.users.${user.name}.home = user.home;
 
+  # Touch ID for sudo. reattach makes it work in terminal multiplexers too.
+  security.pam.services.sudo_local = {
+    touchIdAuth = true;
+    reattach = true;
+  };
+
   nix = {
     enable = true;
     package = pkgs.nixVersions.latest;

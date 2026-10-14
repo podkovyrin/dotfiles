@@ -1,4 +1,9 @@
-# Global tool versions belong in nix/packages.nix, not this file.
+# Global tools belong in nix/packages.nix. Exception: fast-moving npm CLIs that
+# must update without a rebuild. Update them with `./n tools`.
+[tools]
+# Pi releases often. A shorter delay than the global 7d keeps it near current.
+"npm:@earendil-works/pi-coding-agent" = { version = "latest", minimum_release_age = "1d" }
+
 [settings]
 minimum_release_age = "7d"
 # Read rust-toolchain.toml, so Rust projects need no extra mise config.

@@ -14,6 +14,8 @@ usage() {
     '  build             Build only. Result in .build/system.' \
     '  diff              Build, then show package changes against the active system.' \
     '  update [input…]   Update flake inputs (all if none given), diff, confirm, switch.' \
+    '  brew              Update Homebrew, then upgrade the casks and App Store apps in the config.' \
+    '  tools             Install and upgrade the global mise tools (config/mise.toml).' \
     '  rollback          Activate the previous system generation.' \
     '  gc [age]          Delete generations older than age (default 14d), then unused store paths.'
 }
@@ -21,6 +23,17 @@ usage() {
 build() { nix build "$flake#darwinConfigurations.mac.system" --out-link "$result"; }
 switch() { sudo darwin-rebuild switch --flake "$flake#mac"; }
 diff() { build && nix store diff-closures /run/current-system "$result"; }
+
+# Read the Brewfile from the flake, so it matches the config even before a switch.
+brew_upgrade() {
+  local brewfile
+  brewfile=$(nix eval --raw "$flake#darwinConfigurations.mac.config.homebrew.brewfile")
+  brew update
+  HOMEBREW_NO_INSTALL_CLEANUP=1 brew bundle install --file=- <<<"$brewfile"
+}
+
+# Run from $HOME, so mise reads only the global config.
+tools() { (cd "$HOME" && mise install && mise upgrade); }
 
 update() {
   nix flake update "$@" --flake "$flake"
@@ -35,6 +48,8 @@ case "${1:-}" in
   build) build ;;
   diff) diff ;;
   update) shift; update "$@" ;;
+  brew) brew_upgrade ;;
+  tools) tools ;;
   rollback) sudo darwin-rebuild switch --rollback ;;
   gc) sudo nix-collect-garbage --delete-older-than "${2:-14d}" ;;
   -h | --help | '') usage ;;

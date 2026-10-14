@@ -3,10 +3,11 @@
     enable = true;
     global.brewfile = true;
 
+    # Activation installs and removes, but does not upgrade. Run `./n brew` to upgrade.
     onActivation = {
       cleanup = "uninstall";
-      autoUpdate = true;
-      upgrade = true;
+      autoUpdate = false;
+      upgrade = false;
       extraEnv.HOMEBREW_NO_INSTALL_CLEANUP = "1";
     };
 

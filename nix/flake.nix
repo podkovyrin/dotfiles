@@ -29,11 +29,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    pi = {
-      url = "github:earendil-works/pi/stable";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-darwin-x64.follows = "nixpkgs";
-    };
   };
 
   outputs =
@@ -55,12 +50,9 @@
           home-manager.darwinModules.home-manager
           {
             nixpkgs.hostPlatform = system;
-            # Overlays build these on the system Nixpkgs. Their `packages` outputs
-            # would each evaluate a separate Nixpkgs instance.
-            nixpkgs.overlays = [
-              inputs.herdr.overlays.default
-              inputs.pi.overlays.default
-            ];
+            # The overlay builds Herdr on the system Nixpkgs. Its `packages` output
+            # would evaluate a separate Nixpkgs instance.
+            nixpkgs.overlays = [ inputs.herdr.overlays.default ];
 
             home-manager = {
               useGlobalPkgs = true;
