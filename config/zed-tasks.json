@@ -1,0 +1,34 @@
+// Global Zed tasks. Run them with `task: spawn` (alt-shift-t).
+// Project tasks are in <project>/.zed/tasks.json.
+[
+    {
+        "label": "nix: statix check",
+        "command": "statix",
+        "args": ["check", "$ZED_WORKTREE_ROOT"],
+        "cwd": "$ZED_WORKTREE_ROOT",
+    },
+    {
+        "label": "nix: statix fix (current file)",
+        "command": "statix",
+        "args": ["fix", "$ZED_FILE"],
+        "cwd": "$ZED_WORKTREE_ROOT",
+    },
+    {
+        "label": "nix: deadnix",
+        "command": "deadnix",
+        "args": ["$ZED_WORKTREE_ROOT"],
+        "cwd": "$ZED_WORKTREE_ROOT",
+    },
+    {
+        "label": "nix: deadnix (current file)",
+        "command": "deadnix",
+        "args": ["$ZED_FILE"],
+        "cwd": "$ZED_WORKTREE_ROOT",
+    },
+    {
+        "label": "nix: flake check",
+        "command": "nix",
+        "args": ["flake", "check"],
+        "cwd": "$ZED_WORKTREE_ROOT",
+    },
+]

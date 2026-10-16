@@ -1,0 +1,28 @@
+// Tasks for this repository. The flake is in nix/, so the global
+// "nix: flake check" task does not work here.
+[
+    {
+        "label": "dotfiles: build",
+        "command": "./n",
+        "args": ["build"],
+        "cwd": "$ZED_WORKTREE_ROOT",
+    },
+    {
+        "label": "dotfiles: diff",
+        "command": "./n",
+        "args": ["diff"],
+        "cwd": "$ZED_WORKTREE_ROOT",
+    },
+    {
+        "label": "dotfiles: switch",
+        "command": "./n",
+        "args": ["switch"],
+        "cwd": "$ZED_WORKTREE_ROOT",
+    },
+    {
+        "label": "dotfiles: flake check",
+        "command": "nix",
+        "args": ["flake", "check", "./nix"],
+        "cwd": "$ZED_WORKTREE_ROOT",
+    },
+]

@@ -42,6 +42,13 @@ in
 
     watchman
 
+    # Nix language server, formatter, and linters. config/zed.json and
+    # config/zed-tasks.json use them.
+    nixd
+    nixfmt
+    statix
+    deadnix
+
     p7zip
     imagemagick
     ghostscript

@@ -36,6 +36,7 @@ let
     ".config/starship.toml" = "config/starship.toml";
     ".config/uv/uv.toml" = "config/uv.toml";
     ".config/zed/settings.json" = "config/zed.json";
+    ".config/zed/tasks.json" = "config/zed-tasks.json";
 
     # pnpm reads its global config here on macOS unless XDG_CONFIG_HOME is set.
     "Library/Preferences/pnpm/config.yaml" = "config/pnpm.yaml";

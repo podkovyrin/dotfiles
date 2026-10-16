@@ -164,4 +164,46 @@
     },
     "soft_wrap": "editor_width",
     "excerpt_context_lines": 4,
+    "auto_install_extensions": {
+        "nix": true,
+    },
+    "inlay_hints": {
+        "enabled": true,
+    },
+    "languages": {
+        "Nix": {
+            // nixd evaluates the flake, so options get hover, completion, and go-to-definition.
+            "language_servers": ["nixd", "!nil"],
+            "formatter": {
+                "external": {
+                    "command": "nixfmt",
+                },
+            },
+            "format_on_save": "on",
+            // nixd marks semantic tokens as experimental. Set this to "off" if the colors look wrong.
+            "semantic_tokens": "combined",
+        },
+    },
+    "lsp": {
+        "nixd": {
+            "binary": {
+                "arguments": ["--semantic-tokens=true"],
+            },
+            // Global defaults for this flake. Other Nix projects override them in .zed/settings.json.
+            // A plain path breaks when Git's fsmonitor socket is in .git, so use git+file.
+            "settings": {
+                "nixpkgs": {
+                    "expr": "import (builtins.getFlake \"git+file:///Users/andrei/.dotfiles?dir=nix\").inputs.nixpkgs { }",
+                },
+                "options": {
+                    "nix-darwin": {
+                        "expr": "(builtins.getFlake \"git+file:///Users/andrei/.dotfiles?dir=nix\").darwinConfigurations.mac.options",
+                    },
+                    "home-manager": {
+                        "expr": "(builtins.getFlake \"git+file:///Users/andrei/.dotfiles?dir=nix\").darwinConfigurations.mac.options.home-manager.users.type.getSubOptions [ ]",
+                    },
+                },
+            },
+        },
+    },
 }
