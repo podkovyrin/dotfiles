@@ -23,8 +23,6 @@ let
     ".zshenv" = "config/zsh/zshenv";
     ".zprofile" = "config/zsh/zprofile";
     ".zshrc" = "config/zsh/zshrc";
-    ".zimrc" = "config/zsh/zimrc";
-    ".config/zsh-abbr/user-abbreviations" = "config/zsh/abbreviations";
 
     ".config/btop/btop.conf" = "config/btop.conf";
     ".config/ghostty/config" = "config/ghostty.conf";

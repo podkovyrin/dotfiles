@@ -62,7 +62,115 @@
       "inputs": {
         "home-manager": "home-manager",
         "nix-darwin": "nix-darwin",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "zsh-abbr": "zsh-abbr",
+        "zsh-autosuggestions": "zsh-autosuggestions",
+        "zsh-autosuggestions-abbreviations-strategy": "zsh-autosuggestions-abbreviations-strategy",
+        "zsh-completions": "zsh-completions",
+        "zsh-history-substring-search": "zsh-history-substring-search",
+        "zsh-syntax-highlighting": "zsh-syntax-highlighting"
+      }
+    },
+    "zsh-abbr": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1770748719,
+        "narHash": "sha256-WMID8dZiDXVg64OZOMBWMeCKBwVT7dVyBeRfTJhxU9Q=",
+        "owner": "olets",
+        "repo": "zsh-abbr",
+        "rev": "2de4a08c5e0d9dbe8447e11e0a177b59b5b6d6ea",
+        "type": "github"
+      },
+      "original": {
+        "owner": "olets",
+        "repo": "zsh-abbr",
+        "rev": "2de4a08c5e0d9dbe8447e11e0a177b59b5b6d6ea",
+        "type": "github"
+      }
+    },
+    "zsh-autosuggestions": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1750781703,
+        "narHash": "sha256-KmkXgK1J6iAyb1FtF/gOa0adUnh1pgFsgQOUnNngBaE=",
+        "owner": "zsh-users",
+        "repo": "zsh-autosuggestions",
+        "rev": "85919cd1ffa7d2d5412f6d3fe437ebdbeeec4fc5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zsh-users",
+        "repo": "zsh-autosuggestions",
+        "rev": "85919cd1ffa7d2d5412f6d3fe437ebdbeeec4fc5",
+        "type": "github"
+      }
+    },
+    "zsh-autosuggestions-abbreviations-strategy": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1751357807,
+        "narHash": "sha256-eW3k183Y3+FERw5VHKf/T0huJl9hfMY+6Wu/WifI7gw=",
+        "owner": "olets",
+        "repo": "zsh-autosuggestions-abbreviations-strategy",
+        "rev": "3ce24713e4a49f9a5060d9016d35f3cd048d1c74",
+        "type": "github"
+      },
+      "original": {
+        "owner": "olets",
+        "repo": "zsh-autosuggestions-abbreviations-strategy",
+        "rev": "3ce24713e4a49f9a5060d9016d35f3cd048d1c74",
+        "type": "github"
+      }
+    },
+    "zsh-completions": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1771409300,
+        "narHash": "sha256-gSvuBYxe+L6ZdAViz4xyTkCGBKH1872bFdvBEAQYZKQ=",
+        "owner": "zsh-users",
+        "repo": "zsh-completions",
+        "rev": "4c84ebad534bdac3d2061db69082960c50856538",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zsh-users",
+        "repo": "zsh-completions",
+        "rev": "4c84ebad534bdac3d2061db69082960c50856538",
+        "type": "github"
+      }
+    },
+    "zsh-history-substring-search": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1768499095,
+        "narHash": "sha256-KHujL1/TM5R3m4uQh2nGVC98D6MOyCgQpyFf+8gjKR0=",
+        "owner": "zsh-users",
+        "repo": "zsh-history-substring-search",
+        "rev": "14c8d2e0ffaee98f2df9850b19944f32546fdea5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zsh-users",
+        "repo": "zsh-history-substring-search",
+        "rev": "14c8d2e0ffaee98f2df9850b19944f32546fdea5",
+        "type": "github"
+      }
+    },
+    "zsh-syntax-highlighting": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1770569380,
+        "narHash": "sha256-VMne38IQwqB4jwGUI2f3eEiSkT2ww7+G5ch7w+65GT0=",
+        "owner": "zsh-users",
+        "repo": "zsh-syntax-highlighting",
+        "rev": "1d85c692615a25fe2293bdd44b34c217d5d2bf04",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zsh-users",
+        "repo": "zsh-syntax-highlighting",
+        "rev": "1d85c692615a25fe2293bdd44b34c217d5d2bf04",
+        "type": "github"
       }
     }
   },

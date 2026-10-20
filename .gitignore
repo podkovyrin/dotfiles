@@ -1,4 +1,9 @@
 /.build/
+# A `nix build` without --out-link links its output here. ./n uses .build/.
+/result
+/result-*
+/nix/result
+/nix/result-*
 
 # Tools write into the linked ~/.agents/skills and ~/.pi/agent/extensions.
 # The cua-driver installer links its skill to ~/.cua-driver and keeps it at the

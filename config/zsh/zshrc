@@ -1,5 +1,15 @@
+# The shared setup from nix/modules/zsh: options, completion, key bindings,
+# plugins, and the tool hooks. nix/shell.nix has its settings and the
+# abbreviations. Put fpath entries before this block, so that compinit sees them.
+if [[ -r ~/.config/zsh/framework/init.zsh ]]; then
+  source ~/.config/zsh/framework/init.zsh
+else
+  print -ru2 -- 'zshrc: ~/.config/zsh/framework is missing. Run ./n apply in ~/.dotfiles.'
+  autoload -Uz compinit && compinit
+fi
+
 setopt HIST_IGNORE_ALL_DUPS
-bindkey -v
+setopt CORRECT
 
 # Guard against broken TTY input flags (Enter shows as ^M when icrnl is off).
 # Some programs can leave the terminal in this state for the current session.
@@ -10,36 +20,11 @@ fix_tty_enter_key() {
 (( ${precmd_functions[(Ie)fix_tty_enter_key]} )) || precmd_functions+=(fix_tty_enter_key)
 fix_tty_enter_key
 
-setopt CORRECT
-
-export EDITOR="nvim"
-export VISUAL="nvim"
-
 # Word motions stop at a path separator.
 WORDCHARS=${WORDCHARS//[\/]}
 
-zstyle ':zim:termtitle' format '%~'
-
-# Safe only while zsh-autosuggestions is the last module in ~/.zimrc.
-ZSH_AUTOSUGGEST_MANUAL_REBIND=1
-
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
-
-ZIM_HOME=${ZDOTDIR:-${HOME}}/.zim
-if [[ ! -e ${ZIM_HOME}/zimfw.zsh ]]; then
-  if (( ${+commands[curl]} )); then
-    curl -fsSL --create-dirs -o ${ZIM_HOME}/zimfw.zsh \
-        https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
-  else
-    mkdir -p ${ZIM_HOME} && wget -nv -O ${ZIM_HOME}/zimfw.zsh \
-        https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
-  fi
-fi
-# Install missing modules, and rebuild init.zsh when ~/.zimrc is newer.
-if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZDOTDIR:-${HOME}}/.zimrc ]]; then
-  source ${ZIM_HOME}/zimfw.zsh init -q
-fi
-source ${ZIM_HOME}/init.zsh
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=243,underline"
 
 [[ -r ~/.config/herdr/process-name.zsh ]] && source ~/.config/herdr/process-name.zsh
 
@@ -60,17 +45,6 @@ _pnpm_completion() {
 }
 compdef _pnpm_completion pnpm pn
 
-ZSH_AUTOSUGGEST_STRATEGY=( abbreviations history completion )
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=243,underline"
-
-zmodload -F zsh/terminfo +p:terminfo
-# Bind ^[[A/^[[B manually so up/down works both before and after zle-line-init.
-for key ('^[[A' '^P' ${terminfo[kcuu1]}) bindkey ${key} history-substring-search-up
-for key ('^[[B' '^N' ${terminfo[kcud1]}) bindkey ${key} history-substring-search-down
-for key ('k') bindkey -M vicmd ${key} history-substring-search-up
-for key ('j') bindkey -M vicmd ${key} history-substring-search-down
-unset key
-
 ls() { command -v eza &> /dev/null && eza "$@" || command ls -G "$@"; }
 o() { [[ $# -gt 0 ]] && command open "$@" || command open .; }
 s() { [[ $# -gt 0 ]] && subl "$@" || subl .; }
@@ -78,16 +52,8 @@ batrg() { bat "$1" | rg --color=always -C5 "$2" }
 
 alias diff='diff --color=auto'
 alias grep='grep --color=auto'
-alias cd='z'
+(( ${+functions[z]} )) && alias cd='z'
 alias v="nvim"
-
-(( ${+commands[zoxide]} )) && eval "$(zoxide init zsh)"
-(( ${+commands[starship]} )) && eval "$(starship init zsh)"
-
-# Activate mise in every interactive shell, not only login shells.
-# Keep direnv after mise and the prompt setup.
-(( ${+commands[mise]} )) && eval "$(mise activate zsh)"
-(( ${+commands[direnv]} )) && eval "$(direnv hook zsh)"
 
 # VSCode workaround
 if [[ "$TERM_PROGRAM" == "vscode" ]]; then

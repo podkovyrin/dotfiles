@@ -54,14 +54,34 @@ in
     optimise.automatic = true;
   };
 
-  # Zim runs compinit and Starship draws the prompt. /etc/zshrc keeps only the
-  # Nix completion paths in fpath.
+  # nix/modules/zsh runs compinit and Starship draws the prompt. /etc/zshrc
+  # keeps only the Nix completion paths in fpath.
   programs.zsh = {
     enable = true;
     enableGlobalCompInit = false;
     enableBashCompletion = false;
     promptInit = "";
   };
+
+  # The login shell is the Nix zsh, the version that nix/modules/zsh compiles
+  # its files with. environment.shells adds it to /etc/shells. nix-darwin sets
+  # users.users.<name>.shell only for knownUsers, which must not include the
+  # admin user, so set it here.
+  # postActivation runs before /run/current-system points to this generation.
+  # On a new Mac the link does not exist yet, and a later failure would leave
+  # a login shell that does not exist. Change the shell only when the path
+  # works now and in this generation; on a new Mac, the second switch sets it.
+  # If the Nix volume does not mount, use `/bin/zsh -l` as the Terminal command.
+  environment.shells = [ pkgs.zsh ];
+  system.activationScripts.postActivation.text = ''
+    loginShell=/run/current-system/sw${pkgs.zsh.shellPath}
+    if [[ ! -x $loginShell || ! -x $systemConfig/sw${pkgs.zsh.shellPath} ]]; then
+      echo "not changing the login shell of ${user.name}: $loginShell is not there yet. Switch again." >&2
+    elif [[ $(dscl . -read ${lib.escapeShellArg "/Users/${user.name}"} UserShell) != "UserShell: $loginShell" ]]; then
+      echo "setting the login shell of ${user.name} to $loginShell..." >&2
+      dscl . -create ${lib.escapeShellArg "/Users/${user.name}"} UserShell "$loginShell"
+    fi
+  '';
 
   # launchd.user.envVariables sets these only during activation, and a reboot clears
   # them. This agent sets them again at each login.

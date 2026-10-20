@@ -12,6 +12,7 @@ in
   imports = [
     ./packages.nix
     ./links.nix
+    ./shell.nix
   ];
 
   home.stateVersion = "26.05";
@@ -38,7 +39,7 @@ in
     ];
   };
 
-  # Projects opt in with `direnv allow`. The zsh hook is in config/zsh/zshrc,
+  # Projects opt in with `direnv allow`. nix/shell.nix adds the zsh hook,
   # because Home Manager does not generate the zsh files.
   programs.direnv = {
     enable = true;
