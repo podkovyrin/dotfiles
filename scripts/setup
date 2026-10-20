@@ -3,25 +3,18 @@ set -euo pipefail
 
 usage() {
   printf '%s\n' \
-    'Set up and update this Apple Silicon Mac.' \
+    'Set up this Apple Silicon Mac: install the missing prerequisites (Xcode' \
+    'Command Line Tools, Nix, Homebrew), then build and apply the configuration.' \
     '' \
-    'Usage: ./apply [--build | --dry-run]' \
-    '' \
-    '  ./apply             Install missing prerequisites, build, and activate.' \
-    '  ./apply --build     Build without changing the active configuration.' \
-    '  ./apply --dry-run   Build, diff Nix packages, and preview Homebrew cleanup.' \
+    'Usage: bash -c "$(curl -fsSL https://raw.githubusercontent.com/podkovyrin/dotfiles/master/scripts/setup)"' \
     '' \
     'Run as your normal user, without sudo. Installers and activation request access.' \
-    'Only the default mode installs missing prerequisites.' \
-    'See README.md for machine setup and package updates.'
+    'After setup, use ./n apply. See README.md.'
 }
 
-mode=activate
 case "$#:${1:-}" in
   0:) ;;
   1:-h|1:--help) usage; exit 0 ;;
-  1:--build) mode=build ;;
-  1:-n|1:--dry-run) mode=preview ;;
   *) printf 'Unknown arguments: %s. Use --help.\n' "$*" >&2; exit 2 ;;
 esac
 
@@ -36,14 +29,12 @@ fail() {
 macos=$(/usr/bin/sw_vers -productVersion)
 (( ${macos%%.*} >= 14 )) || fail 'This setup requires macOS 14 or newer.'
 
-repo=$(cd -- "$(dirname -- "$0")" && pwd -P)
+repo=$(cd -- "$(dirname -- "$0")/.." && pwd -P)
 flake="path:$repo/nix"
 build="$repo/.build"
 
 may_install() {
-  [[ "$mode" == activate ]] ||
-    fail "Missing prerequisite: $1. Run ./apply in a terminal to install prerequisites."
-  [[ -t 0 && -t 2 ]] || fail "Installing $1 requires an interactive terminal. Run ./apply there."
+  [[ -t 0 && -t 2 ]] || fail "Installing $1 requires an interactive terminal. Run the setup there."
 }
 
 ensure_clt() {
@@ -56,7 +47,7 @@ ensure_clt() {
     /usr/bin/xcode-select -p >/dev/null 2>&1 && return
     sleep 5
   done
-  fail 'Developer tools are not ready. Finish the Apple installation, then run ./apply again.'
+  fail 'Developer tools are not ready. Finish the Apple installation, then run the setup again.'
 }
 
 find_nix() {
@@ -123,7 +114,7 @@ ensure_git_user() {
   local file="$HOME/.gitconfig.user" name email
   [[ -e "$file" ]] && return
   if [[ ! -t 0 ]]; then
-    printf 'Skipping %s: no interactive terminal. Run ./apply there to create it.\n' "$file" >&2
+    printf 'Skipping %s: no interactive terminal. Run the setup there to create it.\n' "$file" >&2
     return
   fi
 
@@ -137,37 +128,9 @@ ensure_git_user() {
   printf 'Wrote %s.\n' "$file" >&2
 }
 
-preview_brew_cleanup() {
-  if [[ ! -x /opt/homebrew/bin/brew ]]; then
-    printf 'Homebrew is not installed. Skipping the cleanup preview.\n' >&2
-    return
-  fi
-
-  local brewfile="$build/Brewfile" output status=0
-  # Use the candidate Brewfile, not the active HOMEBREW_BUNDLE_FILE.
-  "${nix[@]}" eval --raw "$flake#darwinConfigurations.mac.config.homebrew.brewfile" >"$brewfile"
-
-  printf 'Homebrew cleanup preview for the built configuration:\n' >&2
-  # Without redirected input, Homebrew can prompt and then perform the cleanup.
-  output=$(HOMEBREW_NO_AUTO_UPDATE=1 /opt/homebrew/bin/brew bundle cleanup \
-    --file="$brewfile" </dev/null) || status=$?
-  # Exit 1 also reports real errors. Accept it only after a complete cleanup report.
-  local report_end='Run `brew bundle cleanup --force` to make these changes.'
-  if [[ "${output##*$'\n'}" == "$report_end" ]]; then
-    # The suggested command would use the active Brewfile, not the candidate.
-    output=${output%"$report_end"}
-    if (( status == 1 )); then status=0; fi
-  fi
-  [[ -z "$output" ]] || printf '%s\n' "${output%$'\n'}"
-  if (( status != 0 )); then
-    printf 'Homebrew cleanup preview failed with exit code %s.\n' "$status" >&2
-    return "$status"
-  fi
-}
-
 ensure_clt
 
-# Run through curl, not from a file: clone the repo, then run its copy of apply.
+# Run through curl, not from a file: clone the repo, then run its copy of this script.
 if [[ -z "${BASH_SOURCE[0]:-}" ]]; then
   dir="$HOME/.dotfiles"
   if [[ ! -d "$dir/.git" ]]; then
@@ -176,10 +139,10 @@ if [[ -z "${BASH_SOURCE[0]:-}" ]]; then
     git clone https://github.com/podkovyrin/dotfiles.git "$dir"
     git -C "$dir" remote set-url origin git@github.com:podkovyrin/dotfiles.git
   fi
-  exec "$dir/apply" "$@"
+  exec "$dir/scripts/setup" "$@"
 fi
 
-[[ "$mode" != activate ]] || ensure_git_user
+ensure_git_user
 ensure_nix
 nix=$(find_nix)
 export PATH="$(dirname -- "$nix"):$PATH"
@@ -196,26 +159,12 @@ declared=$("${nix[@]}" eval --raw --file "$repo/nix/user.nix" \
 printf 'Building the Mac configuration...\n' >&2
 "${nix[@]}" build "$flake#darwinConfigurations.mac.system" --out-link "$build/system"
 
-case "$mode" in
-  build)
-    printf 'Built configuration: %s\n' "$build/system" >&2
-    ;;
-  preview)
-    if [[ -e /run/current-system ]]; then
-      "${nix[@]}" store diff-closures /run/current-system "$build/system"
-    fi
-    preview_brew_cleanup
-    printf 'No active configuration changed.\n' >&2
-    ;;
-  activate)
-    ensure_brew
-    printf 'Activating the configuration. Administrator access is required.\n' >&2
-    # Use darwin-rebuild from the built system, so a first run needs no installed
-    # copy. It evaluates the flake again as root; the build is already in the store.
-    sudo "$(readlink "$build/system")/sw/bin/darwin-rebuild" switch --flake "$flake#mac"
-    # Global mise tools, for example Pi. Node for npm tools comes from the same profile.
-    printf 'Installing global mise tools...\n' >&2
-    (cd "$HOME" && PATH="/etc/profiles/per-user/$user_name/bin:$PATH" mise install)
-    printf 'Setup complete. Open a new terminal to use the updated environment.\n' >&2
-    ;;
-esac
+ensure_brew
+printf 'Activating the configuration. Administrator access is required.\n' >&2
+# Use darwin-rebuild from the built system, so a first run needs no installed
+# copy. It evaluates the flake again as root; the build is already in the store.
+sudo "$(readlink "$build/system")/sw/bin/darwin-rebuild" switch --flake "$flake#mac"
+# Global mise tools: runtimes, uv, Herdr, Hunk, and Pi.
+printf 'Installing global mise tools...\n' >&2
+(cd "$HOME" && PATH="/etc/profiles/per-user/$user_name/bin:$PATH" mise install)
+printf 'Setup complete. Open a new terminal. From now on, use ./n apply.\n' >&2

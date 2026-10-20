@@ -13,22 +13,6 @@
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    herdr = {
-      url = "github:herdrdev/herdr/v0.9.4";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    hunk = {
-      url = "github:modem-dev/hunk/v0.23.0";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    mole = {
-      url = "github:tw93/Mole/V1.59.1";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
   };
 
   outputs =
@@ -50,9 +34,6 @@
           home-manager.darwinModules.home-manager
           {
             nixpkgs.hostPlatform = system;
-            # The overlay builds Herdr on the system Nixpkgs. Its `packages` output
-            # would evaluate a separate Nixpkgs instance.
-            nixpkgs.overlays = [ inputs.herdr.overlays.default ];
 
             home-manager = {
               useGlobalPkgs = true;

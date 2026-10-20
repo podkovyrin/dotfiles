@@ -43,26 +43,22 @@ source ${ZIM_HOME}/init.zsh
 
 [[ -r ~/.config/herdr/process-name.zsh ]] && source ~/.config/herdr/process-name.zsh
 
-# Generate pnpm completion outside $HOME: there, pnpm reads ~/.npmrc as a
-# project .npmrc and warns about the env-var auth tokens.
-if (( ${+commands[pnpm]} )); then
-  _pnpm_comp=${XDG_CACHE_HOME:-$HOME/.cache}/zsh/pnpm-completion.zsh
-  # Nix normalizes timestamps. Use the resolved executable path as the cache key.
-  _pnpm_key="# pnpm: ${commands[pnpm]:A}"
-  _pnpm_cached_key=
-  [[ -r $_pnpm_comp ]] && IFS= read -r _pnpm_cached_key < $_pnpm_comp
-  if [[ $_pnpm_cached_key != $_pnpm_key ]]; then
-    if _pnpm_completion=$(builtin cd /tmp && pnpm completion zsh 2>/dev/null) && [[ -n $_pnpm_completion ]]; then
-      mkdir -p ${_pnpm_comp:h}
-      _pnpm_tmp=$(mktemp "${_pnpm_comp}.XXXXXX") && {
-        print -rl -- "$_pnpm_key" "$_pnpm_completion" >| $_pnpm_tmp && mv -f $_pnpm_tmp $_pnpm_comp
-        [[ -e $_pnpm_tmp ]] && rm -f $_pnpm_tmp
-      }
-    fi
+# pnpm completion, from `pnpm completion zsh`. There is no global pnpm: each
+# project supplies one (mise or a Nix dev shell). The function asks the pnpm on
+# PATH at completion time, so it works with every project release. When pnpm
+# has no values (for example after `pnpm add ./`), complete file names.
+_pnpm_completion() {
+  (( ${+commands[pnpm]} )) || return 1
+  local -a reply
+  reply=("${(@f)$(COMP_CWORD=$((CURRENT-1)) COMP_LINE="$BUFFER" COMP_POINT="$CURSOR" SHELL=zsh pnpm completion-server -- "${words[@]}" 2>/dev/null)}")
+  reply=( ${reply:#} )
+  if (( ! $#reply )) || [[ ${reply[1]} == __tabtab_complete_files__ ]]; then
+    _files
+  else
+    _describe 'values' reply
   fi
-  [[ -s $_pnpm_comp ]] && source $_pnpm_comp
-  unset _pnpm_comp _pnpm_key _pnpm_cached_key _pnpm_completion _pnpm_tmp
-fi
+}
+compdef _pnpm_completion pnpm pn
 
 ZSH_AUTOSUGGEST_STRATEGY=( abbreviations history completion )
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=243,underline"

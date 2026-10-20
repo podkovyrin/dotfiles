@@ -1,0 +1,781 @@
+#!/bin/bash
+# `./n add`, `./n remove`, `./n info`, and `./n list`: put a global tool in the
+# correct place, so everyone who uses these dotfiles installs it the same way.
+# ./n runs this script. It must work with the macOS Bash 3.2.
+#
+# A bare name goes to the first source that matches:
+#   1. A Homebrew cask that installs a macOS app -> nix/casks.txt.
+#   2. Nixpkgs, when its release is not older than mise's -> nix/packages.txt.
+#   3. The mise registry (no asdf or vfox plugin) -> config/mise.toml.
+#   4. A Homebrew formula, or a cask with only a command -> nix/brews.txt,
+#      nix/casks.txt.
+# The .txt files have one name per line (nix/read-list.nix reads them), so an
+# edit is a line append or a line delete.
+# npm and PyPI are not curated: anyone can publish any name. A bare name never
+# selects them; the plan shows them with the prefix to use after a check.
+# An app cask and a formula with the same name stop with an error.
+set -euo pipefail
+
+repo=$(cd -- "$(dirname -- "$0")/.." && pwd -P)
+flake="path:$repo/nix"
+packages_txt="$repo/nix/packages.txt"
+brews_txt="$repo/nix/brews.txt"
+casks_txt="$repo/nix/casks.txt"
+mise_toml="$repo/config/mise.toml"
+# Separates the fields of a lookup result. Not whitespace, so `read` keeps
+# empty fields.
+sep=$'\x1f'
+
+usage() {
+  printf '%s\n' \
+    'Usage: ./n add [-n] [-y] [-f] <tool>...' \
+    '       ./n remove [-n] [-y] <tool>...' \
+    '       ./n info <tool>...' \
+    '       ./n list [nix|brew|mise]' \
+    '' \
+    'add looks up each tool in all sources, selects one, shows the plan, asks to' \
+    'confirm, writes the config, and applies it (./n apply or mise install).' \
+    '' \
+    'Examples:' \
+    '  ./n add lazygit              Nix, when Nixpkgs has the current release' \
+    '  ./n add hk                   mise, when Nixpkgs is older or does not have it' \
+    '  ./n add zed                  Homebrew, because it is a macOS app' \
+    '  ./n add @biomejs/biome       npm, because the name is a scoped npm package' \
+    '  ./n add -n ripgrep fd        show the plan only' \
+    '' \
+    'A prefix selects the source. Use the one that matches the install line in the' \
+    "tool's README:" \
+    '  nix:ATTR    Nixpkgs                                  -> nix/packages.txt' \
+    '  brew:NAME   brew install NAME (formula, else cask)   -> nix/brews.txt, casks.txt' \
+    '  cask:NAME   brew install --cask NAME                 -> nix/casks.txt' \
+    '  mise:NAME   the mise registry                        -> config/mise.toml' \
+    '  npm:PKG     npm install -g PKG                       -> config/mise.toml' \
+    '  pipx:PKG    pipx install PKG, uv tool install PKG    -> config/mise.toml' \
+    '  Other mise backends: cargo:CRATE, go:MODULE, github:OWNER/REPO, aqua:OWNER/REPO, ...' \
+    '' \
+    'Options:' \
+    '  -n, --dry-run  Show the plan. Change nothing.' \
+    '  -y, --yes      Do not ask for confirmation. Required without a terminal.' \
+    '  -f, --force    Add a tool even when a global tool already supplies its command.' \
+    '  -h, --help     Show this help.' \
+    '' \
+    'Mac App Store apps: edit masApps in nix/homebrew.nix.'
+}
+
+die() { printf 'n: %s\n' "$*" >&2; exit 1; }
+warn() { printf 'n: %s\n' "$*" >&2; }
+
+have() { command -v "$1" >/dev/null 2>&1; }
+
+# True when $1 is one of the other arguments.
+contains() {
+  local x=$1 e
+  shift
+  for e in "$@"; do [[ $e == "$x" ]] && return 0; done
+  return 1
+}
+
+# Run mise from $HOME, so that only the global config and settings apply.
+mise_home() { (cd "$HOME" && mise "$@"); }
+
+# True when version $1 is the same as or newer than version $2.
+version_ge() {
+  local a=${1#v} b=${2#v}
+  [[ $a == "$b" ]] && return 0
+  [[ $(printf '%s\n%s\n' "$a" "$b" | sort -V | tail -n 1) == "$a" ]]
+}
+
+# Names that are safe to write into a list file: one word, no `#`, and a valid
+# Nix attribute path or Homebrew name.
+nix_attr_ok() { [[ $1 =~ ^[A-Za-z_][A-Za-z0-9_-]*(\.[A-Za-z_][A-Za-z0-9_-]*)*$ ]]; }
+brew_name_ok() { [[ $1 =~ ^[A-Za-z0-9][A-Za-z0-9._+@/-]*$ ]]; }
+
+# --- Lookups. Each one prints "VERSION<sep>DESCRIPTION<sep>COMMAND" (fields
+# can be empty) and returns 0 when the source has the tool. A cask lookup adds
+# a fourth field: "app" when the cask installs a macOS app (an .app, a .pkg
+# installer, or a suite of apps). nix_lookup returns
+# 2 when nix eval fails, so that an error in the config is not "not found".
+
+# jq filter: join an array into one line of fields.
+jq_fields='map(. // "" | tostring | gsub("[\t\n\r]"; " ")) | join("\u001f")'
+
+nix_lookup() {
+  local json
+  nix_attr_ok "$1" || return 1
+  json=$(nix eval --json "$flake#darwinConfigurations.mac.pkgs" --apply "
+    pkgs:
+    let
+      lib = pkgs.lib;
+      p = lib.attrByPath (lib.splitString \".\" \"$1\") null pkgs;
+      info = {
+        version = p.version or \"\";
+        description = p.meta.description or \"\";
+        bin = p.meta.mainProgram or (p.pname or \"\");
+      };
+      r = builtins.tryEval (
+        if lib.isDerivation p && (p.meta.available or true)
+        then builtins.deepSeq info info else null
+      );
+    in if r.success then r.value else null" 2>/dev/null) || return 2
+  jq -er "select(. != null) | [.version, .description, .bin] | $jq_fields" <<<"$json"
+}
+
+# The mise description, or nothing when the registry has none.
+mise_description() {
+  local d
+  d=$(mise_home tool --description "$1" 2>/dev/null) || return 0
+  [[ $d == '[none]' ]] || printf '%s' "${d//$'\n'/ }"
+}
+
+# The mise registry, without the asdf and vfox plugins: they often build from
+# source and run third-party scripts.
+mise_registry_lookup() {
+  local backends b usable='' v
+  backends=$(mise_home registry "$1" 2>/dev/null) || return 1
+  for b in $backends; do
+    case $b in asdf:* | vfox:*) ;; *) usable=1 ;; esac
+  done
+  [[ -n $usable ]] || return 1
+  v=$(mise_home latest "$1" 2>/dev/null) || v=
+  printf '%s%s%s%s%s\n' "$v" "$sep" "$(mise_description "$1")" "$sep" "$1"
+}
+
+# Any mise backend spec, for example npm:foo or github:owner/repo.
+mise_spec_lookup() {
+  local v pkg bin
+  v=$(mise_home latest "$1" 2>/dev/null) || return 1
+  pkg=$(spec_package "$1")
+  bin=${pkg##*/}
+  # npm reports the command: npm:@anthropic-ai/claude-code installs claude.
+  if [[ $1 == npm:* ]]; then
+    bin=$(npm_lookup "$pkg" | cut -d "$sep" -f 3) || bin=${pkg##*/}
+  fi
+  printf '%s%s%s%s%s\n' "$v" "$sep" "$(mise_description "$1")" "$sep" "$bin"
+}
+
+# The package of a mise spec, without the backend and the version:
+# npm:@scope/pkg@1.0 -> @scope/pkg, github:owner/repo -> owner/repo.
+spec_package() {
+  local pkg=${1#*:}
+  local rest=${pkg:1}
+  printf '%s%s' "${pkg:0:1}" "${rest%@*}"
+}
+
+brew_lookup() {
+  local kind=$1 name=$2 json
+  have brew && brew_name_ok "$name" || return 1
+  json=$(HOMEBREW_NO_AUTO_UPDATE=1 brew info --json=v2 "--$kind" "$name" 2>/dev/null) || return 1
+  if [[ $kind == cask ]]; then
+    jq -r ".casks[0] | [
+      .version, .desc,
+      ([.artifacts[]? | objects | select(has(\"binary\")) | .target | strings | sub(\".*/\"; \"\")] | first),
+      (if any(.artifacts[]?; type == \"object\" and (has(\"app\") or has(\"pkg\") or has(\"suite\"))) then \"app\" else \"\" end)
+    ] | $jq_fields" <<<"$json"
+  else
+    jq -r ".formulae[0] | [.versions.stable, .desc, .name] | $jq_fields" <<<"$json"
+  fi
+}
+
+# Only packages that install a command.
+npm_lookup() {
+  local json
+  json=$(curl -fsSL --max-time 10 "https://registry.npmjs.org/${1/\//%2F}/latest" 2>/dev/null) || return 1
+  jq -er "select(.bin != null and .bin != {}) | [
+    .version, .description,
+    (.bin | if type == \"object\" then keys[0] else null end)
+  ] | $jq_fields" <<<"$json"
+}
+
+pypi_lookup() {
+  local json
+  json=$(curl -fsSL --max-time 10 "https://pypi.org/pypi/$1/json" 2>/dev/null) || return 1
+  jq -r "[.info.version, .info.summary, .info.name] | $jq_fields" <<<"$json"
+}
+
+# --- Declarations in the config files.
+
+# Prints the names in list file $1: the first word of each line, without
+# comments and blank lines.
+list_names() { awk '{ sub(/#.*/, "") } NF { print $1 }' "$1"; }
+
+# Prints "FILE<TAB>ENTRY" for each declaration that matches $1. For mise keys,
+# a bare name also matches the last part of the key: hunk matches
+# github:modem-dev/hunk, and @scope/pkg matches npm:@scope/pkg.
+find_declared() {
+  local name=$1 bare=${1#*:} f
+  for f in nix/packages.txt nix/brews.txt nix/casks.txt; do
+    list_names "$repo/$f" | awk -v n="$bare" -v f="$f" '$1 == n { print f "\t" n }'
+  done
+  awk -v full="$name" -v n="$bare" -v f="config/mise.toml" '
+    /^\[/ { on = ($0 == "[tools]"); next }
+    on && /^[^#[:space:]][^=]*=/ {
+      key = $0; sub(/[[:space:]]*=.*/, "", key); gsub(/"/, "", key)
+      last = key; sub(/.*[:\/]/, "", last)
+      if (key == full || key == n || key == "npm:" full || last == n) print f "\t" key
+    }
+  ' "$mise_toml"
+}
+
+# Appends name $2 to list file $1.
+append_entry() {
+  # Add the missing final newline first, so the name gets its own line.
+  [[ ! -s $1 || -z $(tail -c 1 "$1") ]] || printf '\n' >>"$1"
+  printf '%s\n' "$2" >>"$1"
+}
+
+# Deletes the line of name $2 in list file $1. Comments above it stay.
+delete_entry() {
+  local tmp
+  tmp=$(mktemp)
+  awk -v e="$2" '{ line = $0; sub(/#.*/, "", line); split(line, w) } w[1] == e { next } { print }' "$1" >"$tmp" &&
+    cat "$tmp" >"$1"
+  rm -f "$tmp"
+}
+
+# Prints the path of command $1 when a global tool already supplies it: the
+# Nix profile, Homebrew, or the global mise config. Ignores the PATH of the
+# caller, which can have project tools.
+existing_command() {
+  local dir
+  for dir in "/etc/profiles/per-user/$(id -un)/bin" /run/current-system/sw/bin "$HOME/.nix-profile/bin" /opt/homebrew/bin; do
+    [[ -x $dir/$1 ]] && { printf '%s' "$dir/$1"; return 0; }
+  done
+  mise_home which "$1" 2>/dev/null
+}
+
+# Names the source of command path $1, for example "nix ripgrep-15.2.0".
+command_origin() {
+  local real rest mise_dir=${MISE_DATA_DIR:-$HOME/.local/share/mise}
+  real=$(realpath "$1" 2>/dev/null) || real=$1
+  case $real in
+  /nix/store/*)
+    rest=${real#/nix/store/*-}
+    printf 'nix %s' "${rest%%/*}"
+    ;;
+  "$mise_dir"/installs/*)
+    rest=${real#"$mise_dir"/installs/}
+    printf 'mise %s %s' "${rest%%/*}" "$(cut -d / -f 2 <<<"$rest")"
+    ;;
+  /opt/homebrew/Cellar/*)
+    rest=${real#/opt/homebrew/Cellar/}
+    printf 'brew %s %s' "${rest%%/*}" "$(cut -d / -f 2 <<<"$rest")"
+    ;;
+  /opt/homebrew/Caskroom/* | /Applications/*) printf 'brew (cask)' ;;
+  *) printf '%s' "$real" ;;
+  esac
+}
+
+# --- Resolution.
+#
+# gather and resolve set these globals for one tool. c_* hold lookup results
+# (empty when the source does not have the tool):
+#   c_app (a cask with an app), c_cask (a cask with only a command), c_formula,
+#   c_nix, c_mise (the registry), c_npm, c_pypi, c_spec (any other mise spec).
+# r_key names the selected c_* (empty when none). r_kind is nix, cask,
+# formula, or mise; r_entry is the text for the config file.
+c_name='' c_app='' c_cask='' c_formula='' c_nix='' c_mise='' c_npm='' c_pypi='' c_spec='' c_nix_failed=''
+r_key='' r_kind='' r_entry='' r_spec='' r_bin='' r_reason=''
+
+clear_result() {
+  c_name='' c_app='' c_cask='' c_formula='' c_nix='' c_mise='' c_npm='' c_pypi='' c_spec='' c_nix_failed=''
+  r_key='' r_kind='' r_entry='' r_spec='' r_bin='' r_reason=''
+}
+
+# Sets c_app or c_cask from cask lookup result $1.
+set_cask() {
+  if [[ $1 == *"${sep}app" ]]; then c_app=$1; else c_cask=$1; fi
+}
+
+# Looks up bare name $1 in all sources at the same time.
+gather() {
+  local d
+  d=$(mktemp -d)
+  lookup() {
+    local key=$1
+    shift
+    if "$@" >"$d/$key.part" 2>/dev/null; then mv "$d/$key.part" "$d/$key"; else echo "$?" >"$d/$key.status"; fi
+  }
+  lookup cask brew_lookup cask "$1" &
+  lookup formula brew_lookup formula "$1" &
+  lookup nix nix_lookup "$1" &
+  lookup mise mise_registry_lookup "$1" &
+  lookup npm npm_lookup "$1" &
+  lookup pypi pypi_lookup "$1" &
+  wait
+  [[ ! -s $d/cask ]] || set_cask "$(cat "$d/cask")"
+  c_formula=$(cat "$d/formula" 2>/dev/null) || c_formula=''
+  c_nix=$(cat "$d/nix" 2>/dev/null) || c_nix=''
+  c_mise=$(cat "$d/mise" 2>/dev/null) || c_mise=''
+  c_npm=$(cat "$d/npm" 2>/dev/null) || c_npm=''
+  c_pypi=$(cat "$d/pypi" 2>/dev/null) || c_pypi=''
+  [[ $(cat "$d/nix.status" 2>/dev/null) != 2 ]] || c_nix_failed=1
+  rm -rf "$d"
+}
+
+# The text to type for candidate $1, for example nix:hk.
+spec_of() {
+  case $1 in
+  app | cask) printf 'cask:%s' "$c_name" ;;
+  formula) printf 'brew:%s' "$c_name" ;;
+  nix) printf 'nix:%s' "$c_name" ;;
+  mise) printf 'mise:%s' "$c_name" ;;
+  npm) printf 'npm:%s' "$c_name" ;;
+  pypi) printf 'pipx:%s' "$c_name" ;;
+  spec) printf '%s' "$c_spec" ;;
+  esac
+}
+
+# Selects candidate $1 for the reason $2.
+select_candidate() {
+  local out _
+  r_key=$1 r_reason=$2 r_spec=$(spec_of "$1")
+  case $1 in
+  app) out=$c_app r_kind=cask r_entry=$c_name ;;
+  cask) out=$c_cask r_kind=cask r_entry=$c_name ;;
+  formula) out=$c_formula r_kind=formula r_entry=$c_name ;;
+  nix) out=$c_nix r_kind=nix r_entry=$c_name ;;
+  mise) out=$c_mise r_kind=mise r_entry=$c_name ;;
+  npm) out=$c_npm r_kind=mise r_entry=npm:$c_name ;;
+  pypi) out=$c_pypi r_kind=mise r_entry=pipx:$c_name ;;
+  spec) out=$c_spec_out r_kind=mise r_entry=$c_spec ;;
+  esac
+  IFS=$sep read -r _ _ r_bin _ <<<"$out" || true
+  # Formulae, mise tools, and PyPI packages report the package name, not the
+  # command. Nixpkgs often knows the command (meta.mainProgram): tlrc installs
+  # tldr. npm and casks report their commands.
+  case $1 in
+  formula | mise | pypi | spec)
+    if [[ $1 != spec || $c_spec != npm:* ]]; then
+      local nix_out=$c_nix pkg=$c_name
+      [[ $1 != spec ]] || pkg=$(spec_package "$c_spec")
+      pkg=${pkg##*/}
+      [[ -n $nix_out ]] || nix_out=$(nix_lookup "$pkg") || nix_out=''
+      out=$(cut -d "$sep" -f 3 <<<"$nix_out")
+      [[ -z $out ]] || r_bin=$out
+    fi
+    ;;
+  esac
+  : "${r_bin:=${r_entry##*[:/]}}"
+}
+
+c_spec_out=''
+nix_failed_reason='nix eval failed, so Nixpkgs cannot be checked. Run ./n apply -n to see the error.'
+
+# Looks up $1 and selects a source. Returns 1 with r_reason when it selects none.
+resolve() {
+  local arg=$1 out nixv misev
+  clear_result
+  c_spec_out=''
+
+  case $arg in
+  nix:*)
+    c_name=${arg#nix:}
+    nix_attr_ok "$c_name" || { r_reason="'$c_name' is not a valid Nix attribute path."; return 1; }
+    local status=0
+    c_nix=$(nix_lookup "$c_name") || status=$?
+    if ((status == 2)); then r_reason=$nix_failed_reason; return 1; fi
+    ((status == 0)) || { r_reason="Nixpkgs has no package '$c_name' for this Mac."; return 1; }
+    select_candidate nix 'selected with nix:'
+    return 0
+    ;;
+  brew:*)
+    # The same as `brew install NAME`: the formula, else the cask.
+    c_name=${arg#brew:}
+    brew_name_ok "$c_name" || { r_reason="'$c_name' is not a valid Homebrew name."; return 1; }
+    if c_formula=$(brew_lookup formula "$c_name"); then
+      select_candidate formula 'selected with brew:'
+      return 0
+    fi
+    c_formula=''
+    out=$(brew_lookup cask "$c_name") || { r_reason="Homebrew has no formula or cask '$c_name'."; return 1; }
+    set_cask "$out"
+    if [[ -n $c_app ]]; then select_candidate app 'selected with brew:'; else select_candidate cask 'selected with brew:'; fi
+    return 0
+    ;;
+  cask:*)
+    c_name=${arg#cask:}
+    brew_name_ok "$c_name" || { r_reason="'$c_name' is not a valid Homebrew name."; return 1; }
+    out=$(brew_lookup cask "$c_name") || { r_reason="Homebrew has no cask '$c_name'."; return 1; }
+    set_cask "$out"
+    if [[ -n $c_app ]]; then select_candidate app 'selected with cask:'; else select_candidate cask 'selected with cask:'; fi
+    return 0
+    ;;
+  mise:*)
+    c_name=${arg#mise:}
+    c_mise=$(mise_registry_lookup "$c_name") || { r_reason="the mise registry has no tool '$c_name' (without asdf or vfox)."; return 1; }
+    select_candidate mise 'selected with mise:'
+    return 0
+    ;;
+  *:*)
+    c_name=${arg#*:} c_spec=$arg
+    c_spec_out=$(mise_spec_lookup "$arg") || { r_reason="mise cannot find '$arg'."; return 1; }
+    select_candidate spec "selected with ${arg%%:*}:"
+    return 0
+    ;;
+  @*/*)
+    c_name=$arg
+    c_npm=$(npm_lookup "$arg") || { r_reason="npm has no package '$arg' with a command."; return 1; }
+    select_candidate npm 'a scoped npm package'
+    return 0
+    ;;
+  esac
+
+  [[ $arg =~ ^[A-Za-z0-9][A-Za-z0-9._+-]*$ ]] || { r_reason="'$arg' is not a valid tool name."; return 1; }
+  c_name=$arg
+  gather "$arg"
+  if [[ -n $c_nix_failed ]]; then
+    r_reason=$nix_failed_reason
+    return 1
+  fi
+
+  # 1. A macOS app. A formula with the same name is a command-line tool.
+  if [[ -n $c_app && -n $c_formula ]]; then
+    r_reason="Homebrew has an app and a command-line tool with this name. Add one of them by the name in the list."
+    return 1
+  fi
+  if [[ -n $c_app ]]; then
+    select_candidate app 'a macOS app'
+    return 0
+  fi
+
+  # 2 and 3. Nixpkgs when it is current, otherwise mise.
+  nixv=${c_nix%%"$sep"*} misev=${c_mise%%"$sep"*}
+  if [[ -n $c_nix && -n $c_mise ]]; then
+    if [[ -z $nixv || -z $misev ]] || version_ge "$nixv" "$misev"; then
+      select_candidate nix 'Nixpkgs has the current release'
+    else
+      select_candidate mise "Nixpkgs has the older $nixv"
+    fi
+    return 0
+  fi
+  if [[ -n $c_nix ]]; then
+    select_candidate nix 'not in the mise registry'
+    return 0
+  fi
+  if [[ -n $c_mise ]]; then
+    select_candidate mise 'not in Nixpkgs'
+    return 0
+  fi
+
+  # 4. Homebrew, as `brew install` does: the formula, else the cask.
+  if [[ -n $c_formula ]]; then
+    select_candidate formula 'not in Nixpkgs or mise'
+    return 0
+  fi
+  if [[ -n $c_cask ]]; then
+    select_candidate cask 'not in Nixpkgs or mise'
+    return 0
+  fi
+
+  if [[ -n $c_npm || -n $c_pypi ]]; then
+    r_reason='only npm or PyPI has this name. Anyone can publish there: check the package, then add it by the name in the list.'
+    return 1
+  fi
+  r_reason="no source has this name. Check the name, or use a prefix (./n add --help)."
+  return 1
+}
+
+target_file() {
+  case $1 in
+  nix) echo nix/packages.txt ;;
+  cask) echo nix/casks.txt ;;
+  formula) echo nix/brews.txt ;;
+  mise) echo config/mise.toml ;;
+  esac
+}
+
+# Prints one line per candidate. The selected one has a check mark.
+print_candidates() {
+  local width desc_width key out mark v d _
+  # Cut descriptions to the terminal width. Ask the terminal: COLUMNS is not
+  # exported, and tput in $(...) sees a pipe and answers 80. Do not cut when
+  # the output is not a terminal.
+  desc_width=100000
+  if [[ -t 1 ]] && width=$(stty size </dev/tty 2>/dev/null) && [[ ${width#* } =~ ^[0-9]+$ ]]; then
+    desc_width=$((${width#* } - 50))
+    ((desc_width >= 20)) || desc_width=20
+  fi
+  for key in app nix mise formula cask npm pypi spec; do
+    case $key in
+    app) out=$c_app ;; cask) out=$c_cask ;; formula) out=$c_formula ;; nix) out=$c_nix ;;
+    mise) out=$c_mise ;; npm) out=$c_npm ;; pypi) out=$c_pypi ;; spec) out=$c_spec_out ;;
+    esac
+    [[ -n $out ]] || continue
+    mark=' '
+    [[ $key == "$r_key" ]] && mark='✓'
+    IFS=$sep read -r v d _ <<<"$out" || true
+    ((${#d} <= desc_width)) || d="${d:0:desc_width-1}…"
+    printf '  %s %-30s %-14s %s\n' "$mark" "$(spec_of "$key")" "${v:-?}" "$d"
+  done
+}
+
+confirm() {
+  [[ -n $yes ]] && return 0
+  [[ -t 0 && -t 2 ]] || die 'confirmation needs a terminal. Use -y to continue without one.'
+  local answer
+  read -rp "$1 [y/N] " answer
+  [[ $answer == [yY] ]]
+}
+
+# Back up the list files, run the edit command "$@", build, and apply. Restore
+# the files when the edit or the build fails, or on Ctrl-C.
+apply_nix() {
+  local backup f
+  backup=$(mktemp -d)
+  cp "$packages_txt" "$brews_txt" "$casks_txt" "$backup/"
+  restore() {
+    for f in packages.txt brews.txt casks.txt; do cp "$backup/$f" "$repo/nix/$f"; done
+    rm -rf "$backup"
+  }
+  trap 'restore; printf "\nn: stopped. The Nix files are restored.\n" >&2; exit 130' INT TERM
+  if ! "$@"; then
+    restore
+    trap - INT TERM
+    die 'could not change the Nix files. They are restored.'
+  fi
+  if ! nix build "$flake#darwinConfigurations.mac.system" --out-link "$repo/.build/system"; then
+    restore
+    trap - INT TERM
+    die 'the build failed. The Nix files are restored.'
+  fi
+  trap - INT TERM
+  rm -rf "$backup"
+  "$repo/n" apply ||
+    die './n apply failed. The Nix files keep the change. Fix the problem, then run ./n apply.'
+}
+
+# --- Commands.
+
+cmd_add() {
+  local tool entry path failed='' seen=() bins=() nix_edits=() mise_specs=() planned=0
+  for tool in "$@"; do
+    contains "$tool" ${seen[@]+"${seen[@]}"} && continue
+    seen+=("$tool")
+    local declared
+    declared=$(find_declared "$tool")
+    if [[ -n $declared ]]; then
+      printf '%s: already in %s\n' "$tool" "$(cut -f 1 <<<"$declared" | head -n 1)"
+      continue
+    fi
+    if ! resolve "$tool"; then
+      warn "$tool: $r_reason"
+      print_candidates
+      failed=1
+      continue
+    fi
+    entry="$r_kind:$r_entry"
+    if contains "$entry" ${nix_edits[@]+"${nix_edits[@]}"} ${mise_specs[@]+"${mise_specs[@]}"}; then
+      printf '%s: same entry as an earlier argument (%s)\n' "$tool" "$r_spec"
+      continue
+    fi
+    # A tool can have another name in the config: rg is ripgrep, and
+    # tealdeer supplies tldr.
+    if [[ -z $force ]] && path=$(existing_command "$r_bin"); then
+      warn "$tool: '$r_bin' is already installed ($(command_origin "$path")). See ./n info $r_bin, or use --force to add it anyway."
+      failed=1
+      continue
+    fi
+    if contains "$r_bin" ${bins[@]+"${bins[@]}"}; then
+      warn "$tool: an earlier argument also supplies the command '$r_bin'. Add only one of them."
+      failed=1
+      continue
+    fi
+    bins+=("$r_bin")
+    if [[ $tool == "$r_spec" ]]; then
+      printf '%s -> %s\n' "$r_spec" "$(target_file "$r_kind")"
+    else
+      printf '%s: %s -> %s (%s)\n' "$tool" "$r_spec" "$(target_file "$r_kind")" "$r_reason"
+    fi
+    print_candidates
+    planned=$((planned + 1))
+    case $r_kind in
+    mise) mise_specs+=("$entry") ;;
+    *) nix_edits+=("$entry") ;;
+    esac
+  done
+  [[ -n $failed ]] && die 'nothing changed. Fix the errors above, then run the command again.'
+  ((planned > 0)) || return 0
+  [[ -z $dry_run ]] || { printf 'No change. Run the command without -n to add.\n' >&2; return 0; }
+  local what=tool
+  ((planned == 1)) || what="$planned tools"
+  confirm "Add the $what?" || die 'nothing changed.'
+
+  # Nix first: a failed build restores the Nix files, and mise is not changed yet.
+  if [[ ${#nix_edits[@]} -gt 0 ]]; then
+    edit_nix_add() {
+      local e
+      for e in "${nix_edits[@]}"; do
+        case $e in
+        nix:*) append_entry "$packages_txt" "${e#nix:}" || return 1 ;;
+        cask:*) append_entry "$casks_txt" "${e#cask:}" || return 1 ;;
+        formula:*) append_entry "$brews_txt" "${e#formula:}" || return 1 ;;
+        esac
+      done
+    }
+    apply_nix edit_nix_add
+  fi
+  # `mise use` writes "latest" when the spec has no version.
+  for entry in ${mise_specs[@]+"${mise_specs[@]}"}; do
+    mise_home use -g "${entry#mise:}" || die "mise could not add ${entry#mise:}. The tools before it in the list are added."
+  done
+}
+
+cmd_remove() {
+  local tool line file entry failed='' nix_edits=() mise_keys=() planned=0
+  for tool in "$@"; do
+    line=$(find_declared "$tool")
+    # A prefix selects the file.
+    local files='nix/packages.txt, nix/brews.txt, nix/casks.txt, or config/mise.toml' pattern=''
+    case $tool in
+    nix:*) files=nix/packages.txt pattern='^nix/packages' ;;
+    brew:*) files='nix/brews.txt or nix/casks.txt' pattern='^nix/(brews|casks)' ;;
+    cask:*) files=nix/casks.txt pattern='^nix/casks' ;;
+    *:*) files=config/mise.toml pattern='^config/mise' ;;
+    esac
+    [[ -z $pattern ]] || line=$(grep -E "$pattern" <<<"$line" || true)
+    if [[ -z $line ]]; then
+      warn "$tool: not in $files. See ./n info $tool."
+      failed=1
+      continue
+    fi
+    if [[ $(wc -l <<<"$line") -gt 1 ]]; then
+      warn "$tool: in more than one place: $(cut -f 1 <<<"$line" | paste -sd , -). Use a prefix (nix:, brew:, cask:, mise:), or remove it by hand."
+      failed=1
+      continue
+    fi
+    file=${line%%$'\t'*} entry=${line#*$'\t'}
+    case $file in
+    config/mise.toml) entry=mise:$entry ;;
+    nix/packages.txt) entry=nix:$entry ;;
+    nix/brews.txt) entry=formula:$entry ;;
+    nix/casks.txt) entry=cask:$entry ;;
+    esac
+    contains "$entry" ${nix_edits[@]+"${nix_edits[@]}"} ${mise_keys[@]+"${mise_keys[@]}"} && continue
+    printf '%s: remove %s from %s\n' "$tool" "${entry#*:}" "$file"
+    planned=$((planned + 1))
+    case $entry in
+    mise:*) mise_keys+=("$entry") ;;
+    *) nix_edits+=("$entry") ;;
+    esac
+  done
+  [[ -n $failed ]] && die 'nothing changed. Fix the errors above, then run the command again.'
+  [[ -z $dry_run ]] || { printf 'No change. Run the command without -n to remove.\n' >&2; return 0; }
+  confirm 'Remove?' || die 'nothing changed.'
+
+  if [[ ${#nix_edits[@]} -gt 0 ]]; then
+    edit_nix_remove() {
+      local e
+      for e in "${nix_edits[@]}"; do
+        case $e in
+        nix:*) delete_entry "$packages_txt" "${e#nix:}" || return 1 ;;
+        formula:*) delete_entry "$brews_txt" "${e#formula:}" || return 1 ;;
+        cask:*) delete_entry "$casks_txt" "${e#cask:}" || return 1 ;;
+        esac
+      done
+    }
+    apply_nix edit_nix_remove
+  fi
+  for entry in ${mise_keys[@]+"${mise_keys[@]}"}; do
+    mise_home unuse -g "${entry#mise:}" || die "mise could not remove ${entry#mise:}. The tools before it in the list are removed."
+  done
+}
+
+cmd_info() {
+  local tool line status=0 bin path found
+  for tool in "$@"; do
+    found=''
+    printf '%s\n' "$tool"
+    line=$(find_declared "$tool")
+    if [[ -n $line ]]; then
+      found=1
+      while IFS=$'\t' read -r file entry; do
+        printf '  %-9s %s (%s)\n' declared "$file" "$entry"
+      done <<<"$line"
+    else
+      printf '  %-9s %s\n' declared no
+    fi
+    if resolve "$tool"; then
+      printf '  %-9s %s (%s)\n' 'add picks' "$r_spec" "$r_reason"
+    else
+      printf '  %-9s none: %s\n' 'add picks' "$r_reason"
+    fi
+    bin=${r_bin:-${tool##*[:/]}}
+    if path=$(existing_command "$bin"); then
+      found=1
+      printf '  %-9s %s (%s)\n' command "$path" "$(command_origin "$path")"
+    fi
+    if [[ -n $c_app$c_cask$c_formula$c_nix$c_mise$c_npm$c_pypi$c_spec_out ]]; then
+      found=1
+      printf '  sources\n'
+      print_candidates
+    fi
+    [[ -n $found ]] || status=1
+  done
+  return "$status"
+}
+
+cmd_list() {
+  local src
+  for src in "$@"; do
+    case $src in nix | brew | mise) ;; *) die "'$src' is not a source. Use nix, brew, or mise." ;; esac
+  done
+  (($# > 0)) || set -- nix brew mise
+  for src in "$@"; do
+    case $src in
+    nix) list_names "$packages_txt" | awk '{ printf "nix   %s\n", $1 }' ;;
+    brew)
+      list_names "$brews_txt" | awk '{ printf "brew  %-36s formula\n", $1 }'
+      list_names "$casks_txt" | awk '{ printf "brew  %-36s cask\n", $1 }'
+      nix eval --json "$flake#darwinConfigurations.mac.config.homebrew.masApps" |
+        jq -r 'keys[] | "brew  \(.)" + (" " * ([36 - length, 0] | max)) + " app store"'
+      ;;
+    mise)
+      awk '
+        /^\[/ { on = ($0 == "[tools]"); next }
+        on && /^[^#[:space:]][^=]*=/ {
+          key = $0; sub(/[[:space:]]*=.*/, "", key); gsub(/"/, "", key)
+          v = $0; sub(/^[^=]*=[[:space:]]*/, "", v)
+          if (v ~ /^\{/) { if (match(v, /version = "[^"]*"/)) v = substr(v, RSTART + 11, RLENGTH - 12) }
+          gsub(/"/, "", v)
+          printf "mise  %-36s %s\n", key, v
+        }
+      ' "$mise_toml"
+      ;;
+    esac
+  done
+}
+
+cmd=${1:-}
+[[ -n $cmd ]] && shift
+dry_run='' yes='' force=''
+args=()
+while [[ $# -gt 0 ]]; do
+  case $1 in
+  -n | --dry-run) dry_run=1 ;;
+  -y | --yes) yes=1 ;;
+  -f | --force) force=1 ;;
+  -h | --help) usage; exit 0 ;;
+  --) shift; args+=("$@"); break ;;
+  -*) printf 'n: unknown option: %s. Use ./n %s --help.\n' "$1" "$cmd" >&2; exit 2 ;;
+  *) args+=("$1") ;;
+  esac
+  shift
+done
+
+case $cmd in
+add | remove | info | list) ;;
+-h | --help | '') usage; exit 0 ;;
+*) printf 'n: unknown command: %s. Use --help.\n' "$cmd" >&2; exit 2 ;;
+esac
+if [[ $cmd != list && ${#args[@]} -eq 0 ]]; then
+  printf 'Usage: ./n %s <tool>... Use ./n %s --help for examples.\n' "$cmd" "$cmd" >&2
+  exit 2
+fi
+have jq || die 'jq is not on PATH. Run ./n apply first.'
+
+case $cmd in
+add) cmd_add "${args[@]}" ;;
+remove) cmd_remove "${args[@]}" ;;
+info) cmd_info "${args[@]}" ;;
+list) cmd_list ${args[@]+"${args[@]}"} ;;
+esac

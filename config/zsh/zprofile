@@ -9,7 +9,7 @@ fi
 path=( ${path:#$HOME/.pi/agent/bin} )
 path=( ${path:#$HOME/.local/share/mise/shims} )
 
-# Nix owns global defaults. mise can override them inside a project.
+# Nix owns the global CLIs. mise owns the runtimes and overrides them inside a project.
 # DOTFILES_TOOL_PATH comes from nix/home.nix through hm-session-vars.sh.
 typeset -U path PATH
 path=( ${(s.:.)DOTFILES_TOOL_PATH} $path )

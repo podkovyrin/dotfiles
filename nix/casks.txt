@@ -1,0 +1,37 @@
+# Homebrew casks, one per line. `./n add` appends new ones at the end; move
+# them into a group if you like.
+
+ghostty
+sublime-text
+fork
+zed
+android-studio
+
+google-chrome
+helium-browser
+telegram
+slack
+zoom
+
+spotify
+the-unarchiver
+vlc
+macmediakeyforwarder
+sf-symbols
+db-browser-for-sqlite
+steermouse
+raycast
+google-drive
+notunes
+monitorcontrol
+1password
+chatgpt
+codexbar
+opencode-desktop
+orbstack
+omniwm
+karabiner-elements
+
+# Apple fonts are not in Nixpkgs.
+font-sf-mono
+font-sf-pro

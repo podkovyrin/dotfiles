@@ -1,72 +1,281 @@
 #!/bin/bash
-# Day-to-day nix-darwin commands. Use ./apply to set up a new Mac.
+# ./n: day-to-day commands for this Mac. It must work with the macOS Bash 3.2.
+# The tools come from three sources, and ./n uses the same three words everywhere:
+#   nix   nix/packages.txt (CLIs), nix/flake.lock (the Nixpkgs release)
+#   brew  nix/casks.txt, nix/brews.txt, masApps in nix/homebrew.nix
+#   mise  config/mise.toml (runtimes and fast-moving CLIs)
 set -euo pipefail
 
 repo=$(cd -- "$(dirname -- "$0")" && pwd -P)
 flake="path:$repo/nix"
 result="$repo/.build/system"
+lock="$repo/nix/flake.lock"
 
 usage() {
   printf '%s\n' \
-    'Usage: ./n <command>' \
+    'Usage: ./n <command> [options]' \
     '' \
-    '  switch            Build and activate the configuration.' \
-    '  build             Build only. Result in .build/system.' \
-    '  diff              Build, then show package changes against the active system.' \
-    '  update [input…]   Update flake inputs (all if none given), diff, confirm, switch.' \
-    '  changes           Show package changes from the previous generation to the active one.' \
-    '  brew              Update Homebrew, then upgrade the casks and App Store apps in the config.' \
-    '  tools             Install and upgrade the global mise tools (config/mise.toml).' \
-    '  rollback          Activate the previous system generation.' \
-    '  gc [age]          Delete generations older than age (default 14d), then unused store paths.'
+    'Daily:' \
+    '  apply [-n]                  Apply the config: Nix, Homebrew, and mise.' \
+    '                              -n builds and shows the changes, and changes nothing.' \
+    '  upgrade [-n] [-y] [source]  Get new releases. Shows one plan, asks once, then applies.' \
+    '                              source: nix, brew, mise, or a flake input (nixpkgs).' \
+    '                              Without a source, all three.' \
+    '  add [-n] [-y] <tool>...     Select the source for a tool, add it, and apply.' \
+    '  remove [-n] [-y] <tool>...  Remove a tool from the config that declares it, and apply.' \
+    '  info <tool>...              Where a tool is declared, its command, and its sources.' \
+    '  list [nix|brew|mise]        The declared tools.' \
+    '' \
+    'Recovery:' \
+    '  history                     The package changes of the last apply.' \
+    '  rollback                    Go back to the previous Nix generation.' \
+    '                              Homebrew and mise do not roll back.' \
+    '  clean [-n] [-y] [age]       Delete Nix generations older than age (default 14d),' \
+    '                              old Homebrew downloads, and unused mise versions.' \
+    '' \
+    'New Mac: see README.md.' \
+    '' \
+    'Examples:' \
+    '  ./n add lazygit             Nix, mise, or Homebrew: ./n add selects one' \
+    '  ./n add npm:cowsay          A prefix selects the source (./n add --help)' \
+    '  ./n upgrade -n              Show what is outdated' \
+    '  ./n upgrade mise            Upgrade only the mise tools'
+}
+
+die() { printf 'n: %s\n' "$*" >&2; exit 1; }
+usage_error() { printf 'n: %s Use ./n --help.\n' "$*" >&2; exit 2; }
+
+# Run mise from $HOME, so that only the global config and settings apply.
+mise_home() { (cd "$HOME" && mise "$@"); }
+
+confirm() {
+  [[ -n $yes ]] && return 0
+  [[ -t 0 && -t 2 ]] || die 'confirmation needs a terminal. Use -y to continue without one.'
+  local answer
+  read -rp "$1 [y/N] " answer
+  [[ $answer == [yY] ]]
 }
 
 build() { nix build "$flake#darwinConfigurations.mac.system" --out-link "$result"; }
 switch() { sudo darwin-rebuild switch --flake "$flake#mac"; }
-diff() { build && nix store diff-closures /run/current-system "$result"; }
+mise_install() { mise_home install; }
+
+# Show what `brew bundle cleanup` removes for the built Brewfile.
+preview_brew_cleanup() {
+  local brewfile="$repo/.build/Brewfile" output status=0
+  [[ -x /opt/homebrew/bin/brew ]] || return 0
+  # Use the candidate Brewfile, not the active HOMEBREW_BUNDLE_FILE.
+  nix eval --raw "$flake#darwinConfigurations.mac.config.homebrew.brewfile" >"$brewfile"
+  # Without redirected input, Homebrew can prompt and then do the cleanup.
+  output=$(HOMEBREW_NO_AUTO_UPDATE=1 /opt/homebrew/bin/brew bundle cleanup \
+    --file="$brewfile" </dev/null) || status=$?
+  # Exit 1 also reports real errors. Accept it only after a complete cleanup report.
+  # shellcheck disable=SC2016 # Literal Homebrew output.
+  local report_end='Run `brew bundle cleanup --force` to make these changes.'
+  if [[ "${output##*$'\n'}" == "$report_end" ]]; then
+    # The suggested command would use the active Brewfile, not the candidate.
+    output=${output%"$report_end"}
+    if ((status == 1)); then status=0; fi
+  fi
+  [[ -z "$output" ]] || printf 'Homebrew removes:\n%s\n' "${output%$'\n'}"
+  ((status == 0)) || die "the Homebrew cleanup preview failed with exit code $status."
+}
+
+cmd_apply() {
+  (($# == 0)) || usage_error "apply takes no arguments."
+  if [[ -n $dry_run ]]; then
+    build
+    printf 'Nix package changes:\n'
+    nix store diff-closures /run/current-system "$result"
+    preview_brew_cleanup
+    mise_home install --dry-run
+    printf 'No change. Run ./n apply to apply.\n' >&2
+    return
+  fi
+  switch
+  mise_install
+}
+
+# --- upgrade
+
+flake_inputs() { jq -r '.nodes.root.inputs | keys[]' "$lock"; }
+
+# Prints one plan line per flake input that changed between lock files $1 and $2.
+lock_changes() {
+  jq -r --slurpfile old "$1" '
+    def info($n): ($n.locked // {}) | [(.lastModified // 0 | strftime("%Y-%m-%d")), ((.rev // "")[0:7])] | join(" ");
+    .nodes as $new | .nodes.root.inputs | to_entries[]
+    | select(.value | type == "string") | .value as $k
+    | select(($old[0].nodes[$k].locked // {}) != ($new[$k].locked // {}))
+    | [.key, info($old[0].nodes[$k]), info($new[$k])] | @tsv
+  ' "$2"
+}
+
+lock_backup=''
+restore_lock() {
+  [[ -n $lock_backup ]] || return 0
+  cp "$lock_backup" "$lock"
+  rm -f "$lock_backup"
+  lock_backup=''
+}
+
+# The names in list files: the first word of each line, without comments.
+read_list() { awk '{ sub(/#.*/, "") } NF { print $1 }' "$@"; }
+
+plan_row() { printf '  %-5s %-36s %-22s -> %s\n' "$@"; }
+
+cmd_upgrade() {
+  local a out up_nix='' up_brew='' up_mise='' all_inputs='' inputs=() nix_rows='' brew_rows='' mise_rows=''
+  for a in "$@"; do
+    case $a in
+    nix) up_nix=1 all_inputs=1 ;;
+    brew) up_brew=1 ;;
+    mise) up_mise=1 ;;
+    *)
+      flake_inputs | grep -qx -- "$a" ||
+        usage_error "'$a' is not a source or a flake input. Use nix, brew, mise, or: $(flake_inputs | paste -sd ' ' -)."
+      up_nix=1 inputs+=("$a")
+      ;;
+    esac
+  done
+  [[ -n $up_nix$up_brew$up_mise ]] || up_nix=1 up_brew=1 up_mise=1
+  # `nix` means all inputs, also with an input name: upgrade nix nixpkgs.
+  [[ -z $all_inputs ]] || inputs=()
+
+  if [[ -n $up_nix ]]; then
+    printf 'Checking Nix...\n' >&2
+    lock_backup=$(mktemp)
+    cp "$lock" "$lock_backup"
+    trap restore_lock EXIT
+    out=$(nix flake update ${inputs[@]+"${inputs[@]}"} --flake "$flake" 2>&1) ||
+      { printf '%s\n' "$out" >&2; die 'nix flake update failed. nix/flake.lock is restored.'; }
+    nix_rows=$(lock_changes "$lock_backup" "$lock")
+    [[ -n $nix_rows ]] || restore_lock
+  fi
+  if [[ -n $up_brew ]]; then
+    printf 'Checking Homebrew...\n' >&2
+    out=$(brew update --quiet 2>&1) || { printf '%s\n' "$out" >&2; die 'brew update failed.'; }
+    # Only the declared formulae and casks: brew bundle does not upgrade the
+    # others (for example dependencies, or formulae installed by hand).
+    brew_rows=$(HOMEBREW_NO_AUTO_UPDATE=1 brew outdated --json=v2 |
+      jq -r --rawfile declared <(read_list "$repo/nix/brews.txt" "$repo/nix/casks.txt") '
+        ($declared | split("\n")) as $names
+        | (.formulae[], .casks[]) | select(.name as $n | $names | index($n))
+        | [.name, (.installed_versions | join(" ")), .current_version] | @tsv')
+  fi
+  if [[ -n $up_mise ]]; then
+    printf 'Checking mise...\n' >&2
+    mise_rows=$(mise_home outdated --json | jq -r 'to_entries[] | [.key, .value.current, .value.latest] | @tsv')
+  fi
+
+  if [[ -z $nix_rows$brew_rows$mise_rows ]]; then
+    printf 'Everything is up to date.\n'
+    return
+  fi
+  local src rows name from to
+  for src in nix brew mise; do
+    case $src in nix) rows=$nix_rows ;; brew) rows=$brew_rows ;; mise) rows=$mise_rows ;; esac
+    [[ -n $rows ]] || continue
+    while IFS=$'\t' read -r name from to; do plan_row "$src" "$name" "$from" "$to"; done <<<"$rows"
+  done
+  if [[ -n $nix_rows ]]; then
+    build
+    printf '\nNix package changes:\n'
+    nix store diff-closures /run/current-system "$result"
+  fi
+  if [[ -n $dry_run ]]; then
+    restore_lock
+    printf 'No change. Run ./n upgrade to apply.\n' >&2
+    return
+  fi
+  confirm 'Upgrade?' || { restore_lock; die 'nothing changed.'; }
+
+  if [[ -n $nix_rows ]]; then
+    switch || { restore_lock; die 'the switch failed. nix/flake.lock is restored.'; }
+    rm -f "$lock_backup"
+    lock_backup=''
+  fi
+  if [[ -n $brew_rows ]]; then
+    # Read the Brewfile from the flake, so it matches the config.
+    nix eval --raw "$flake#darwinConfigurations.mac.config.homebrew.brewfile" |
+      HOMEBREW_NO_INSTALL_CLEANUP=1 brew bundle install --file=-
+  fi
+  [[ -z $mise_rows ]] || mise_home upgrade
+  [[ -z $nix_rows ]] || printf 'Commit nix/flake.lock to keep the upgrade.\n' >&2
+}
+
+# --- recovery
 
 # Compare the active generation with the one before it.
-changes() {
+cmd_history() {
+  (($# == 0)) || usage_error "history takes no arguments."
   local profiles=/nix/var/nix/profiles current prev
   current=$(readlink "$profiles/system")
-  prev="$profiles/system-$(( ${current//[!0-9]/} - 1 ))-link"
-  if [[ ! -e $prev ]]; then
-    echo 'No previous generation found.' >&2
-    exit 1
-  fi
+  prev="$profiles/system-$((${current//[!0-9]/} - 1))-link"
+  [[ -e $prev ]] || die 'there is no previous generation.'
   echo "${prev##*/} -> $current"
   nix store diff-closures "$prev" "$profiles/$current"
 }
 
-# Read the Brewfile from the flake, so it matches the config even before a switch.
-brew_upgrade() {
-  local brewfile
-  brewfile=$(nix eval --raw "$flake#darwinConfigurations.mac.config.homebrew.brewfile")
-  brew update
-  HOMEBREW_NO_INSTALL_CLEANUP=1 brew bundle install --file=- <<<"$brewfile"
+cmd_rollback() {
+  (($# == 0)) || usage_error "rollback takes no arguments."
+  sudo darwin-rebuild switch --rollback
 }
 
-# Run from $HOME, so mise reads only the global config.
-tools() { (cd "$HOME" && mise install && mise upgrade); }
-
-update() {
-  nix flake update "$@" --flake "$flake"
-  git -C "$repo" --no-pager diff --stat -- nix/flake.lock
-  diff
-  read -rp 'Switch to this configuration? [y/N] ' answer
-  if [[ $answer == [yY] ]]; then switch; else echo 'Not switched. Revert with: git restore nix/flake.lock'; fi
+cmd_clean() {
+  (($# <= 1)) || usage_error "clean takes one age, for example 30d."
+  local age=${1:-14d}
+  [[ $age =~ ^[0-9]+d$ ]] || usage_error "'$age' is not an age. Use days, for example 30d."
+  if [[ -n $dry_run ]]; then
+    sudo nix-collect-garbage --delete-older-than "$age" --dry-run
+    brew cleanup --dry-run
+    mise_home prune --dry-run
+    printf 'No change. Run ./n clean to delete.\n' >&2
+    return
+  fi
+  confirm "Delete Nix generations older than $age, old Homebrew downloads, and unused mise versions?" ||
+    die 'nothing changed.'
+  sudo nix-collect-garbage --delete-older-than "$age"
+  brew cleanup
+  mise_home prune --yes
 }
 
-case "${1:-}" in
-  switch) switch ;;
-  build) build ;;
-  diff) diff ;;
-  update) shift; update "$@" ;;
-  changes) changes ;;
-  brew) brew_upgrade ;;
-  tools) tools ;;
-  rollback) sudo darwin-rebuild switch --rollback ;;
-  gc) sudo nix-collect-garbage --delete-older-than "${2:-14d}" ;;
-  -h | --help | '') usage ;;
-  *) printf 'Unknown command: %s. Use --help.\n' "$1" >&2; exit 2 ;;
+# --- main
+
+cmd=${1:-}
+[[ -n $cmd ]] && shift
+
+case $cmd in
+add | remove | info | list) exec "$repo/scripts/n-pkg" "$cmd" "$@" ;;
+-h | --help | help | '') usage; exit 0 ;;
+apply | upgrade | history | rollback | clean) ;;
+switch) usage_error "'switch' is now 'apply'." ;;
+build | diff) usage_error "'$cmd' is now 'apply -n'." ;;
+update) usage_error "'update' is now 'upgrade nix' (or 'upgrade <input>')." ;;
+brew) usage_error "'brew' is now 'upgrade brew'." ;;
+tools) usage_error "'tools' is now 'upgrade mise'." ;;
+changes) usage_error "'changes' is now 'history'." ;;
+where) usage_error "'where' is now 'info'." ;;
+gc) usage_error "'gc' is now 'clean'." ;;
+*) usage_error "unknown command: $cmd." ;;
 esac
+
+dry_run='' yes=''
+args=()
+while [[ $# -gt 0 ]]; do
+  case $1 in
+  -n | --dry-run) dry_run=1 ;;
+  -y | --yes) yes=1 ;;
+  -h | --help) usage; exit 0 ;;
+  --) shift; args+=("$@"); break ;;
+  -*) usage_error "unknown option: $1." ;;
+  *) args+=("$1") ;;
+  esac
+  shift
+done
+case $cmd in
+history | rollback) [[ -z $dry_run$yes ]] || usage_error "$cmd takes no options." ;;
+apply) [[ -z $yes ]] || usage_error "apply does not ask, so it takes no -y." ;;
+esac
+
+"cmd_$cmd" ${args[@]+"${args[@]}"}

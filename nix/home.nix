@@ -19,7 +19,8 @@ in
   home.sessionVariables = {
     EDITOR = "nvim";
     VISUAL = "nvim";
-    JAVA_HOME = pkgs.jdk17.home;
+    # A Nix dev shell or a project mise.toml with java replaces it in the project.
+    JAVA_HOME = pkgs.zulu17.home;
     ANDROID_HOME = androidHome;
 
     # Global tool directories, in priority order. config/zsh/zprofile puts them

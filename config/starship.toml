@@ -26,7 +26,6 @@ disabled = true
 disabled = true
 
 [gcloud]
-symbol = "󱇶 "
 disabled = true
 
 [status]
@@ -600,4 +599,3 @@ Uos = " "
 Void = " "
 Windows = "󰍲 "
 Zorin = " "
-

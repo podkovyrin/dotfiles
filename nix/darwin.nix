@@ -10,9 +10,10 @@ let
   hmVariables = config.home-manager.users.${user.name}.home.sessionVariables;
 
   # GUI processes do not read the shell profile. Give them the same tools and SDKs.
+  # They do not run `mise activate`, so the mise shims supply the global runtimes.
   guiEnvironment = {
     inherit (hmVariables) JAVA_HOME ANDROID_HOME;
-    PATH = "${hmVariables.DOTFILES_TOOL_PATH}:/usr/bin:/bin:/usr/sbin:/sbin";
+    PATH = "${hmVariables.DOTFILES_TOOL_PATH}:${user.home}/.local/share/mise/shims:/usr/bin:/bin:/usr/sbin:/sbin";
   };
 in
 {
@@ -52,9 +53,6 @@ in
     };
     optimise.automatic = true;
   };
-
-  nixpkgs.config.allowUnfreePredicate =
-    package: lib.elem (lib.getName package) [ "google-cloud-sdk" ];
 
   # Zim runs compinit and Starship draws the prompt. /etc/zshrc keeps only the
   # Nix completion paths in fpath.
