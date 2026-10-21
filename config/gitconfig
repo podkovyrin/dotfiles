@@ -13,7 +13,6 @@
 	summary = true
 	verbosity = 1
 	tool = nvimdiff
-	conflictStyle = zdiff3
 [rebase]
 	updateRefs = true
 [push]
