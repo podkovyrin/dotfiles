@@ -15,6 +15,10 @@
   # nix/home.nix sets it.
   dotkit.guiVariables = [ "ANDROID_HOME" ];
 
+  # My lists are the complete set: an apply uninstalls what they do not have.
+  # The dotkit default keeps everything that was installed by hand.
+  homebrew.onActivation.cleanup = "uninstall";
+
   homebrew.masApps = {
     Keynote = 361285480;
     Numbers = 409203825;
