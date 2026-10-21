@@ -1,7 +1,6 @@
-# Homebrew casks, one per line. `./n add` appends new ones at the end; move
-# them into a group if you like.
+# Homebrew casks, one per line, after the dotkit base list (Ghostty).
+# `dotkit add` appends new ones at the end; move them into a group if you like.
 
-ghostty
 sublime-text
 fork
 zed

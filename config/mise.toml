@@ -1,18 +1,8 @@
-# Global runtimes and fast-moving CLIs. Stable CLIs and tools that link C
-# libraries belong in nix/packages.txt. Update with `./n upgrade mise`.
-# Projects pin their own versions in a project mise.toml.
+# My global fast-moving CLIs, linked to ~/.config/mise/config.toml. The dotkit
+# base (~/.config/mise/conf.d/dotkit.toml) has the runtimes (Node, Python,
+# Ruby), uv, herdr, and the settings: new releases wait 7 days. Stable CLIs
+# and tools that link C libraries belong in nix/packages.txt. Update with
+# `dotkit upgrade mise`. Projects pin their own versions in a project mise.toml.
 [tools]
-# Global default runtimes. Projects override them.
-node = "24"
-python = "3.14"
-ruby = "3.4"
-
-uv = { version = "latest", minimum_release_age = "1d" }
-"github:herdrdev/herdr" = { version = "latest", minimum_release_age = "1d" }
 "github:modem-dev/hunk" = { version = "latest", minimum_release_age = "1d" }
 "npm:@earendil-works/pi-coding-agent" = { version = "latest", minimum_release_age = "1d" }
-
-[settings]
-minimum_release_age = "7d"
-# Read rust-toolchain.toml, so Rust projects need no extra mise config.
-idiomatic_version_file_enable_tools = ["rust"]

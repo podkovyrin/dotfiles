@@ -2,27 +2,27 @@
 // "nix: flake check" task does not work here.
 [
     {
-        "label": "dotfiles: build",
-        "command": "./n",
-        "args": ["build"],
+        "label": "dotfiles: apply -n",
+        "command": "./dotkit",
+        "args": ["apply", "-n"],
         "cwd": "$ZED_WORKTREE_ROOT",
     },
     {
-        "label": "dotfiles: diff",
-        "command": "./n",
-        "args": ["diff"],
+        "label": "dotfiles: apply",
+        "command": "./dotkit",
+        "args": ["apply"],
         "cwd": "$ZED_WORKTREE_ROOT",
     },
     {
-        "label": "dotfiles: switch",
-        "command": "./n",
-        "args": ["switch"],
+        "label": "dotfiles: upgrade -n",
+        "command": "./dotkit",
+        "args": ["upgrade", "-n"],
         "cwd": "$ZED_WORKTREE_ROOT",
     },
     {
         "label": "dotfiles: flake check",
         "command": "nix",
-        "args": ["flake", "check", "./nix"],
+        "args": ["flake", "check", "path:./nix"],
         "cwd": "$ZED_WORKTREE_ROOT",
     },
 ]

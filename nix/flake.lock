@@ -1,8 +1,35 @@
 {
   "nodes": {
+    "dotkit": {
+      "inputs": {
+        "home-manager": "home-manager",
+        "nix-darwin": "nix-darwin",
+        "nixpkgs": "nixpkgs",
+        "zsh-abbr": "zsh-abbr",
+        "zsh-autosuggestions": "zsh-autosuggestions",
+        "zsh-autosuggestions-abbreviations-strategy": "zsh-autosuggestions-abbreviations-strategy",
+        "zsh-completions": "zsh-completions",
+        "zsh-history-substring-search": "zsh-history-substring-search",
+        "zsh-syntax-highlighting": "zsh-syntax-highlighting"
+      },
+      "locked": {
+        "lastModified": 1792597434,
+        "narHash": "sha256-Wio8cwApbb2qKLrgDod0I044aFQn3GW4AfHNR2cqeLw=",
+        "ref": "refs/heads/main",
+        "rev": "2bceb409204017ddb7775bc5a02d3467e288994f",
+        "revCount": 1,
+        "type": "git",
+        "url": "file:///Users/andrei/.dotkit"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:///Users/andrei/.dotkit"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
+          "dotkit",
           "nixpkgs"
         ]
       },
@@ -24,6 +51,7 @@
     "nix-darwin": {
       "inputs": {
         "nixpkgs": [
+          "dotkit",
           "nixpkgs"
         ]
       },
@@ -60,15 +88,11 @@
     },
     "root": {
       "inputs": {
-        "home-manager": "home-manager",
-        "nix-darwin": "nix-darwin",
-        "nixpkgs": "nixpkgs",
-        "zsh-abbr": "zsh-abbr",
-        "zsh-autosuggestions": "zsh-autosuggestions",
-        "zsh-autosuggestions-abbreviations-strategy": "zsh-autosuggestions-abbreviations-strategy",
-        "zsh-completions": "zsh-completions",
-        "zsh-history-substring-search": "zsh-history-substring-search",
-        "zsh-syntax-highlighting": "zsh-syntax-highlighting"
+        "dotkit": "dotkit",
+        "nixpkgs": [
+          "dotkit",
+          "nixpkgs"
+        ]
       }
     },
     "zsh-abbr": {

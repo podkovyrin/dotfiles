@@ -1,0 +1,25 @@
+#!/bin/bash
+# ./dotkit: runs the dotkit command of dotkit for this repository. dotkit also puts
+# `dotkit` on PATH, so it works from any directory; this file works before the
+# first apply too. `dotkit --help` lists the commands. DOTKIT_DIR selects a
+# dotkit checkout instead of the release in nix/flake.lock.
+set -euo pipefail
+
+repo=$(cd -- "$(dirname -- "$0")" && pwd -P)
+
+if [[ -n ${DOTKIT_DIR:-} ]]; then
+  dotkit=$DOTKIT_DIR
+  [[ -x $dotkit/dotkit ]] || {
+    printf 'dotkit: DOTKIT_DIR is %s, which is not a dotkit checkout. Set it to your checkout, or unset it.\n' "$DOTKIT_DIR" >&2
+    exit 1
+  }
+elif [[ -x $HOME/.local/share/dotkit/dotkit ]]; then
+  # The dotkit of the active configuration.
+  dotkit=$HOME/.local/share/dotkit
+else
+  # Not applied yet: the dotkit release in nix/flake.lock.
+  dotkit=$(nix eval --raw --impure --expr "(builtins.getFlake \"path:$repo/nix\").inputs.dotkit.outPath")
+fi
+[[ -x $dotkit/dotkit ]] || { printf 'dotkit: %s/dotkit is missing.\n' "$dotkit" >&2; exit 1; }
+
+DOTFILES=$repo exec "$dotkit/dotkit" "$@"

@@ -1,4 +1,5 @@
-# Homebrew formulae, one per line: only tools that Nix and mise cannot supply
-# well (`./n add` selects the source and appends new ones at the end).
+# Homebrew formulae, one per line, after the dotkit base list: only tools that
+# Nix and mise cannot supply well (`dotkit add` selects the source and appends
+# new ones at the end).
 
 mole

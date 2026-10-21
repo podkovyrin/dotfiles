@@ -1,5 +1,5 @@
 /.build/
-# A `nix build` without --out-link links its output here. ./n uses .build/.
+# A `nix build` without --out-link links its output here. dotkit uses .build/.
 /result
 /result-*
 /nix/result

@@ -1,20 +1,12 @@
-if [[ -x /opt/homebrew/bin/brew ]]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
+# My login shell lines, linked to ~/.zprofile.local. The dotkit zprofile
+# sources this file before it puts the global tool directories first in PATH.
 
 [[ -r "$HOME/.orbstack/shell/init.zsh" ]] && source "$HOME/.orbstack/shell/init.zsh"
 [[ -r "$HOME/.secrets" ]] && source "$HOME/.secrets"
 
-# Drop launcher directories that would shadow the Nix tools.
+# Drop the Pi launcher directory, which would shadow the mise tools.
 path=( ${path:#$HOME/.pi/agent/bin} )
-path=( ${path:#$HOME/.local/share/mise/shims} )
 
-# Nix owns the global CLIs. mise owns the runtimes and overrides them inside a project.
-# DOTFILES_TOOL_PATH comes from nix/home.nix through hm-session-vars.sh.
-typeset -U path PATH
-path=( ${(s.:.)DOTFILES_TOOL_PATH} $path )
-
-# Non-interactive login shells do not read .zshrc.
-if [[ ! -o interactive ]] && (( $+commands[mise] )); then
-  eval "$(mise activate zsh)"
-fi
+# dotkit uses this dotkit checkout instead of the release in nix/flake.lock.
+# nix/home.nix links the base config files to it too (dotkit.liveDir).
+export DOTKIT_DIR=$HOME/.dotkit

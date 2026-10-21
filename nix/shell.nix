@@ -1,20 +1,9 @@
-# My settings for the zsh setup in nix/modules/zsh. The rest of my zsh
-# config is in config/zsh/zshrc, which needs no rebuild.
+# My settings for the zsh setup of dotkit (nix/modules/zsh in dotkit). The
+# rest of my zsh config is in config/zsh/zshrc, which needs no rebuild.
 {
-  imports = [ ./modules/zsh ];
-
-  dotfiles.zsh = {
-    enable = true;
+  dotkit.zsh = {
     keymap = "vi";
     title = "%~";
-
-    integrations = {
-      fzf.enable = true;
-      zoxide.enable = true;
-      starship.enable = true;
-      mise.enable = true;
-      direnv.enable = true;
-    };
 
     # Expanded with Space or Enter. The name can have several words.
     abbreviations = {

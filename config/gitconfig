@@ -1,23 +1,14 @@
+# My Git settings. Git reads the dotkit base (~/.config/git/config) first, so
+# these win. The base has the output settings, Git LFS, and ~/.gitconfig.user.
 [core]
 	autocrlf = false
 	editor = nvim
-	excludesfile = ~/.gitignore
-	fsmonitor = true
-	untrackedCache = true
 	pager = hunk pager
-[init]
-	defaultBranch = main
 [commit]
 	gpgsign = true
 [diff]
 	# Prefixes are (i)ndex, (w)ork tree, (c)ommit, and (o)bject, not a/b.
 	mnemonicPrefix = true
-	algorithm = histogram
-	colorMoved = plain
-	renames = true
-[branch]
-	autosetupmerge = true
-	sort = -committerdate
 [merge]
 	summary = true
 	verbosity = 1
@@ -25,54 +16,23 @@
 	conflictStyle = zdiff3
 [rebase]
 	updateRefs = true
-[rerere]
-	enabled = true
-	autoupdate = true
-[fetch]
-	prune = true
-	pruneTags = true
-	all = true
-[pull]
-	ff = only
-	rebase = true
 [push]
+	# Push to the upstream branch, also when its name differs.
 	default = upstream
-	autoSetupRemote = true
-	followTags = true
 [apply]
 	whitespace = nowarn
-[help]
-	autocorrect = prompt
-[alias]
-	unstage = reset HEAD
-	uncommit = reset --soft HEAD^
-	mop = !git clean -df && git reset --hard
-	nuke = !git submodule deinit -f --all && git clean -ffdx && git reset --hard && git submodule sync --recursive && git submodule update --init --recursive --force && git submodule foreach --recursive 'git reset --hard && git clean -ffdx'
-	bclean = "!f() { git branch --merged | grep  -v '\\*\\|master\\|develop\\|main\\|dev' | xargs -n 1 git branch -d; }; f"
-	subs = submodule update --init --recursive
-	changelog = "!f() { git log $1..HEAD --pretty=\"format:%s%n%b\" | grep changelog: | /usr/bin/sed -e \"s/^.*changelog\\://\" | awk \"{\\$1=\\$1};1\"; }; f"
-	chores = !git fetch --prune && git remote prune origin && git reflog expire --expire=now --all && git gc --prune=now --aggressive && git fsck --full && git submodule foreach \"git fetch --prune && git remote prune origin && git reflog expire --expire=now --all && git gc --prune=now --aggressive && git fsck --full\"
 [format]
 	pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset
 [advice]
 	statusHints = false
-[include]
-	path = .gitconfig.user
 [mergetool]
 	prompt = false
 	keepBackup = false
-[filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
 # Removes the per-machine fields that Pi writes. Only repositories whose
 # .gitattributes uses this filter run it, for example ~/.dotfiles.
 [filter "pi-settings"]
 	clean = jq --indent 2 'del(.deviceId, .trackingId, .lastChangelogVersion)'
 	required = true
-[color]
-	ui = true
 [color "branch"]
 	current = yellow reverse
 	local = yellow

@@ -1,61 +1,12 @@
-# The shared setup from nix/modules/zsh: options, completion, key bindings,
-# plugins, and the tool hooks. nix/shell.nix has its settings and the
-# abbreviations. Put fpath entries before this block, so that compinit sees them.
-if [[ -r ~/.config/zsh/framework/init.zsh ]]; then
-  source ~/.config/zsh/framework/init.zsh
-else
-  print -ru2 -- 'zshrc: ~/.config/zsh/framework is missing. Run ./n apply in ~/.dotfiles.'
-  autoload -Uz compinit && compinit
-fi
-
-setopt HIST_IGNORE_ALL_DUPS
-setopt CORRECT
-
-# Guard against broken TTY input flags (Enter shows as ^M when icrnl is off).
-# Some programs can leave the terminal in this state for the current session.
-fix_tty_enter_key() {
-  [[ -t 0 ]] || return
-  stty icrnl -inlcr -igncr 2>/dev/null
-}
-(( ${precmd_functions[(Ie)fix_tty_enter_key]} )) || precmd_functions+=(fix_tty_enter_key)
-fix_tty_enter_key
+# My zsh lines, linked to ~/.zshrc.local. The dotkit zshrc sources this file
+# at the end, after the plugins and the base aliases (ls, diff, grep).
 
 # Word motions stop at a path separator.
 WORDCHARS=${WORDCHARS//[\/]}
 
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=243,underline"
-
-[[ -r ~/.config/herdr/process-name.zsh ]] && source ~/.config/herdr/process-name.zsh
-
-# pnpm completion, from `pnpm completion zsh`. There is no global pnpm: each
-# project supplies one (mise or a Nix dev shell). The function asks the pnpm on
-# PATH at completion time, so it works with every project release. When pnpm
-# has no values (for example after `pnpm add ./`), complete file names.
-_pnpm_completion() {
-  (( ${+commands[pnpm]} )) || return 1
-  local -a reply
-  reply=("${(@f)$(COMP_CWORD=$((CURRENT-1)) COMP_LINE="$BUFFER" COMP_POINT="$CURSOR" SHELL=zsh pnpm completion-server -- "${words[@]}" 2>/dev/null)}")
-  reply=( ${reply:#} )
-  if (( ! $#reply )) || [[ ${reply[1]} == __tabtab_complete_files__ ]]; then
-    _files
-  else
-    _describe 'values' reply
-  fi
-}
-compdef _pnpm_completion pnpm pn
-
-ls() { command -v eza &> /dev/null && eza "$@" || command ls -G "$@"; }
 o() { [[ $# -gt 0 ]] && command open "$@" || command open .; }
 s() { [[ $# -gt 0 ]] && subl "$@" || subl .; }
 batrg() { bat "$1" | rg --color=always -C5 "$2" }
 
-alias diff='diff --color=auto'
-alias grep='grep --color=auto'
 (( ${+functions[z]} )) && alias cd='z'
 alias v="nvim"
-
-# VSCode workaround
-if [[ "$TERM_PROGRAM" == "vscode" ]]; then
-  . "$(code --locate-shell-integration-path zsh)"
-fi
