@@ -43,4 +43,16 @@ Session.vim
 
 .npmrc
 
+# Local files of coding agents and tools, as in the dotkit base
+# (config/gitignore there). Do not ignore .claude/, .cursor/, or AGENTS.md:
+# teams commit them.
+**/.claude/settings.local.json
 .claude/*.local.json
+.claude/worktrees/
+CLAUDE.local.md
+.aider*
+# nix-direnv keeps its cache here.
+.direnv/
+mise.local.toml
+mise.*.local.toml
+.mise.local.toml
