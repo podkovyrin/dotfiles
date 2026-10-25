@@ -2,7 +2,6 @@
 # sources this file before it puts the global tool directories first in PATH.
 
 [[ -r "$HOME/.orbstack/shell/init.zsh" ]] && source "$HOME/.orbstack/shell/init.zsh"
-[[ -r "$HOME/.secrets" ]] && source "$HOME/.secrets"
 
 # Drop the Pi launcher directory, which would shadow the mise tools.
 path=( ${path:#$HOME/.pi/agent/bin} )
