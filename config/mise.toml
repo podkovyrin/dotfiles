@@ -4,5 +4,6 @@
 # and tools that link C libraries belong in nix/packages.txt. Update with
 # `dotkit upgrade mise`. Projects pin their own versions in a project mise.toml.
 [tools]
+claude-code = "latest"
 "github:modem-dev/hunk" = { version = "latest", minimum_release_age = "1d" }
 "npm:@earendil-works/pi-coding-agent" = { version = "latest", minimum_release_age = "1d" }

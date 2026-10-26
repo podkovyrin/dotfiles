@@ -34,3 +34,4 @@ karabiner-elements
 # Apple fonts are not in Nixpkgs.
 font-sf-mono
 font-sf-pro
+claude

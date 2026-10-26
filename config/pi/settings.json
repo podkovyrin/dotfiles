@@ -1,6 +1,6 @@
 {
-  "defaultProvider": "openrouter",
-  "defaultModel": "anthropic/claude-opus-5.5",
+  "defaultProvider": "claude-bridge",
+  "defaultModel": "claude-opus-5-5",
   "defaultThinkingLevel": "medium",
   "theme": "light",
   "compaction": {
@@ -17,7 +17,8 @@
     "git:github.com/podkovyrin/pi-herdr-side",
     "npm:pi-open-tui",
     "npm:pi-browser-use",
-    "npm:pi-subagent-manager"
+    "npm:pi-subagent-manager",
+    "npm:pi-claude-bridge"
   ],
   "pi-browser-use": {
     "mode": "existing",
@@ -30,8 +31,8 @@
   "enableInstallTelemetry": false,
   "defaultProjectTrust": "ask",
   "enabledModels": [
-    "openrouter/anthropic/claude-opus-5.5",
     "openai/gpt-6.1-sol",
-    "openai/gpt-6-astra"
+    "openai/gpt-6-astra",
+    "claude-bridge/claude-opus-5-5"
   ]
 }

@@ -34,6 +34,7 @@
     ".pi/agent/extensions" = "config/pi/extensions";
     ".pi/agent/settings.json" = "config/pi/settings.json";
     ".pi/agent/cloak.json" = "config/pi/cloak.json";
+    ".pi/agent/claude-bridge.json" = "config/pi/claude-bridge.json";
     ".pi/agent/open-tui.json" = "config/pi/open-tui.json";
   };
 
