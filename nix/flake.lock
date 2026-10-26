@@ -13,11 +13,11 @@
         "zsh-syntax-highlighting": "zsh-syntax-highlighting"
       },
       "locked": {
-        "lastModified": 1792662180,
-        "narHash": "sha256-1XwnO2Xce7+3+K4359SgepSpfQqlnH0T4KgPmv59KfQ=",
-        "ref": "refs/heads/main",
-        "rev": "475dcbcd3a1df9bb04daf1a9d8905fd386031213",
-        "revCount": 8,
+        "lastModified": 1793010903,
+        "narHash": "sha256-m/X4Y4Omgw3Np4xKue2hKgbSybDEPf0jONU6EDw6ofI=",
+        "ref": "refs/heads/migrate-architecture",
+        "rev": "37987e2c7eefe5b58db075ba1e5233f11afe3f62",
+        "revCount": 67,
         "type": "git",
         "url": "file:///Users/andrei/.dotkit"
       },
