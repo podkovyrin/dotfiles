@@ -24,6 +24,10 @@
     "mode": "existing",
     "userDataDir": "~/Library/Application Support/net.imput.helium"
   },
+  "npmCommand": [
+    "npm",
+    "--min-release-age=1"
+  ],
   "collapseChangelog": true,
   "markdown": {
     "mermaid": "streaming"
