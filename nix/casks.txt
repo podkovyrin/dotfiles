@@ -11,6 +11,7 @@ helium-browser
 telegram
 slack
 zoom
+whatsapp
 
 spotify
 the-unarchiver
@@ -30,6 +31,7 @@ opencode-desktop
 orbstack
 omniwm
 karabiner-elements
+cuadriver
 
 # Apple fonts are not in Nixpkgs.
 font-sf-mono
