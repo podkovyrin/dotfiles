@@ -8,5 +8,8 @@
   "widgetMode": "full",
   "nerdFontIcons": true,
   "loaderStyle": "circle",
-  "finalRecap": false
+  "finalRecap": false,
+  "subagentExtensions": [
+    "/Users/andrei/.pi/agent/npm/node_modules/pi-claude-bridge/src/index.ts"
+  ]
 }
