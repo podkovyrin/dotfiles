@@ -18,7 +18,8 @@
     "npm:pi-open-tui",
     "npm:pi-browser-use",
     "npm:pi-subagent-manager",
-    "npm:pi-claude-bridge"
+    "npm:pi-claude-bridge",
+    "git:github.com/michael-denyer/pstack-claude"
   ],
   "pi-browser-use": {
     "mode": "existing",

@@ -38,9 +38,11 @@
     ".pi/agent/open-tui.json" = "config/pi/open-tui.json";
   };
 
-  # pi-subagent-manager rejects symlinked settings, so copy them. A differing
-  # local copy, for example one saved from /agents, is kept as .bak.
+  # Keep settings writable for /setup-pstack and /agents.
+  # pi-subagent-manager also rejects symlinked settings.
+  # A differing local copy is kept as .bak.
   dotkit.copies = {
+    ".pi/agent/pstack-models.md" = "config/pi/pstack-models.md";
     ".pi/agent/subagent-manager/settings.json" = "config/pi/subagent-manager/settings.json";
   };
 }
