@@ -19,7 +19,12 @@
     "npm:pi-browser-use",
     "npm:pi-subagent-manager",
     "npm:pi-claude-bridge",
-    "git:github.com/michael-denyer/pstack-claude"
+    {
+      "source": "git:github.com/michael-denyer/pstack-claude",
+      "skills": [
+        "!plugins/pstack/skills/ketchup-video/**"
+      ]
+    }
   ],
   "pi-browser-use": {
     "mode": "existing",
