@@ -55,9 +55,9 @@ useGlobalGaps = true
 
 [focus]
 crossesMonitorAtEdge = false
-followsMouse = false
+followsMouse = true
 followsWindowToMonitor = false
-lockModifier = "off"
+lockModifier = "control"
 moveCrossesMonitorAtEdge = false
 moveMouseToFocusedWindow = true
 raiseOnMouseFocus = false
@@ -242,7 +242,6 @@ bundleId = "com.openai.codex"
 id = "6A31F08A-4051-4354-B439-42F4C71894A3"
 minHeight = 600.0
 minWidth = 800.0
-
 
 [[appRules]]
 assignToWorkspace = "11"
