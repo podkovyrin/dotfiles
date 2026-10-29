@@ -243,11 +243,6 @@ id = "6A31F08A-4051-4354-B439-42F4C71894A3"
 minHeight = 600.0
 minWidth = 800.0
 
-[[appRules]]
-bundleId = "com.eltima.cmd1.pro.mas"
-id = "4BA546DA-2875-4BEF-B13F-1539E833B1A0"
-minHeight = 550.0
-minWidth = 950.0
 
 [[appRules]]
 assignToWorkspace = "11"
@@ -354,6 +349,16 @@ layout = "float"
 assignToWorkspace = "2"
 bundleId = "net.imput.helium"
 id = "FC2B64E5-D38B-4812-B9D0-B566603E86CC"
+
+[[appRules]]
+assignToWorkspace = "7"
+bundleId = "com.anthropic.claudefordesktop"
+id = "9FAD46C0-16A0-40FA-99DD-81A3E9388120"
+
+[[appRules]]
+assignToWorkspace = "6"
+bundleId = "net.whatsapp.WhatsApp"
+id = "5AE46645-4085-444E-8557-6048F6B55FF5"
 
 [[hotkeys]]
 binding = "Unassigned"
