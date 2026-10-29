@@ -1,0 +1,214 @@
+#!/usr/bin/env python3
+"""Build the offline shortcut reference from the local and dotkit configs."""
+
+import argparse
+import json
+import os
+from pathlib import Path
+import re
+import subprocess
+import tomllib
+
+ROOT = Path(__file__).resolve().parents[1]
+ALIASES = {
+    'command': 'cmd', 'control': 'ctrl', 'option': 'alt', 'hyper': 'caps',
+    'return': 'enter', 'escape': 'esc', 'caps_lock': 'capslock',
+    'left arrow': 'left', 'right arrow': 'right', 'up arrow': 'up',
+    'down arrow': 'down', 'period': '.', 'comma': ',', 'minus': '-',
+    'equal': '=', 'quote': "'", 'left bracket': '[', 'right bracket': ']',
+    'backslash': '\\', 'slash': '/', 'backtick': '`', 'mute': 'f10',
+}
+MODS = ['caps', 'cmd', 'ctrl', 'alt', 'shift']
+OMNI_LABELS = {
+    'workspaceBackAndForth': 'Previous workspace', 'focusPrevious': 'Previous window',
+    'toggleFullscreen': 'Toggle fullscreen', 'cycleSizeForward': 'Next size preset',
+    'cycleSizeBackward': 'Previous size preset',
+    'toggleContainerFullPrimarySpan': 'Toggle full primary span',
+    'expandContainerToAvailablePrimarySpan': 'Expand to available primary span',
+    'balanceSizes': 'Balance sizes', 'toggleSplit': 'Toggle split direction',
+    'openCommandPalette': 'Command palette', 'raiseAllFloatingWindows': 'Raise floating windows',
+    'toggleFocusedWindowFloating': 'Toggle floating window',
+    'toggleWorkspaceLayout': 'Toggle workspace layout',
+    'resizeFocusedWindow.grow': 'Grow focused window',
+    'resizeFocusedWindow.shrink': 'Shrink focused window',
+    'setContainerPrimarySpan.decrease10Percent': 'Primary span −10%',
+    'setContainerPrimarySpan.increase10Percent': 'Primary span +10%',
+    'setWindowSecondarySpan.decrease10Percent': 'Secondary span −10%',
+    'setWindowSecondarySpan.increase10Percent': 'Secondary span +10%',
+}
+
+
+def human(value):
+    return re.sub(r'(?<=[a-z])(?=[A-Z])', ' ', value.replace('_', ' ').replace('.', ' ')).capitalize()
+
+
+def chord(value):
+    parts = [ALIASES.get(p.lower(), p.lower()) for p in value.split('+')]
+    parts = [p.removeprefix('digit_').removeprefix('left_') for p in parts]
+    return '+'.join([m for m in MODS if m in parts] + [p for p in parts if p not in MODS])
+
+
+def build(dotkit, herdr_config):
+    rows = []
+
+    def add(app, binding, action, source, note=''):
+        # Each row: application, normalized chord, action, source, note.
+        for digit in range(1, 10) if '1..9' in binding else [None]:
+            key = binding.replace('1..9', str(digit)) if digit else binding
+            label = f'{action} {digit}' if digit else action
+            rows.append([app, chord(key), label, source, note])
+
+    omni = tomllib.loads((ROOT / 'config/omniwm.toml').read_text())
+    if omni['general']['hyperKeyModifiers'] != 'Control+Option+Command':
+        raise ValueError('OmniWM Hyper changed. Update the Caps layer mapping in this script.')
+    for item in omni['hotkeys']:
+        if item['binding'] == 'Unassigned':
+            continue
+        action = item['id']
+        label = OMNI_LABELS.get(action, human(action))
+        note = action
+        if action.startswith(('switchWorkspace.', 'moveToWorkspace.')):
+            workspace = omni['workspaces'][int(action.split('.')[1])]
+            verb = 'Go to' if action.startswith('switch') else 'Move window to'
+            label = f'{verb} workspace {workspace["displayName"]}'
+            note += f' · Workspace {workspace["name"]}; layout: {workspace["layoutType"]}'
+        elif action.startswith(('focus.', 'move.', 'moveColumn.')):
+            verb = {'focus': 'Focus', 'move': 'Move window', 'moveColumn': 'Move column'}[action.split('.')[0]]
+            label = f'{verb} {action.split(".")[1]}'
+        add('OmniWM', item['binding'], label, 'config/omniwm.toml', note)
+
+    karabiner = json.loads((ROOT / 'config/karabiner.json').read_text())
+    profile = next(p for p in karabiner['profiles'] if p.get('selected'))
+    for rule in profile['complex_modifications']['rules']:
+        for item in rule['manipulators']:
+            origin = item['from']
+            key = origin.get('key_code', origin.get('consumer_key_code'))
+            mods = origin.get('modifiers', {}).get('mandatory', [])
+            if key == 'caps_lock':
+                add('Karabiner', 'capslock', 'Tap: Escape; hold: Hyper', 'config/karabiner.json',
+                    'Hyper = Ctrl+Option+Cmd, without Shift. Hold Caps Lock with another key.')
+                continue
+            if {'control', 'option', 'command'} <= set(mods):
+                mods = ['caps'] + [m for m in mods if m not in ('control', 'option', 'command')]
+            target = item['to'][0]
+            label = rule['description']
+            if target.get('key_code') == 'vk_none':
+                label = 'Disabled'
+            command = target.get('shell_command', '')
+            if 'audio-toggle' in command:
+                label = 'Toggle Jabra / desk audio'
+            elif 'omniwm-browser' in command:
+                label = 'Return Helium to W' if ' home ' in command else 'Summon Helium'
+            variants = [mods]
+            if 'shift' in origin.get('modifiers', {}).get('optional', []):
+                variants.append(mods + ['shift'])
+            for variant in variants:
+                row = ['Karabiner', chord('+'.join(variant + [key])), label,
+                       'config/karabiner.json', rule['description']]
+                if row not in rows:
+                    rows.append(row)
+
+    defaults = subprocess.run(['herdr', '--default-config'], check=True, capture_output=True, text=True).stdout
+    section = defaults.split('[keys]\n', 1)[1].split('# Custom commands', 1)[0]
+    keys = {}
+    for line in section.splitlines():
+        match = re.match(r'# (\w+) = ("[^"\n]*")', line)
+        if match:
+            keys[match[1]] = json.loads(match[2])
+    overrides = tomllib.loads(herdr_config.read_text()).get('keys', {})
+    keys.update(overrides)
+    if keys.get('prefix') != 'ctrl+b':
+        raise ValueError('Herdr prefix changed. Update the Ghostty prefix mapping in this script.')
+    herdr_source = str(herdr_config).replace(str(Path.home()), '~') + ' + herdr --default-config'
+    for action, bindings in keys.items():
+        if action == 'prefix' or not bindings:
+            continue
+        if not isinstance(bindings, (str, list)):
+            raise ValueError(f'Unsupported Herdr key entry: {action}. Extend the generator.')
+        for binding in [bindings] if isinstance(bindings, str) else bindings:
+            if not isinstance(binding, str):
+                raise ValueError(f'Unsupported Herdr binding: {action}. Extend the generator.')
+            note = 'Config override' if action in overrides else 'Herdr default'
+            if action.startswith('navigate_'):
+                note += '; only in navigate mode'
+                binding = 'navigate+' + binding
+            if action == 'remote_image_paste':
+                note += '; only in remote sessions'
+            add('Herdr', binding, human(action), herdr_source, note)
+    add('Herdr', 'ctrl+b', 'Enter prefix mode', herdr_source, 'Also available as Cmd+S in Ghostty.')
+
+    ghostty = {}
+    for path in [dotkit / 'config/ghostty.conf', ROOT / 'config/ghostty.conf']:
+        for line in path.read_text().splitlines():
+            match = re.match(r'keybind\s*=\s*([^=]+)=(.*)', line)
+            if match:
+                ghostty[chord(match[1].strip())] = (match[2].strip(), str(path).replace(str(Path.home()), '~'))
+    text_labels = {
+        r'text:\x02': 'Enter Herdr prefix mode', r'text:\x02n': 'Next Herdr tab',
+        r'text:\x02p': 'Previous Herdr tab', r'text:\x04': 'Send Ctrl+D',
+    }
+    for binding, (action, source) in ghostty.items():
+        note = action
+        label = text_labels.get(action, 'Disabled' if action == 'ignore' else action)
+        if action == r'text:\x04':
+            note += '; exits an empty shell prompt, closing its pane. Other apps may handle Ctrl+D differently.'
+        elif action.startswith('csi:'):
+            matches = [r for r in rows if r[0] == 'Herdr' and r[1] == binding]
+            label = matches[0][2] if matches else 'Forward to terminal app'
+            note += '; CSI u forwarding' + ('; no configured Herdr action for Cmd+0' if binding == 'cmd+0' else '')
+        add('Ghostty', binding, label, source, note)
+    if ghostty.get('cmd+s', ('',))[0] != r'text:\x02':
+        raise ValueError('Ghostty Cmd+S changed. Update the prefix labels in the HTML template.')
+
+    # These shell entries document the dotkit widgets rather than ordinary editing keys.
+    shell_source = '~/.dotkit/nix/modules/zsh/'
+    for binding, action, note in [
+        ('ctrl+p', 'Previous matching history entry', 'Also Up. Herdr intercepts Ctrl+N/P only after its prefix.'),
+        ('ctrl+n', 'Next matching history entry', 'Also Down.'),
+        ('up', 'Previous matching history entry', 'History substring search'),
+        ('down', 'Next matching history entry', 'History substring search'),
+        ('ctrl+x>ctrl+e', 'Edit command in $EDITOR', 'Press Ctrl+X, then Ctrl+E.'),
+        ('alt+.', 'Insert last argument', 'Also Option+Shift+minus.'),
+        ('ctrl+t', 'Find files with fzf', 'Configured file previews; select a path to insert.'),
+        ('alt+c', 'Change directory with fzf', 'Configured directory previews.'),
+        ('ctrl+r', 'Search history with fzf', 'fzf shell integration'),
+        ('fzf+ctrl+/', 'Toggle fzf preview', 'Inside the file or directory picker.'),
+    ]:
+        add('Shell', binding, action, shell_source, note)
+    for binding, action in [('vi+k', 'Previous matching history entry'), ('vi+j', 'Next matching history entry')]:
+        add('Shell', binding, action, shell_source, 'Zsh vi command mode; configured in nix/shell.nix.')
+    for binding in ['space', 'enter']:
+        add('Shell', binding, 'Expand shell abbreviation', 'nix/shell.nix',
+            'Expands configured abbreviations, such as g → git and gg → lazygit. Enter also executes the command.')
+    add('libedit', 'ctrl+r', 'Search previous history', 'config/editrc', 'em-inc-search-prev in libedit programs; vi keymap.')
+    for path in sorted((ROOT / 'config/pi/extensions').rglob('*.ts')):
+        for binding, description in re.findall(r'registerShortcut\("([^"]+)",\s*\{\s*description:\s*"([^"]+)"', path.read_text()):
+            add('Pi', binding, description, str(path.relative_to(ROOT)), 'Custom extension shortcut; only inside Pi.')
+    return rows
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__, epilog='Run: python3 scripts/build-shortcuts')
+    parser.add_argument('--dotkit', type=Path, default=Path(os.environ.get('DOTKIT_DIR', '~/.dotkit')).expanduser(), help='dotkit checkout (default: DOTKIT_DIR or ~/.dotkit)')
+    parser.add_argument('--herdr-config', type=Path, default=Path(os.environ.get('HERDR_CONFIG_PATH', '~/.config/herdr/config.toml')).expanduser(), help='Herdr config file')
+    parser.add_argument('--check', action='store_true', help='fail if docs/shortcuts.html needs regeneration')
+    args = parser.parse_args()
+    try:
+        rows = build(args.dotkit.expanduser(), args.herdr_config.expanduser())
+        data = json.dumps(rows, ensure_ascii=False, separators=(',', ':')).replace('<', '\\u003c')
+        template = (ROOT / 'docs/shortcuts.template.html').read_text()
+        output = template.replace('__SHORTCUT_DATA__', data)
+        path = ROOT / 'docs/shortcuts.html'
+        if args.check:
+            if not path.exists() or path.read_text() != output:
+                parser.exit(1, 'Shortcut documentation is stale. Run python3 scripts/build-shortcuts.\n')
+            print('Shortcut documentation is current.')
+        else:
+            path.write_text(output)
+            print(f'Wrote {path.relative_to(ROOT)} ({len(rows)} bindings, {len(output.encode()):,} bytes).')
+    except (OSError, ValueError, KeyError, subprocess.CalledProcessError) as error:
+        parser.exit(1, f'Cannot build shortcut documentation: {error}\n')
+
+
+if __name__ == '__main__':
+    main()

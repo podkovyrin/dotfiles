@@ -12,6 +12,31 @@ checkout, and `nix/home.nix` links the base config files to it
 (`dotkit.liveDir`). Edits in `~/.dotkit` apply here first; commit and push
 them to release them to everyone.
 
+## Shortcuts
+
+Open [docs/shortcuts.html](docs/shortcuts.html) in a browser. It is a standalone,
+offline page with a QWERTY keyboard, selectable modifier layers, and a searchable
+table. It covers Karabiner, OmniWM, Ghostty, Herdr, and custom shell and Pi bindings.
+It excludes macOS and GUI app defaults.
+
+Regenerate it after changing bindings:
+
+```sh
+python3 scripts/build-shortcuts
+python3 scripts/build-shortcuts --check  # check without writing
+```
+
+The builder needs Python 3.11+, `herdr` on PATH, and the dotkit checkout at
+`DOTKIT_DIR` or `~/.dotkit`. It merges the installed Herdr defaults with
+`HERDR_CONFIG_PATH` or `~/.config/herdr/config.toml`. Use `--dotkit` or
+`--herdr-config` to select different paths. It does not change any app settings.
+
+Edit `docs/shortcuts.template.html` for the page layout. Edit
+`scripts/build-shortcuts` for action labels and curated shell entries. The main
+app bindings come from their configs; shell summaries and the page's behavior
+notes need manual review when those settings change. Commit the regenerated HTML
+so viewing it needs no build tools. Do not edit `docs/shortcuts.html` directly.
+
 ## Usage
 
 The tools come from three sources. `dotkit` uses these words everywhere:
