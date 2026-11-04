@@ -32,7 +32,10 @@
     "git:github.com/podkovyrin/pi-herdr-side",
     "npm:pi-open-tui",
     "npm:pi-browser-use",
-    "npm:pi-subagent-manager",
+    {
+      "source": "npm:pi-subagent-manager",
+      "extensions": []
+    },
     "npm:pi-claude-bridge",
     {
       "source": "git:github.com/michael-denyer/pstack-claude",
