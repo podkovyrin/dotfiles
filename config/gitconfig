@@ -30,7 +30,7 @@
 # Removes the per-machine fields that Pi writes. Only repositories whose
 # .gitattributes uses this filter run it, for example ~/.dotfiles.
 [filter "pi-settings"]
-	clean = jq --indent 2 'del(.deviceId, .trackingId, .lastChangelogVersion)'
+	clean = jq --indent 2 'del(.deviceId, .trackingId, .lastChangelogVersion, .extensionChangelogVersions)'
 	required = true
 [color "branch"]
 	current = yellow reverse

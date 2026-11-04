@@ -1,12 +1,27 @@
 {
+  "$schema": "https://pi.dev/schemas/settings.schema.json",
   "defaultProvider": "claude-bridge",
   "defaultModel": "claude-opus-5-5",
   "defaultThinkingLevel": "medium",
-  "theme": "light",
+  "theme": "system",
+  "defaultTools": [
+    "+codemode"
+  ],
+  "showCacheMissNotices": true,
+  "cacheWarming": "idle",
+  "fullscreenExitOutput": "resume-hint",
+  "terminal": {
+    "showTerminalProgress": true
+  },
   "compaction": {
     "enabled": true
   },
   "hideThinkingBlock": false,
+  "selfUpdateCommand": [
+    "mise",
+    "upgrade",
+    "npm:{packageName}"
+  ],
   "packages": [
     "npm:pi-web-access",
     "npm:pi-context-view",
