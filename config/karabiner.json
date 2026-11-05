@@ -69,7 +69,7 @@
             ]
           },
           {
-            "description": "Caps Lock: Escape on tap, Meta (Control+Command+Option) on hold",
+            "description": "Caps Lock: Meta (Control+Command+Option) only",
             "manipulators": [
               {
                 "from": {
@@ -87,11 +87,6 @@
                       "left_command",
                       "left_option"
                     ]
-                  }
-                ],
-                "to_if_alone": [
-                  {
-                    "key_code": "escape"
                   }
                 ],
                 "type": "basic"

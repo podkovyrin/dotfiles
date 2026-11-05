@@ -85,7 +85,7 @@ def build(dotkit, herdr_config):
             key = origin.get('key_code', origin.get('consumer_key_code'))
             mods = origin.get('modifiers', {}).get('mandatory', [])
             if key == 'caps_lock':
-                add('Karabiner', 'capslock', 'Tap: Escape; hold: Hyper', 'config/karabiner.json',
+                add('Karabiner', 'capslock', 'Meta only', 'config/karabiner.json',
                     'Hyper = Ctrl+Option+Cmd, without Shift. Hold Caps Lock with another key.')
                 continue
             if {'control', 'option', 'command'} <= set(mods):
