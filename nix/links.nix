@@ -42,6 +42,7 @@
   # pi-subagent-manager also rejects symlinked settings.
   # A differing local copy is kept as .bak.
   dotkit.copies = {
+    ".cua-driver/config.json" = "config/cua-driver/config.json";
     ".pi/agent/pstack-models.md" = "config/pi/pstack-models.md";
     ".pi/agent/subagent-manager/settings.json" = "config/pi/subagent-manager/settings.json";
   };
