@@ -36,6 +36,8 @@
     ".pi/agent/cloak.json" = "config/pi/cloak.json";
     ".pi/agent/claude-bridge.json" = "config/pi/claude-bridge.json";
     ".pi/agent/open-tui.json" = "config/pi/open-tui.json";
+    ".pi/agent/AGENTS.md" = "config/pi/AGENTS.md";
+    ".pi/agent/pi-fff.json" = "config/pi/pi-fff.json";
   };
 
   # Keep settings writable for /setup-pstack and /agents.

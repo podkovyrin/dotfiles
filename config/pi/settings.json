@@ -40,7 +40,8 @@
     {
       "source": "git:github.com/michael-denyer/pstack-claude",
       "skills": [
-        "!plugins/pstack/skills/ketchup-video/**"
+        "!plugins/pstack/skills/ketchup-video/**",
+        "!plugins/pstack/skills/principle-*/**"
       ]
     }
   ],
