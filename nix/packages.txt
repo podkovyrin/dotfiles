@@ -29,3 +29,4 @@ poppler-utils
 vhs
 
 switchaudio-osx
+git-filter-repo
