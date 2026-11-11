@@ -24,6 +24,14 @@ standalone instruction — toggle exactly the ones you want per message.
 - When you send a message, active snippet bodies are merged into the message
   text: prepend group (sorted by `order`) → your text → append group (sorted
   by `order`), separated by blank lines.
+  - A `/skill:<name>` command stays first, and the snippets go around its
+    arguments, because Pi expands the command only at the start of the text.
+  - A leading `<skill>` block that another extension wrote stays first, and
+    the prepend group goes after it.
+  - A prompt template message (`/<template> ...`) gets no snippets, and the
+    toggles stay on. Pi splits the text after the template name into words
+    and joins them with spaces, so snippet text there would change.
+  - `node --test compose.test.ts` tests the text transform.
 - Toggles reset to **all off** after each send and at session start.
 
 ## Snippet files

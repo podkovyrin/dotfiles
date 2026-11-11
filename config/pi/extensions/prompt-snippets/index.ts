@@ -12,7 +12,9 @@
  *   append groups visually distinguished.
  * - When a message is sent, active snippet bodies are prepended/appended to
  *   the message text in order (prepend group sorted by `order` first, then
- *   the typed text, then the append group sorted by `order`).
+ *   the typed text, then the append group sorted by `order`). A `/skill:`
+ *   command or a leading `<skill>` block stays first. Snippets skip a
+ *   prompt template message and stay on.
  * - Toggles reset to all-off after each send and at session start.
  */
 
@@ -21,6 +23,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
 import { Key, matchesKey, truncateToWidth, wrapTextWithAnsi } from "@earendil-works/pi-tui";
+import { composeMessage, slashName } from "./compose.ts";
 
 interface Snippet {
 	/** Filename, e.g. "concise.md" */
@@ -327,6 +330,12 @@ export default function (pi: ExtensionAPI) {
 	pi.on("input", async (event, ctx) => {
 		if (enabled.size === 0) return; // continue unchanged
 
+		const name = slashName(event.text);
+		if (name && pi.getCommands().some((c) => c.source === "prompt" && c.name === name)) {
+			ctx.ui.notify(`Prompt snippets stay on: they do not apply to the prompt template /${name}.`, "warning");
+			return;
+		}
+
 		snippets = loadSnippets();
 		const active = snippets.filter((s) => enabled.has(s.id));
 		enabled = new Set();
@@ -338,7 +347,7 @@ export default function (pi: ExtensionAPI) {
 		const appendBodies = active.filter((s) => s.placement === "append").map((s) => s.body);
 		return {
 			action: "transform",
-			text: [...prependBodies, event.text, ...appendBodies].join("\n\n"),
+			text: composeMessage({ text: event.text, prepends: prependBodies, appends: appendBodies }),
 		};
 	});
 
