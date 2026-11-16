@@ -16,8 +16,7 @@
 [rebase]
 	updateRefs = true
 [push]
-	# Push to the upstream branch, also when its name differs.
-	default = upstream
+	default = nothing
 [apply]
 	whitespace = nowarn
 [format]

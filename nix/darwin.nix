@@ -27,4 +27,8 @@
   };
 
   fonts.packages = [ pkgs.montserrat ];
+
+  # btop looks for its bundled themes in ../share/btop/themes next to the
+  # unresolved binary path, so the per-user profile must link that directory.
+  environment.pathsToLink = [ "/share/btop" ];
 }
