@@ -62,6 +62,7 @@
   "enabledModels": [
     "openai/gpt-6.1-sol",
     "openai/gpt-6-astra",
-    "claude-bridge/claude-opus-5-5"
+    "claude-bridge/claude-opus-5-5",
+    "claude-bridge/claude-fable-5-2"
   ]
 }
