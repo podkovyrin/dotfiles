@@ -9,9 +9,9 @@ These rules override skill defaults. Set `model` and `effort` on every `agent` c
 | Mechanical: exploration, code reading, doc sweeps, verification runs | `openai/gpt-6.1-sol` | medium |
 | Exceptional research, very hard decisions | `openai/gpt-6-astra` | high |
 
-- All `claude-bridge` agents share one 5-hour quota. Send work that does not need Opus judgment to `gpt-6.1-sol`.
+- All `claude-bridge` agents share one 5-hour quota. Send work that does not need Opus judgment to `gpt-6.2-sol`.
 - If a model is unavailable, tell me before you substitute another.
-- Give `gpt-6-astra` a short brief and bounded questions. It can delegate bulk work to cheaper agents.
+- Give `gpt-6.2-astra` a short brief and bounded questions. It can delegate bulk work to cheaper agents.
 - Split work into non-overlapping scopes and ask for concise reports. Prefer one focused reviewer to several overlapping reviews.
 - Use `xhigh` only when I ask for it.
 
