@@ -288,8 +288,6 @@ red = 1.0
 assignToWorkspace = "7"
 bundleId = "com.openai.codex"
 id = "6A31F08A-4051-4354-B439-42F4C71894A3"
-minHeight = 600.0
-minWidth = 800.0
 
 [[appRules]]
 assignToWorkspace = "11"
@@ -1355,7 +1353,7 @@ type = "main"
 [[workspaces]]
 displayName = "D"
 id = "A7D5E104-6985-4516-8ED5-07F144F2A33D"
-layoutType = "default"
+layoutType = "niri"
 name = "7"
 
 [workspaces.monitorAssignment]
