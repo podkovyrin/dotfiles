@@ -21,6 +21,12 @@
     ".config/zed/settings.json" = "config/zed.json";
     ".config/zed/tasks.json" = "config/zed-tasks.json";
 
+    # Herdr.app writes settings.json through the link (zoom, theme). Its other
+    # files are generated or bookkeeping.
+    ".config/herdr-app/settings.json" = "config/herdr-app/settings.json";
+    ".config/herdr-app/keys.json" = "config/herdr-app/keys.json";
+    ".config/herdr-app/themes/catppuccin-latte.json" = "config/herdr-app/themes/catppuccin-latte.json";
+
     ".local/bin/audio-toggle" = "scripts/audio-toggle";
     ".local/bin/omniwm-browser" = "scripts/omniwm-browser";
 
