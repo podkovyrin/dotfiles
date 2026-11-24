@@ -6,7 +6,7 @@ These rules override skill defaults. Set `model` and `effort` on every `agent` c
 |---|---|---|
 | Default: implementation, routine reviews | `claude-bridge/claude-opus-5-5` | medium |
 | Design, important reviews | `claude-bridge/claude-opus-5-5` | high |
-| Mechanical: exploration, code reading, doc sweeps, verification runs | `openai/gpt-6.1-sol` | medium |
+| Mechanical: exploration, code reading, doc sweeps, verification runs | `openai/gpt-6.2-sol` | medium |
 | Exceptional research, very hard decisions | `openai/gpt-6-astra` | high |
 
 - All `claude-bridge` agents share one 5-hour quota. Send work that does not need Opus judgment to `gpt-6.2-sol`.
