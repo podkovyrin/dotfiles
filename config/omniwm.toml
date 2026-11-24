@@ -53,7 +53,7 @@ useGlobalGaps = true
 [focus]
 crossesMonitorAtEdge = false
 edgeNavigationInterval = 0.75
-followsMouse = true
+followsMouse = false
 followsMouseOnlyFullyVisible = false
 followsWindowToMonitor = false
 lockModifier = "control"
@@ -96,7 +96,7 @@ overviewGestureEnabled = false
 overviewGestureFingerCount = 4
 resizePreviewStyle = "live"
 scrollEnabled = true
-scrollModifierKey = "optionShift"
+scrollModifierKey = "controlOptionCommandShift"
 scrollSensitivity = 5.0
 trackpadScrollStyle = "snap"
 windowGestureSensitivity = 1.0
@@ -405,6 +405,11 @@ assignToWorkspace = "6"
 bundleId = "net.whatsapp.WhatsApp"
 id = "5AE46645-4085-444E-8557-6048F6B55FF5"
 
+[[appRules]]
+assignToWorkspace = "1"
+bundleId = "dev.herdr.app"
+id = "E3A65C5F-3E9E-46D5-B6B7-F2000010466D"
+
 [[hotkeys]]
 binding = "Unassigned"
 id = "toggleScratchpad.1"
@@ -580,6 +585,38 @@ id = "switchWorkspace.11"
 [[hotkeys]]
 binding = "Hyper+Shift+V"
 id = "moveToWorkspace.11"
+
+[[hotkeys]]
+binding = "Hyper+1"
+id = "switchWorkspace.12"
+
+[[hotkeys]]
+binding = "Hyper+Shift+1"
+id = "moveToWorkspace.12"
+
+[[hotkeys]]
+binding = "Hyper+2"
+id = "switchWorkspace.13"
+
+[[hotkeys]]
+binding = "Hyper+Shift+2"
+id = "moveToWorkspace.13"
+
+[[hotkeys]]
+binding = "Hyper+3"
+id = "switchWorkspace.14"
+
+[[hotkeys]]
+binding = "Hyper+Shift+3"
+id = "moveToWorkspace.14"
+
+[[hotkeys]]
+binding = "Hyper+4"
+id = "switchWorkspace.15"
+
+[[hotkeys]]
+binding = "Hyper+Shift+4"
+id = "moveToWorkspace.15"
 
 [[hotkeys]]
 binding = "Unassigned"
@@ -788,6 +825,22 @@ id = "moveColumnToWorkspace.10"
 [[hotkeys]]
 binding = "Unassigned"
 id = "moveColumnToWorkspace.11"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveColumnToWorkspace.12"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveColumnToWorkspace.13"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveColumnToWorkspace.14"
+
+[[hotkeys]]
+binding = "Unassigned"
+id = "moveColumnToWorkspace.15"
 
 [[hotkeys]]
 binding = "Hyper+Shift+H"
@@ -1400,6 +1453,42 @@ displayName = "V"
 id = "ACB24CBA-BBAA-47FA-B0B5-71620F7F6C74"
 layoutType = "default"
 name = "12"
+
+[workspaces.monitorAssignment]
+type = "main"
+
+[[workspaces]]
+displayName = "S1"
+id = "8453D2D9-64D9-4152-9A93-BE6C7BE9E47B"
+layoutType = "niri"
+name = "13"
+
+[workspaces.monitorAssignment]
+type = "main"
+
+[[workspaces]]
+displayName = "S2"
+id = "3B8FBDF8-D156-48DC-AF7F-BAAD918E5B23"
+layoutType = "niri"
+name = "14"
+
+[workspaces.monitorAssignment]
+type = "main"
+
+[[workspaces]]
+displayName = "S3"
+id = "C38397E0-A4D6-465B-9491-307F649C6214"
+layoutType = "niri"
+name = "15"
+
+[workspaces.monitorAssignment]
+type = "main"
+
+[[workspaces]]
+displayName = "S4"
+id = "8C86E269-142A-4517-8219-704D85908BC7"
+layoutType = "niri"
+name = "16"
 
 [workspaces.monitorAssignment]
 type = "main"
